@@ -1,34 +1,68 @@
 package io.deeplay;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Board {
-    private final Disk[][] board;
-    private int deskSize = 0;
+    private final Cell[][] board;
+    private final int boardSize;
 
 
-    public Board(int BOARD_SIZE) { //создание доски.. здесь ли делать проверки на корректность данных? или отдельно, аля в "контроллере"
-        deskSize = BOARD_SIZE;
-        board = new Disk[BOARD_SIZE][BOARD_SIZE];
+    public Board(int boardSize) { //создание доски
+        if (boardSize <= 3) {
+            throw new IllegalArgumentException("неверный размер доски");
+        } else {
 
-        int center = BOARD_SIZE / 2;
-        board[center - 1][center - 1] = Disk.WHITE;
-        board[center][center] = Disk.WHITE;
-        board[center - 1][center] = Disk.BLACK;
-        board[center][center - 1] = Disk.BLACK;
+            this.boardSize = boardSize;
+            board = new Cell[boardSize][boardSize];
+
+            for (int row = 0; row < boardSize; row++) {
+                for (int cow = 0; cow < boardSize; cow++) {
+                    board[row][cow] = Cell.EMPTY;
+                }
+            }
+
+            int center = boardSize / 2;
+            board[center - 1][center - 1] = Cell.WHITE;
+            board[center][center] = Cell.WHITE;
+            board[center - 1][center] = Cell.BLACK;
+            board[center][center - 1] = Cell.BLACK;
+        }
     }
 
-    public void setOnPlace(int i, int j, Disk disk) { //установка диска в ячейку
-        board[i][j] = disk;
+
+    /**
+     * установка диска в указанную ячейку
+     */
+    public void setOnPlace(int row, int col, Cell cell) {
+        try {
+            board[row][col] = cell;
+        } catch (IllegalArgumentException exception) {
+            System.out.println("неверные координаты, повторите ввод");
+        }
+
     }
 
-    public Disk whatIsInside(int i, int j) { //проверка(возврат), что в ячейке
-        return board[i][j];
+    /**
+     * возвращает значение cell, которое лежит в клетке
+     */
+    public Cell getFromPlace(int row, int col) {
+        try {
+            return board[row][col];
+        } catch (IllegalArgumentException exception) {
+            System.out.println("неверные координаты, повторите ввод");
+            return null;
+        }
     }
 
-    public int countDisk(Disk disk) { //подсчет дисков указанного цвета
+    /**
+     * считает диски указанного цвета
+     */
+    public int countDisk(Cell cell) {
         int count = 0;
-        for (Disk[] disks : board) {
-            for (int j = 0; j < deskSize; j++) {
-                if (disks[j] == disk) {
+        for (Cell[] cells : board) {
+            for (int col = 0; col < boardSize; col++) {
+                if (cells[col] == cell) {
                     count++;
                 }
             }
@@ -36,8 +70,8 @@ public class Board {
         return count;
     }
 
-    private boolean isValidMove(int row, int col, Player player) { //проверка, является ли клетка подходящей для хода указанного игрока(здесь ли реализовывать?)
-        if (row < 0 || row >= deskSize || col < 0 || col >= deskSize || board[row][col] != null) {
+    private boolean isValidMove(int row, int col, Player player) {
+        if (row < 0 || row >= boardSize || col < 0 || col >= boardSize || board[row][col] != null) {
             return false;
         }
 
@@ -51,13 +85,13 @@ public class Board {
                 int c = col + dc;
                 boolean isValidDirection = false;
 
-                while (r >= 0 && r < deskSize && c >= 0 && c < deskSize && board[r][c] == player.getOpponent()) {
+                while (r >= 0 && r < boardSize && c >= 0 && c < boardSize && board[r][c] == player.getOpponent()) {
                     r += dr;
                     c += dc;
                     isValidDirection = true;
                 }
 
-                if (isValidDirection && r >= 0 && r < deskSize && c >= 0 && c < deskSize && board[r][c] == player.getOpponent()) {
+                if (isValidDirection && r >= 0 && r < boardSize && c >= 0 && c < boardSize && board[r][c] == player.getOpponent()) {
                     return true;
                 }
             }
@@ -66,8 +100,8 @@ public class Board {
     }
 
     private boolean hasAvailableMoves(Player player) {
-        for (int i = 0; i < deskSize; i++) {
-            for (int j = 0; j < deskSize; j++) {
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
                 if (isValidMove(i, j, player)) {
                     return true;
                 }
@@ -76,10 +110,19 @@ public class Board {
         return false;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Board board1)) return false;
+        return boardSize == board1.boardSize && Arrays.deepEquals(board, board1.board);
+    }
 
-    //еще нужно сам мув добавить или типа установку. или мув использует метод "устанвока", но где он?
-
-    //зачем нужен копибоард?
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(boardSize);
+        result = 31 * result + Arrays.deepHashCode(board);
+        return result;
+    }
 }
 
 

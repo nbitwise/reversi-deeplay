@@ -1,5 +1,6 @@
 package io.deeplay;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,27 +10,31 @@ class BoardTest {
 
     @Test
     void checkNewBoard(){
-        assertNull(board.whatIsInside(0, 0));
-        assertEquals(Disk.WHITE, board.whatIsInside(3,3)); //на самом деле не 3 должно юыть, размер же доски разный может быть
+        assertEquals(Cell.EMPTY, board.getFromPlace(0, 0));
+        assertEquals(Cell.WHITE, board.getFromPlace(3,3));
+        assertEquals(Cell.BLACK, board.getFromPlace(3,4));
 
     }
 
     @Test
     void setOnPlace() {
-        board.setOnPlace(1,3,Disk.WHITE);
-        assertEquals(Disk.WHITE, board.whatIsInside(1,3));
+        board.setOnPlace(1,3, Cell.WHITE);
+        board.setOnPlace(2,3, Cell.BLACK);
+        assertEquals(Cell.WHITE, board.getFromPlace(1,3));
+        assertEquals(Cell.BLACK, board.getFromPlace(2,3));
     }
 
     @Test
     void whatIsInside() {
-        assertEquals(Disk.WHITE, board.whatIsInside(3,3));
+        assertEquals(Cell.WHITE, board.getFromPlace(3,3));
     }
 
     @Test
     void countDisk() {
         for (int i = 0; i < 5; i++) {
-            board.setOnPlace(i,1,Disk.WHITE);
+            board.setOnPlace(i,1, Cell.WHITE);
         }
-        assertEquals(7,board.countDisk(Disk.WHITE));
+        assertEquals(7,board.countDisk(Cell.WHITE));
+        assertEquals(2,board.countDisk(Cell.BLACK));
     }
 }
