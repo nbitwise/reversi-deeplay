@@ -5,7 +5,9 @@ import java.util.Objects;
 
 public class Board {
     private final Cell[][] board;
-    private final int BOARD_SIZE = 8;
+
+
+    private static final int BOARD_SIZE = 8;
     private int quantityOfWhite = 2;
     private int quantityOfBlack = 2;
 
@@ -135,6 +137,12 @@ public class Board {
         if (row >= BOARD_SIZE || row < 0 || col >= BOARD_SIZE || col < 0) {
             throw new IllegalArgumentException();
         }
+    }
+    /**
+     * Возвращает размер доски.
+     */
+    public static int getBOARD_SIZE() {
+        return BOARD_SIZE;
     }
 
     @Override
