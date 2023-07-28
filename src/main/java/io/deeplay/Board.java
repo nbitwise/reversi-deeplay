@@ -5,63 +5,58 @@ import java.util.Objects;
 
 public class Board {
     private final Cell[][] board;
-    private final int boardSize;
+    private final int BOARD_SIZE = 8;
 
+    /**
+     * Создает доску и четыре фишки по центру карты.
+     */
+    public Board() {
 
-    public Board(int boardSize) { //создание доски
-        if (boardSize <= 3) {
-            throw new IllegalArgumentException("неверный размер доски");
-        } else {
-
-            this.boardSize = boardSize;
-            board = new Cell[boardSize][boardSize];
-
-            for (int row = 0; row < boardSize; row++) {
-                for (int cow = 0; cow < boardSize; cow++) {
-                    board[row][cow] = Cell.EMPTY;
-                }
+        board = new Cell[BOARD_SIZE][BOARD_SIZE];
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int cow = 0; cow < BOARD_SIZE; cow++) {
+                board[row][cow] = Cell.EMPTY;
             }
-
-            int center = boardSize / 2;
-            board[center - 1][center - 1] = Cell.WHITE;
-            board[center][center] = Cell.WHITE;
-            board[center - 1][center] = Cell.BLACK;
-            board[center][center - 1] = Cell.BLACK;
         }
+
+        int center = BOARD_SIZE / 2;
+        board[center - 1][center - 1] = Cell.WHITE;
+        board[center][center] = Cell.WHITE;
+        board[center - 1][center] = Cell.BLACK;
+        board[center][center - 1] = Cell.BLACK;
     }
 
 
     /**
-     * установка диска в указанную ячейку
+     * Установка диска в указанную ячейку.
      */
     public void setOnPlace(int row, int col, Cell cell) {
-        try {
+        if (row > BOARD_SIZE - 1 || row < 0 || col > BOARD_SIZE - 1 || col < 0) {
+            throw new IllegalArgumentException();
+        } else {
             board[row][col] = cell;
-        } catch (IllegalArgumentException exception) {
-            System.out.println("неверные координаты, повторите ввод");
         }
-
     }
 
     /**
-     * возвращает значение cell, которое лежит в клетке
+     * Возвращает значение cell, которое лежит в клетке.
      */
     public Cell getFromPlace(int row, int col) {
-        try {
+        if (row > BOARD_SIZE - 1 || row < 0 || col > BOARD_SIZE - 1 || col < 0) {
+            throw new IllegalArgumentException();
+        } else {
             return board[row][col];
-        } catch (IllegalArgumentException exception) {
-            System.out.println("неверные координаты, повторите ввод");
-            return null;
         }
     }
 
+
     /**
-     * считает диски указанного цвета
+     * Считает диски указанного цвета.
      */
     public int countDisk(Cell cell) {
         int count = 0;
         for (Cell[] cells : board) {
-            for (int col = 0; col < boardSize; col++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
                 if (cells[col] == cell) {
                     count++;
                 }
@@ -70,8 +65,8 @@ public class Board {
         return count;
     }
 
-    private boolean isValidMove(int row, int col, Player player) {
-        if (row < 0 || row >= boardSize || col < 0 || col >= boardSize || board[row][col] != null) {
+    private boolean isValidMove(int row, int col, Cell cell) {
+        if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE || board[row][col] != null) {
             return false;
         }
 
@@ -85,13 +80,13 @@ public class Board {
                 int c = col + dc;
                 boolean isValidDirection = false;
 
-                while (r >= 0 && r < boardSize && c >= 0 && c < boardSize && board[r][c] == player.getOpponent()) {
+                while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c] == cell.reverse()) {
                     r += dr;
                     c += dc;
                     isValidDirection = true;
                 }
 
-                if (isValidDirection && r >= 0 && r < boardSize && c >= 0 && c < boardSize && board[r][c] == player.getOpponent()) {
+                if (isValidDirection && r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c] == cell.reverse()) {
                     return true;
                 }
             }
@@ -99,10 +94,10 @@ public class Board {
         return false;
     }
 
-    private boolean hasAvailableMoves(Player player) {
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
-                if (isValidMove(i, j, player)) {
+    private boolean hasAvailableMoves(Cell cell) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (isValidMove(i, j, cell)) {
                     return true;
                 }
             }
@@ -114,12 +109,12 @@ public class Board {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Board board1)) return false;
-        return boardSize == board1.boardSize && Arrays.deepEquals(board, board1.board);
+        return Arrays.deepEquals(board, board1.board);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(boardSize);
+        int result = Objects.hash(BOARD_SIZE);
         result = 31 * result + Arrays.deepHashCode(board);
         return result;
     }

@@ -1,7 +1,7 @@
 package io.deeplay;
 
 class HumanPlayer extends Player {
-    public HumanPlayer(Disk symbol) {
+    public HumanPlayer(Cell symbol) {
         super(symbol);
     }
 
@@ -10,7 +10,7 @@ class HumanPlayer extends Player {
         // Human player makes the move through the UI, need update and create console app
         return new int[]{-1, -1};
     }
-    public Disk getOpponent() {
+    public Cell getOpponent() {
         return super.getOpponent();
     }
 
