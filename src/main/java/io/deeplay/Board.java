@@ -6,6 +6,9 @@ import java.util.Objects;
 public class Board {
     private final Cell[][] board;
     private final int BOARD_SIZE = 8;
+    private int quantityOfWhite = 0;
+    private int quantityOfBlack = 0;
+    private int quantityOfEmpty = BOARD_SIZE * BOARD_SIZE;
 
     /**
      * Создает доску и четыре фишки по центру карты.
@@ -24,49 +27,64 @@ public class Board {
         board[center][center] = Cell.WHITE;
         board[center - 1][center] = Cell.BLACK;
         board[center][center - 1] = Cell.BLACK;
+
+        quantityOfWhite += 2;
+        quantityOfBlack += 2;
+        quantityOfEmpty -= 4;
     }
 
 
     /**
-     * Установка диска в указанную ячейку.
+     * Установка диска в указанное поле.
+     *
+     * @param row  - строка.
+     * @param col  - колонка.
+     * @param cell - клетка, который нужно поставить в поле.
      */
-    public void setOnPlace(int row, int col, Cell cell) {
-        if (row > BOARD_SIZE - 1 || row < 0 || col > BOARD_SIZE - 1 || col < 0) {
+    public void set(int row, int col, Cell cell) {
+        if (row >= BOARD_SIZE || row < 0 || col >= BOARD_SIZE || col < 0) {
             throw new IllegalArgumentException();
-        } else {
-            board[row][col] = cell;
         }
+        if (board[row][col] == Cell.BLACK) {
+            quantityOfWhite++;
+            quantityOfBlack--;
+        }
+        if (board[row][col] == Cell.WHITE) {
+            quantityOfWhite--;
+            quantityOfBlack++;
+        }
+        if (board[row][col] == Cell.EMPTY) {
+            if (cell == Cell.WHITE) quantityOfWhite++;
+            if (cell == Cell.BLACK) quantityOfBlack++;
+            quantityOfEmpty--;
+        }
+        board[row][col] = cell;
+
     }
 
     /**
-     * Возвращает значение cell, которое лежит в клетке.
+     * Возвращает значение cell, которое лежит в поле.
+     *
+     * @param row - строка.
+     * @param col - колонка.
+     * @return возвращает клетку.
      */
-    public Cell getFromPlace(int row, int col) {
+    public Cell get(int row, int col) {
         if (row > BOARD_SIZE - 1 || row < 0 || col > BOARD_SIZE - 1 || col < 0) {
             throw new IllegalArgumentException();
-        } else {
-            return board[row][col];
         }
+        return board[row][col];
     }
 
 
     /**
      * Считает диски указанного цвета.
+     *
+     * @param cell - клетка, количество которой нужно посчитать.
+     * @return возвращает количество клеток указанного цвета.
      */
-    public int countDisk(Cell cell) {
-        int count = 0;
-        for (Cell[] cells : board) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
-                if (cells[col] == cell) {
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-
     private boolean isValidMove(int row, int col, Cell cell) {
-        if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE || board[row][col] != null) {
+        if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE || board[row][col] != Cell.EMPTY) {
             return false;
         }
 
@@ -105,6 +123,28 @@ public class Board {
         return false;
     }
 
+
+    /**
+     * Возвращает количество белых клеток.
+     */
+    public int getQuantityOfWhite() {
+        return quantityOfWhite;
+    }
+
+    /**
+     * Возвращает количество черных клеток.
+     */
+    public int getQuantityOfBlack() {
+        return quantityOfBlack;
+    }
+
+    /**
+     * Возвращает количество пустых клеток.
+     */
+    public int getQuantityOfEmpty() {
+        return quantityOfEmpty;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -118,6 +158,8 @@ public class Board {
         result = 31 * result + Arrays.deepHashCode(board);
         return result;
     }
+
+
 }
 
 
