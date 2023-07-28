@@ -1,11 +1,18 @@
 package io.deeplay;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
-    Board board = new Board();
+    Board board;
+
+    @BeforeEach
+        // Будет выполнять метод перед запуском каждого теста
+    void setUp() {
+        board = new Board();
+    }
 
     @Test
     void checkNewBoard() {
@@ -31,7 +38,7 @@ class BoardTest {
         board.set(2, 3, Cell.BLACK);
         assertEquals(Cell.WHITE, board.get(1, 3));
         assertEquals(Cell.BLACK, board.get(2, 3));
-        assertThrows(IllegalArgumentException.class,()->board.set(-2, 3, Cell.WHITE));
+        assertThrows(IllegalArgumentException.class, () -> board.set(-2, 3, Cell.WHITE));
     }
 
     @Test
@@ -39,11 +46,11 @@ class BoardTest {
         assertEquals(Cell.WHITE, board.get(3, 3));
         assertEquals(Cell.BLACK, board.get(4, 3));
         assertEquals(Cell.EMPTY, board.get(0, 3));
-        assertThrows(IllegalArgumentException.class,()->board.get(-2, 3));
+        assertThrows(IllegalArgumentException.class, () -> board.get(-2, 3));
     }
 
     @Test
-    void quantity() {
+    void getCellsQuantity() {
         assertEquals(2, board.getQuantityOfBlack());
         assertEquals(2, board.getQuantityOfWhite());
         assertEquals(60, board.getQuantityOfEmpty());

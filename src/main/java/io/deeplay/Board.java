@@ -6,9 +6,9 @@ import java.util.Objects;
 public class Board {
     private final Cell[][] board;
     private final int BOARD_SIZE = 8;
-    private int quantityOfWhite = 0;
-    private int quantityOfBlack = 0;
-    private int quantityOfEmpty = BOARD_SIZE * BOARD_SIZE;
+    private int quantityOfWhite = 2;
+    private int quantityOfBlack = 2;
+    private int quantityOfEmpty = BOARD_SIZE * BOARD_SIZE - 4;
 
     /**
      * Создает доску и четыре фишки по центру карты.
@@ -22,15 +22,10 @@ public class Board {
             }
         }
 
-        int center = BOARD_SIZE / 2;
-        board[center - 1][center - 1] = Cell.WHITE;
-        board[center][center] = Cell.WHITE;
-        board[center - 1][center] = Cell.BLACK;
-        board[center][center - 1] = Cell.BLACK;
-
-        quantityOfWhite += 2;
-        quantityOfBlack += 2;
-        quantityOfEmpty -= 4;
+        board[3][3] = Cell.WHITE;
+        board[4][4] = Cell.WHITE;
+        board[3][4] = Cell.BLACK;
+        board[4][3] = Cell.BLACK;
     }
 
 
@@ -42,9 +37,8 @@ public class Board {
      * @param cell - клетка, который нужно поставить в поле.
      */
     public void set(int row, int col, Cell cell) {
-        if (row >= BOARD_SIZE || row < 0 || col >= BOARD_SIZE || col < 0) {
-            throw new IllegalArgumentException();
-        }
+        checkArgument(row, col);
+
         if (board[row][col] == Cell.BLACK) {
             quantityOfWhite++;
             quantityOfBlack--;
@@ -70,21 +64,14 @@ public class Board {
      * @return возвращает клетку.
      */
     public Cell get(int row, int col) {
-        if (row > BOARD_SIZE - 1 || row < 0 || col > BOARD_SIZE - 1 || col < 0) {
-            throw new IllegalArgumentException();
-        }
+        checkArgument(row, col);
         return board[row][col];
     }
 
-
-    /**
-     * Считает диски указанного цвета.
-     *
-     * @param cell - клетка, количество которой нужно посчитать.
-     * @return возвращает количество клеток указанного цвета.
-     */
     private boolean isValidMove(int row, int col, Cell cell) {
-        if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE || board[row][col] != Cell.EMPTY) {
+
+        checkArgument(row, col);
+        if (board[row][col] != Cell.EMPTY) {
             return false;
         }
 
@@ -143,6 +130,12 @@ public class Board {
      */
     public int getQuantityOfEmpty() {
         return quantityOfEmpty;
+    }
+
+    private void checkArgument(int row, int col) {
+        if (row >= BOARD_SIZE || row < 0 || col >= BOARD_SIZE || col < 0) {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
