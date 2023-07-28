@@ -8,7 +8,7 @@ public class Board {
     private final int BOARD_SIZE = 8;
     private int quantityOfWhite = 2;
     private int quantityOfBlack = 2;
-    private int quantityOfEmpty = BOARD_SIZE * BOARD_SIZE - 4;
+
 
     /**
      * Создает доску и четыре фишки по центру карты.
@@ -50,7 +50,6 @@ public class Board {
         if (board[row][col] == Cell.EMPTY) {
             if (cell == Cell.WHITE) quantityOfWhite++;
             if (cell == Cell.BLACK) quantityOfBlack++;
-            quantityOfEmpty--;
         }
         board[row][col] = cell;
 
@@ -129,7 +128,7 @@ public class Board {
      * Возвращает количество пустых клеток.
      */
     public int getQuantityOfEmpty() {
-        return quantityOfEmpty;
+        return BOARD_SIZE * BOARD_SIZE - quantityOfBlack - quantityOfWhite;
     }
 
     private void checkArgument(int row, int col) {

@@ -9,7 +9,6 @@ class BoardTest {
     Board board;
 
     @BeforeEach
-        // Будет выполнять метод перед запуском каждого теста
     void setUp() {
         board = new Board();
     }
