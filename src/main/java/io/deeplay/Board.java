@@ -157,7 +157,53 @@ public class Board {
         return result;
     }
 
+    public Board getBoardCopy() {
+        Board copy = new Board();
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            System.arraycopy(this.board[i], 0, copy.board[i], 0, BOARD_SIZE);
+        }
+        return copy;
+    }
 
+    public void placePiece(int row, int col, Cell playerCell) {
+        this.set(row, col, playerCell);
+
+        for (int dr = -1; dr <= 1; dr++) {
+            for (int dc = -1; dc <= 1; dc++) {
+                if (dr == 0 && dc == 0) {
+                    continue;
+                }
+
+                int r = row + dr;
+                int c = col + dc;
+                boolean isValidDirection = false;
+                boolean hasOpponentPiece = false;
+
+                while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c] == playerCell.reverse()) {
+                    r += dr;
+                    c += dc;
+                    isValidDirection = true;
+                    hasOpponentPiece = true;
+                }
+
+                if (isValidDirection && r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c] == playerCell && hasOpponentPiece) {
+                    while (r != row || c != col) {
+                        r -= dr;
+                        c -= dc;
+                        this.set(r, c, playerCell);
+                    }
+                }
+            }
+        }
+    }
+
+    public Board placePieceAndGetCopy(int row, int col, Cell playerCell) {
+        Board copy = getBoardCopy();
+        copy.placePiece(row, col, playerCell);
+        return copy;
+    }
 }
+
+
 
 

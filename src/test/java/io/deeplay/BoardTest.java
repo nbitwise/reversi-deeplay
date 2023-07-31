@@ -67,5 +67,29 @@ class BoardTest {
         assertEquals(58, board.getQuantityOfEmpty());
     }
 
+    @Test
+    void testCopyBoard() {
+        assertEquals(board, board.getBoardCopy());
+    }
+
+    @Test
+    void testPlacePiece() {
+        Board boardCopy1 = board.placePieceAndGetCopy(2, 4, Cell.WHITE);
+        assertEquals(Cell.WHITE, boardCopy1.get(3, 4));
+        assertEquals(Cell.WHITE, boardCopy1.get(2, 4));
+        assertEquals(Cell.WHITE, boardCopy1.get(2, 4));
+        board.set(2, 2, Cell.WHITE);
+        board.set(4, 2, Cell.WHITE);
+        board.set(4, 4, Cell.WHITE);
+        board.set(2, 3, Cell.BLACK);
+        board.set(3, 3, Cell.BLACK);
+        board.set(3, 4, Cell.BLACK);
+        Board boardCopy2 = board.placePieceAndGetCopy(2, 4, Cell.WHITE);
+        assertEquals(Cell.WHITE, boardCopy2.get(2, 3));
+        assertEquals(Cell.WHITE, boardCopy2.get(3, 3));
+        assertEquals(Cell.WHITE, boardCopy2.get(3, 4));
+        assertEquals(Cell.WHITE, boardCopy2.get(2, 4));
+    }
+
 
 }
