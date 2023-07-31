@@ -66,4 +66,15 @@ class BoardTest {
         assertEquals(3, board.getQuantityOfBlack());
         assertEquals(58, board.getQuantityOfEmpty());
     }
+
+    @Test
+    void testIsValidMove() {
+        assertTrue(board.isValidMove(3, 2, Cell.BLACK));
+        assertFalse(board.isValidMove(3, 2, Cell.WHITE));
+        assertTrue(board.isValidMove(2, 3, Cell.BLACK));
+        assertFalse(board.isValidMove(2, 2, Cell.BLACK));
+        board.set(5, 5, Cell.BLACK);
+        assertTrue(board.isValidMove(2, 2, Cell.BLACK));
+
+    }
 }

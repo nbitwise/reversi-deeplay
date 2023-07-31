@@ -67,7 +67,15 @@ public class Board {
         return board[row][col];
     }
 
-    private boolean isValidMove(int row, int col, Cell cell) {
+    /**
+     * Определяет, возможен из клетки ход, или нет.
+     *
+     * @param row  - строка.
+     * @param col  - колонка.
+     * @param cell - цвет игрока.
+     * @return Возвращает true, если в указанную клетку возможен ход.
+     */
+    public boolean isValidMove(int row, int col, Cell cell) {
 
         checkArgument(row, col);
         if (board[row][col] != Cell.EMPTY) {
@@ -90,7 +98,7 @@ public class Board {
                     isValidDirection = true;
                 }
 
-                if (isValidDirection && r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c] == cell.reverse()) {
+                if (isValidDirection && r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c] == cell) {
                     return true;
                 }
             }
@@ -150,7 +158,6 @@ public class Board {
         result = 31 * result + Arrays.deepHashCode(board);
         return result;
     }
-
 
 }
 
