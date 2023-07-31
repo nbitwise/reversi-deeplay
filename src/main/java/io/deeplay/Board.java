@@ -143,8 +143,7 @@ public class Board {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Board)) return false;
-        Board board1 = (Board) o;
+        if (!(o instanceof Board board1)) return false;
         return Arrays.deepEquals(board, board1.board);
     }
 
@@ -156,18 +155,16 @@ public class Board {
         return result;
     }
 
-    private Cell[][] getBoardCopy() {
-        Cell[][] copy = new Cell[BOARD_SIZE][BOARD_SIZE];
+    public Board getBoardCopy() {
+        Board copy = new Board();
         for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                copy[i][j] = board[i][j];
-            }
+            System.arraycopy(this.board[i], 0, copy.board[i], 0, BOARD_SIZE);
         }
         return copy;
     }
 
     private void placePiece(int row, int col, Cell player) {
-        board[row][col] = player;
+        this.set(row, col, player);
 
         for (int dr = -1; dr <= 1; dr++) {
             for (int dc = -1; dc <= 1; dc++) {
@@ -180,7 +177,7 @@ public class Board {
                 boolean isValidDirection = false;
                 boolean hasOpponentPiece = false;
 
-                while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c] == getOpponent(player)) {
+                while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c] == player.reverse()) {
                     r += dr;
                     c += dc;
                     isValidDirection = true;
@@ -191,21 +188,21 @@ public class Board {
                     while (r != row || c != col) {
                         r -= dr;
                         c -= dc;
-                        board[r][c] = player;
+                        this.set(r, c, player);
                     }
                 }
             }
         }
     }
 
-    private Cell[][] placePieceAndGetCopy(int row, int col, Cell player) {
+    public Board placePieceAndGetCopy(int row, int col, Cell player) {
         placePiece(row, col, player);
         return getBoardCopy();
     }
 
-    private Cell getOpponent(Cell player) {
-        return (player == BLACK) ? WHITE : BLACK;
-    }
+//    private Cell getOpponent(Cell player) {
+//        return (player == BLACK) ? WHITE : BLACK;
+//    }
 
 }
 
