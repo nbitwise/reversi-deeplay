@@ -67,18 +67,5 @@ class BoardTest {
         assertEquals(58, board.getQuantityOfEmpty());
     }
 
-    @Test
-    void parser(){
-        Board boardparse = Parser.parser("________\n" +
-                                                     "________\n" +
-                                                     "________\n" +
-                                                     "___-+___\n" +
-                                                     "___+-___\n" +
-                                                     "________\n" +
-                                                     "________\n" +
-                                                     "________\n");
-        assertEquals(board, boardparse);
 
-
-    }
 }

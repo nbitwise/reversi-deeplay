@@ -2,30 +2,35 @@ package io.deeplay;
 
 public class Parser {
 
-    private Parser(){}
+    private Parser() {
+    }
 
     /**
-     * Возвращает объект типа Board, конвертируя String bouardinstring.
+     * Возвращает объект типа Board, конвертируя String boardAsString.
      *
-     * @param boardinstring - строка, содержащая поле и разсоположенные на ней фишки, вида      "________\n" +
-     *                                                                                          "________\n" +
-     *                                                                                          "________\n" +
-     *                                                                                          "___-+___\n" +
-     *                                                                                          "___+-___\n" +
-     *                                                                                          "________\n" +
-     *                                                                                          "________\n" +
-     *                                                                                          "________\n"
+     * @param boardAsString - строка, содержащая поле и разсоположенные на ней фишки, вида
+     *                      "_ _ _ _ _ _ _ _ \n" +
+     *                      "_ _ _ _ _ _ _ _ \n" +
+     *                      "_ _ _ _ _ _ _ _ \n" +
+     *                      "_ _ _ - + _ _ _ \n" +
+     *                      "_ _ _ + - _ _ _ \n" +
+     *                      "_ _ _ _ _ _ _ _ \n" +
+     *                      "_ _ _ _ _ _ _ _ \n" +
+     *                      "_ _ _ _ _ _ _ _ \n"
      * @return возвращает доску.
      */
-    public static Board parser(String boardinstring){
+    public static Board parse(final String boardAsString, final char black, final char white) {
+        if(boardAsString.length() < (Board.getBOARD_SIZE()*2 + 1) * Board.getBOARD_SIZE() - 2)
+            throw new IllegalArgumentException();
+
         Board board = new Board();
         for (int row = 0; row < Board.getBOARD_SIZE(); row++) {
-            for (int col = 0; col < Board.getBOARD_SIZE(); col++) {
-                char currentCell = boardinstring.charAt((Board.getBOARD_SIZE()+1)*row + col);
-                if(currentCell == '+')
-                    board.set(row, col,Cell.BLACK);
-                else if (currentCell == '-') {
-                    board.set(row, col,Cell.WHITE);
+            for (int col = 0; col < Board.getBOARD_SIZE() * 2; col += 2) {
+                char currentCell = boardAsString.charAt((Board.getBOARD_SIZE()*2 + 1) * row + col);
+                if (currentCell == black)
+                    board.set(row, col/2, Cell.BLACK);
+                else if (currentCell == white) {
+                    board.set(row, col/2, Cell.WHITE);
                 }
             }
         }
