@@ -25,9 +25,9 @@ public class BoardParser {
         for (int row = 0; row < board.getSize(); row++) {
             for (int col = 0; col < board.getSize() * 2; col += 2) {
                 char currentCell = boardAsString.charAt((board.getSize() * 2 + 1) * row + col);
-                if (currentCell == black)
+                if (currentCell == black) {
                     board.set(row, col / 2, Cell.BLACK);
-                else if (currentCell == white) {
+                } else if (currentCell == white) {
                     board.set(row, col / 2, Cell.WHITE);
                 }
             }
