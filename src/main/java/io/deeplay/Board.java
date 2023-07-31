@@ -139,7 +139,7 @@ public class Board {
     /**
      * Возвращает размер доски.
      */
-    public static int getBOARD_SIZE() {
+    public int getSize() {
         return BOARD_SIZE;
     }
 
