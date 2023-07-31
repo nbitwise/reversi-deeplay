@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a829ddee-ce1e-48e6-87b8-2bfca6fc2167" name="Changes" comment="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/deeplay/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/deeplay/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/deeplay/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/deeplay/BoardParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/deeplay/BoardParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/deeplay/BoardParser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/io/deeplay/ParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/io/deeplay/ParserTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -71,7 +69,7 @@
       <recent name="io.deeplay" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.ParserTest (1)">
+  <component name="RunManager" selected="Gradle.ParserTest.testParsingOnException">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="io.deeplay.Main" />
       <module name="reversi-deeplay.main" />
@@ -84,29 +82,6 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
-    </configuration>
-    <configuration name="BoardTest.parser" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;io.deeplay.BoardTest.parser&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
     </configuration>
     <configuration name="ParserTest (1)" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -177,13 +152,36 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="ParserTest.testParsingOnException" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;io.deeplay.ParserTest.testParsingOnException&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.ParserTest.testParsingOnException" />
         <item itemvalue="Gradle.ParserTest (1)" />
         <item itemvalue="Gradle.ParserTest.testParsing (1)" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Gradle.ParserTest.parser (1)" />
-        <item itemvalue="Gradle.BoardTest.parser" />
       </list>
     </recent_temporary>
   </component>
@@ -196,7 +194,7 @@
       <option name="presentableId" value="Default" />
       <updated>1690442870816</updated>
       <workItem from="1690536391858" duration="6110000" />
-      <workItem from="1690775991121" duration="6472000" />
+      <workItem from="1690775991121" duration="7307000" />
     </task>
     <task id="LOCAL-00001" summary="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest.">
       <created>1690538996230</created>
@@ -212,7 +210,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690780300019</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest.">
+      <created>1690783709903</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1690783709904</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
