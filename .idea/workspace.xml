@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a829ddee-ce1e-48e6-87b8-2bfca6fc2167" name="Changes" comment="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest.">
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/deeplay/BoardParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/deeplay/BoardParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/io/deeplay/ParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/io/deeplay/ParserTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +68,7 @@
       <recent name="io.deeplay" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.ParserTest.testParsingOnException">
+  <component name="RunManager" selected="Gradle.ParserTest.testParsing (1)">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="io.deeplay.Main" />
       <module name="reversi-deeplay.main" />
@@ -177,9 +176,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.ParserTest.testParsing (1)" />
         <item itemvalue="Gradle.ParserTest.testParsingOnException" />
         <item itemvalue="Gradle.ParserTest (1)" />
-        <item itemvalue="Gradle.ParserTest.testParsing (1)" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Gradle.ParserTest.parser (1)" />
       </list>
@@ -194,7 +193,7 @@
       <option name="presentableId" value="Default" />
       <updated>1690442870816</updated>
       <workItem from="1690536391858" duration="6110000" />
-      <workItem from="1690775991121" duration="7307000" />
+      <workItem from="1690775991121" duration="8378000" />
     </task>
     <task id="LOCAL-00001" summary="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest.">
       <created>1690538996230</created>
@@ -217,7 +216,21 @@
       <option name="project" value="LOCAL" />
       <updated>1690783709904</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest.">
+      <created>1690786740569</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1690786740569</updated>
+    </task>
+    <task id="LOCAL-00005" summary="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest.">
+      <created>1690786806471</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1690786806471</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -22,6 +22,10 @@ public class BoardParser {
     public static Board parse(final String boardAsString, final char black, final char white) {
         Board board = new Board();
 
+        if (boardAsString.length() < (board.getSize() * 2 + 1) * board.getSize() - 2) {
+            throw new IllegalArgumentException();
+        }
+
         for (int row = 0; row < board.getSize(); row++) {
             for (int col = 0; col < board.getSize() * 2; col += 2) {
                 char currentCell = boardAsString.charAt((board.getSize() * 2 + 1) * row + col);
