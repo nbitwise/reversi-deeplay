@@ -63,7 +63,7 @@ class ParserTest {
     }
     @Test
     void testParsingOnException() {
-        assertThrows(StringIndexOutOfBoundsException.class, () -> BoardParser.parse(
+        assertThrows(IllegalArgumentException.class, () -> BoardParser.parse(
                 "_ _ _ _ _ _ _ _ \n" +
                             "_ _ _ _ _ _ _ _ \n" +
                             "_ _ _ _ _ _ _ _ \n" +
