@@ -70,7 +70,7 @@ public class Board {
         return board[row][col];
     }
 
-    private boolean isValidMove(int row, int col, Cell cell) {
+    public boolean isValidMove(int row, int col, Cell cell) {
 
         checkArgument(row, col);
         if (board[row][col] != Cell.EMPTY) {
@@ -163,7 +163,7 @@ public class Board {
         return copy;
     }
 
-    private void placePiece(int row, int col, Cell player) {
+    public void placePiece(int row, int col, Cell player) {
         this.set(row, col, player);
 
         for (int dr = -1; dr <= 1; dr++) {
