@@ -31,6 +31,7 @@ class BoardTest {
         }
     }
 
+
     @Test
     void setOnBoard() {
         board.set(1, 3, Cell.WHITE);
