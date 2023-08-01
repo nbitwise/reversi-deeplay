@@ -75,7 +75,7 @@ class BoardTest {
         assertFalse(board.isValidMove(2, 2, Cell.BLACK));
         board.set(5, 5, Cell.BLACK);
         assertTrue(board.isValidMove(2, 2, Cell.BLACK));
-        Board board1 = BoardParser.parse(
+        final Board board1 = BoardParser.parse(
                 """
                         _ _ _ _ _ _ _ _\s
                         _ _ _ _ _ _ _ _\s
@@ -102,7 +102,7 @@ class BoardTest {
         assertTrue(board1.isValidMove(5, 3, Cell.BLACK));
         assertFalse(board1.isValidMove(5, 4, Cell.BLACK));
         assertTrue(board1.isValidMove(5, 5, Cell.BLACK));
-        Board board2 = BoardParser.parse(
+        final Board board2 = BoardParser.parse(
                 """
                         _ _ _ _ _ _ _ _\s
                         _ _ _ _ _ _ _ _\s
