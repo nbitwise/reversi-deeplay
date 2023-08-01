@@ -159,6 +159,9 @@ public class Board {
         return result;
     }
 
+    public int getSize() {
+        return BOARD_SIZE;
+    }
 }
 
 
