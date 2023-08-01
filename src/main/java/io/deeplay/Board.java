@@ -100,7 +100,13 @@ public class Board {
         }
         return false;
     }
-
+    /**
+     * Метод getAllAvailableMoves в классе Board предназначен для получения списка всех доступных ходов для указанной
+     * фишки (цвета) на текущей доске.
+     *
+     * @param cell тип фишки (цвет), для которой нужно получить доступные ходы.
+     * @return список ходов типа List<Move>, представляющий все доступные ходы для указанной фишки.
+     */
     public List<Move> getAllAvailableMoves(Cell cell) {
         List<Move> moves = new ArrayList<>();
         for (int i = 0; i < BOARD_SIZE; i++) {

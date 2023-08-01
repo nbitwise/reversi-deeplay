@@ -36,14 +36,14 @@ public abstract class Player {
 
         @Override
         public Move makeMove(Board board) {
-            List<Move> availableMoves = board.getAllAvailableMoves(playerCell);
+            final List<Move> availableMoves = board.getAllAvailableMoves(playerCell);
             System.out.println("Доступные ходы: " + availableMoves);
 
             while (true) {
                 System.out.print("Введите строку и столбец (например, 2 3): ");
-                int row = scanner.nextInt();
-                int col = scanner.nextInt();
-                Move move = new Move(row, col);
+                final int row = scanner.nextInt();
+                final int col = scanner.nextInt();
+                final Move move = new Move(row, col);
 
                 if (availableMoves.contains(move)) {
                     board.placePiece(row, col, playerCell); // Размещаем фишку на доске
@@ -54,7 +54,7 @@ public abstract class Player {
             }
         }
     }
-    /**
+        /**
      * Подкласс BotPlayer представляет игрока-бота, который делает случайные ходы.
      */
     public static class BotPlayer extends Player {
