@@ -177,7 +177,7 @@ public class Board {
     }
 
     public void placePiece(int row, int col, Cell playerCell) {
-        this.set(row, col, playerCell);
+        set(row, col, playerCell);
 
         for (int dr = -1; dr <= 1; dr++) {
             for (int dc = -1; dc <= 1; dc++) {
@@ -201,7 +201,7 @@ public class Board {
                     while (r != row || c != col) {
                         r -= dr;
                         c -= dc;
-                        this.set(r, c, playerCell);
+                        set(r, c, playerCell);
                     }
                 }
             }
