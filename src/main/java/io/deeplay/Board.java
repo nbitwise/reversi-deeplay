@@ -2,6 +2,9 @@ package io.deeplay;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Board {
     private final Cell[][] board;
@@ -67,7 +70,7 @@ public class Board {
         return board[row][col];
     }
 
-    private boolean isValidMove(int row, int col, Cell cell) {
+    public boolean isValidMove(int row, int col, Cell cell) {
 
         checkArgument(row, col);
         if (board[row][col] != Cell.EMPTY) {
@@ -90,7 +93,7 @@ public class Board {
                     isValidDirection = true;
                 }
 
-                if (isValidDirection && r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c] == cell.reverse()) {
+                if (isValidDirection && r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c] == cell) {
                     return true;
                 }
             }
@@ -98,16 +101,18 @@ public class Board {
         return false;
     }
 
-    private boolean hasAvailableMoves(Cell cell) {
+    public List<Move> getAllAvailableMoves(Cell cell) {
+        List<Move> moves = new ArrayList<>();
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 if (isValidMove(i, j, cell)) {
-                    return true;
+                    moves.add(new Move(i, j));
                 }
             }
         }
-        return false;
+        return moves;
     }
+
 
 
     /**
@@ -203,7 +208,3 @@ public class Board {
         return copy;
     }
 }
-
-
-
-
