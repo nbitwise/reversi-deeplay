@@ -75,6 +75,59 @@ class BoardTest {
         assertFalse(board.isValidMove(2, 2, Cell.BLACK));
         board.set(5, 5, Cell.BLACK);
         assertTrue(board.isValidMove(2, 2, Cell.BLACK));
-
+        Board board1 = BoardParser.parse(
+                """
+                        _ _ _ _ _ _ _ _\s
+                        _ _ _ _ _ _ _ _\s
+                        _ _ W W W _ _ _\s
+                        _ _ W B W _ _ _\s
+                        _ _ W W W _ _ _\s
+                        _ _ _ _ _ _ _ _\s
+                        _ _ _ _ _ _ _ _\s
+                        _ _ _ _ _ _ _ _\s
+                        """, 'B', 'W');
+        assertTrue(board1.isValidMove(1, 1, Cell.BLACK));
+        assertFalse(board1.isValidMove(1, 2, Cell.BLACK));
+        assertTrue(board1.isValidMove(1, 3, Cell.BLACK));
+        assertFalse(board1.isValidMove(1, 4, Cell.BLACK));
+        assertTrue(board1.isValidMove(1, 5, Cell.BLACK));
+        assertFalse(board1.isValidMove(2, 1, Cell.BLACK));
+        assertFalse(board1.isValidMove(2, 5, Cell.BLACK));
+        assertTrue(board1.isValidMove(3, 1, Cell.BLACK));
+        assertTrue(board1.isValidMove(3, 5, Cell.BLACK));
+        assertFalse(board1.isValidMove(4, 1, Cell.BLACK));
+        assertFalse(board1.isValidMove(4, 5, Cell.BLACK));
+        assertTrue(board1.isValidMove(5, 1, Cell.BLACK));
+        assertFalse(board1.isValidMove(5, 2, Cell.BLACK));
+        assertTrue(board1.isValidMove(5, 3, Cell.BLACK));
+        assertFalse(board1.isValidMove(5, 4, Cell.BLACK));
+        assertTrue(board1.isValidMove(5, 5, Cell.BLACK));
+        Board board2 = BoardParser.parse(
+                """
+                        _ _ _ _ _ _ _ _\s
+                        _ _ _ _ _ _ _ _\s
+                        _ _ W W W _ _ _\s
+                        _ _ W _ W _ _ _\s
+                        _ _ W W W _ _ _\s
+                        _ _ _ _ _ _ _ _\s
+                        _ _ _ _ _ _ _ _\s
+                        _ _ _ _ _ _ _ _\s
+                        """, 'B', 'W');
+        assertFalse(board2.isValidMove(1, 1, Cell.BLACK));
+        assertFalse(board2.isValidMove(1, 2, Cell.BLACK));
+        assertFalse(board2.isValidMove(1, 3, Cell.BLACK));
+        assertFalse(board2.isValidMove(1, 4, Cell.BLACK));
+        assertFalse(board2.isValidMove(1, 5, Cell.BLACK));
+        assertFalse(board2.isValidMove(2, 1, Cell.BLACK));
+        assertFalse(board2.isValidMove(2, 5, Cell.BLACK));
+        assertFalse(board2.isValidMove(3, 1, Cell.BLACK));
+        assertFalse(board2.isValidMove(3, 5, Cell.BLACK));
+        assertFalse(board2.isValidMove(4, 1, Cell.BLACK));
+        assertFalse(board2.isValidMove(4, 5, Cell.BLACK));
+        assertFalse(board2.isValidMove(5, 1, Cell.BLACK));
+        assertFalse(board2.isValidMove(5, 2, Cell.BLACK));
+        assertFalse(board2.isValidMove(5, 3, Cell.BLACK));
+        assertFalse(board2.isValidMove(5, 4, Cell.BLACK));
+        assertFalse(board2.isValidMove(5, 5, Cell.BLACK));
     }
 }
