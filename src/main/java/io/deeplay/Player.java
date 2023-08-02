@@ -15,6 +15,7 @@ public abstract class Player {
     public Player(Cell playerCell) {
         this.playerCell = playerCell;
     }
+
     /**
      * Абстрактный метод makeMove, который должен быть реализован в подклассах.
      * Определяет ход игрока в зависимости от типа игрока (HumanPlayer или BotPlayer).
@@ -37,7 +38,11 @@ public abstract class Player {
         @Override
         public Move makeMove(Board board) {
             final List<Move> availableMoves = board.getAllAvailableMoves(playerCell);
-            System.out.println("Доступные ходы: " + availableMoves);
+            System.out.println("Досступные ходы: ");
+            for (Move m : availableMoves) {
+                System.out.println(m.row + " " + m.col);
+            }
+
 
             while (true) {
                 System.out.print("Введите строку и столбец (например, 2 3): ");
@@ -54,7 +59,8 @@ public abstract class Player {
             }
         }
     }
-        /**
+
+    /**
      * Подкласс BotPlayer представляет игрока-бота, который делает случайные ходы.
      */
     public static class BotPlayer extends Player {
