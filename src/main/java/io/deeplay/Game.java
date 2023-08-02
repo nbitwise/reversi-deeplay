@@ -17,24 +17,29 @@ public class Game {
      */
     public static void startGame(Board board, final Player black, final Player white) {
         Logging.logStart(fileForHuman);
-        while (!board.getAllAvailableMoves(black.playerCell).isEmpty() || !board.getAllAvailableMoves(white.playerCell).isEmpty()) {
+        int moveNumber = 1;
+
+        while (board.getQuantityOfEmpty() > 0) {
             Board copyBoard = board.getBoardCopy();
             if (!board.getAllAvailableMoves(black.playerCell).isEmpty()) {
                 final Move blackMove = black.makeMove(copyBoard);
                 board.placePiece(blackMove.row, blackMove.col, black.playerCell);
                 Logging.logMove(board, blackMove.row, blackMove.col, black, fileForHuman, fileForBot);
-                UI.displayMove(board, black, blackMove);
+                UI.displayMove(moveNumber, board, black, blackMove);
+                moveNumber++;
             }
             if (!board.getAllAvailableMoves(white.playerCell).isEmpty()) {
                 final Move whiteMove = white.makeMove(copyBoard);
                 board.placePiece(whiteMove.row, whiteMove.col, white.playerCell);
                 Logging.logMove(board, whiteMove.row, whiteMove.col, white, fileForHuman, fileForBot);
-                UI.displayMove(board, white, whiteMove);
+                UI.displayMove(moveNumber, board, white, whiteMove);
+                moveNumber++;
             }
         }
         Logging.logEnd(board, fileForHuman, fileForBot);
         displayResult(board);
     }
+
 
     /**
      * Метод displayResult отображает результат партии.
