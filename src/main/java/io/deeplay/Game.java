@@ -17,7 +17,7 @@ public class Game {
      */
     public static void startGame(Board board, final Player black, final Player white) {
         Logging.logStart(fileForHuman);
-        while (board.getQuantityOfEmpty() > 0) {
+        while (!board.getAllAvailableMoves(black.playerCell).isEmpty() || !board.getAllAvailableMoves(white.playerCell).isEmpty()) {
             Board copyBoard = board.getBoardCopy();
             if (!board.getAllAvailableMoves(black.playerCell).isEmpty()) {
                 final Move blackMove = black.makeMove(copyBoard);

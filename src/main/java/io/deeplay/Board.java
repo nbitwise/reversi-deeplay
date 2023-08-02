@@ -87,13 +87,13 @@ public class Board {
                 int c = col + dc;
                 boolean isValidDirection = false;
 
-                while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c] == cell.reverse()) {
+                while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c]==cell.reverse()) {
                     r += dr;
                     c += dc;
                     isValidDirection = true;
                 }
 
-                if (isValidDirection && r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c] == cell) {
+                if (isValidDirection && r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c]==cell) {
                     return true;
                 }
             }
@@ -168,6 +168,10 @@ public class Board {
         return result;
     }
 
+    /**
+     * Метод создает копию доски.
+     * @return копия доски.
+     */
     public Board getBoardCopy() {
         Board copy = new Board();
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -176,6 +180,11 @@ public class Board {
         return copy;
     }
 
+    /**
+     * Устанавливает фишку в указанное место, переворачивая другие фишки в соответсвии с логикой игры.
+     * @param row - строка.
+     * @param col - колонна.
+     */
     public void placePiece(int row, int col, Cell playerCell) {
         set(row, col, playerCell);
 
@@ -208,6 +217,13 @@ public class Board {
         }
     }
 
+    /**
+     * Выпоняет метод placePiece, создает копию доски после хода.
+     * @param row - строка.
+     * @param col - колонна.
+     * @param playerCell - клетка цвета игрока, осуществляющего ход.
+     * @return возвращает копию доски после хода.
+     */
     public Board placePieceAndGetCopy(int row, int col, Cell playerCell) {
         Board copy = getBoardCopy();
         copy.placePiece(row, col, playerCell);
