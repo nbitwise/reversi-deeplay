@@ -38,27 +38,37 @@ public abstract class Player {
         @Override
         public Move makeMove(Board board) {
             final List<Move> availableMoves = board.getAllAvailableMoves(playerCell);
-            System.out.println("Досступные ходы: ");
+            System.out.println("Доступные ходы: ");
             for (Move m : availableMoves) {
                 System.out.println(m.row + " " + m.col);
             }
 
-
             while (true) {
                 System.out.print("Введите строку и столбец (например, 2 3): ");
-                final int row = scanner.nextInt();
-                final int col = scanner.nextInt();
-                final Move move = new Move(row, col);
+                String input = scanner.nextLine();
+                String[] inputArray = input.trim().split("\\s+");
+                if (inputArray.length == 2) {
+                    try {
+                        int row = Integer.parseInt(inputArray[0]) - 1;
+                        int col = Integer.parseInt(inputArray[1]) - 1;
+                        final Move move = new Move(row, col);
 
-                if (availableMoves.contains(move)) {
-                    board.placePiece(row, col, playerCell); // Размещаем фишку на доске
-                    return move;
+                        if (availableMoves.contains(move)) {
+                            board.placePiece(row, col, playerCell); // Размещаем фишку на доске
+                            return move;
+                        } else {
+                            System.out.println("Недопустимый ход! Пожалуйста, выберите из доступных ходов.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Недопустимый ввод! Пожалуйста, введите два числа через пробел.");
+                    }
                 } else {
-                    System.out.println("Недопустимый ход! Пожалуйста, выберите из доступных ходов.");
+                    System.out.println("Недопустимый ввод! Пожалуйста, введите два числа через пробел.");
                 }
             }
         }
     }
+
 
     /**
      * Подкласс BotPlayer представляет игрока-бота, который делает случайные ходы.
