@@ -16,8 +16,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class Player {
     private static final AtomicInteger playerCounter = new AtomicInteger(0);
-    protected int playerId;
-    protected Cell playerCell;
+    protected final int playerId;
+    protected final Cell playerCell;
     /**
      * Конструктор создает объект игрока с указанным типом фишки (клетки) и присваивает
      * ему уникальный идентификатор.
