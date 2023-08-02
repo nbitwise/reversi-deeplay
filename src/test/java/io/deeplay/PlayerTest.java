@@ -16,4 +16,21 @@ public class PlayerTest {
         Move move = player.makeMove(board);
         assertTrue(availableMoves.contains(move));
     }
+    @Test
+    void testPlayerId() {
+        Cell blackCell = Cell.BLACK;
+        Cell whiteCell = Cell.WHITE;
+
+        Player player1 = new Player.HumanPlayer(blackCell);
+        Player player2 = new Player.BotPlayer(whiteCell);
+        Player player3 = new Player.HumanPlayer(blackCell);
+
+        assertNotEquals(player1.playerId, player2.playerId);
+        assertNotEquals(player1.playerId, player3.playerId);
+        assertNotEquals(player2.playerId, player3.playerId);
+
+        assertEquals(1, player1.playerId);
+        assertEquals(2, player2.playerId);
+        assertEquals(3, player3.playerId);
+    }
 }
