@@ -110,7 +110,7 @@ class BoardTest {
                         _ _ _ _ _ _ _ _\s
                         _ _ _ _ _ _ _ _\s
                         _ _ _ _ _ _ _ _\s
-                        """, 'B', 'W');
+                        """, 'B', 'W','_');
         assertTrue(board1.isValidMove(1, 1, Cell.BLACK));
         assertFalse(board1.isValidMove(1, 2, Cell.BLACK));
         assertTrue(board1.isValidMove(1, 3, Cell.BLACK));
@@ -128,16 +128,17 @@ class BoardTest {
         assertFalse(board1.isValidMove(5, 4, Cell.BLACK));
         assertTrue(board1.isValidMove(5, 5, Cell.BLACK));
         final Board board2 = BoardParser.parse(
-                """
-                        _ _ _ _ _ _ _ _\s
-                        _ _ _ _ _ _ _ _\s
-                        _ _ W W W _ _ _\s
-                        _ _ W _ W _ _ _\s
-                        _ _ W W W _ _ _\s
-                        _ _ _ _ _ _ _ _\s
-                        _ _ _ _ _ _ _ _\s
-                        _ _ _ _ _ _ _ _\s
-                        """, 'B', 'W');
+
+                "_ _ _ _ _ _ _ _ \n" +
+                        "_ _ _ _ _ _ _ _ \n" +
+                        "_ _ W W W W _ _ \n" +
+                        "_ _ W _ W _ _ _ \n" +
+                        "_ _ W W W _ _ _ \n" +
+                        "_ _ _ _ _ _ _ _ \n" +
+                        "_ _ _ _ _ _ _ _ \n" +
+                        "_ _ _ _ _ _ _ _ \n"
+                , 'B', 'W', '_');
+
         assertFalse(board2.isValidMove(1, 1, Cell.BLACK));
         assertFalse(board2.isValidMove(1, 2, Cell.BLACK));
         assertFalse(board2.isValidMove(1, 3, Cell.BLACK));
@@ -154,6 +155,35 @@ class BoardTest {
         assertFalse(board2.isValidMove(5, 3, Cell.BLACK));
         assertFalse(board2.isValidMove(5, 4, Cell.BLACK));
         assertFalse(board2.isValidMove(5, 5, Cell.BLACK));
+        final Board board3 = BoardParser.parse(
+                "w w w w w b b b \n" +
+                        "w w b b b w b b \n" +
+                        "w w w b b w w w \n" +
+                        "w w w b w b w w \n" +
+                        "w w b w w w w _ \n" +
+                        "b w b w w w w w \n" +
+                        "b b b w w w w w \n" +
+                        "b b b b _ w w w \n"
+                , 'b', 'w', '_');
+        assertFalse(board3.isValidMove(4, 7, Cell.WHITE));
+        assertFalse(board3.isValidMove(7, 4, Cell.WHITE));
+        assertTrue(board3.isValidMove(4, 7, Cell.BLACK));
+        assertTrue(board3.isValidMove(7, 4, Cell.BLACK));
+
+        final Board board4 = BoardParser.parse(
+                "b w w w _ w w b \n" +
+                        "w w b w w w w b \n" +
+                        "w w b w w w w b \n" +
+                        "w w w w w w w b \n" +
+                        "w w w b w b w b \n" +
+                        "w w b w w w w w \n" +
+                        "w b w w w w w w \n" +
+                        "w w w w w w w _ \n"
+                , 'b', 'w', '_');
+        assertFalse(board4.isValidMove(7, 7, Cell.WHITE));
+        assertTrue(board4.isValidMove(7, 7, Cell.BLACK));
+        assertFalse(board4.isValidMove(0, 4, Cell.WHITE));
+        assertTrue(board4.isValidMove(0, 4, Cell.BLACK));
     }
 
 }
