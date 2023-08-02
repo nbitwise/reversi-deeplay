@@ -38,7 +38,7 @@ public final class UI {
      * @param move       сделанный ход.
      */
     public static void displayMove(final int moveNumber, final Board board, final Player player, final Move move) {
-        System.out.println("Ход №" + moveNumber + " игрока " + player.playerCell + ": " + (move.row + 1) + " " + (move.col + 1) + "\n");
+        System.out.println("Ход №" + moveNumber + " игрока " + player.playerId + "с цветом " + player.playerCell + ": " + (move.row + 1) + " " + (move.col + 1) + "\n");
         displayBoard(board);
         System.out.println();
     }

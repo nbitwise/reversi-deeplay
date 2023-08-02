@@ -4,18 +4,30 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-
 /**
- * Абстрактный класс Player представляет игрока в игре. У каждого игрока есть свой тип фишки (клетки) - Cell,
+ * Абстрактный класс Player представляет игрока в игре.
+ * У каждого игрока есть свой тип фишки (клетки) - Cell,
  * который представляет цвет игрока (BLACK или WHITE).
+ *
+ * Каждый игрок получает уникальный идентификатор, который может быть использован
+ * для статистики или для других целей, требующих идентификации игрока.
  */
-public abstract class Player {
-    protected Cell playerCell;
+import java.util.concurrent.atomic.AtomicInteger;
 
+public abstract class Player {
+    private static final AtomicInteger playerCounter = new AtomicInteger(0);
+    protected int playerId;
+    protected Cell playerCell;
+    /**
+     * Конструктор создает объект игрока с указанным типом фишки (клетки) и присваивает
+     * ему уникальный идентификатор.
+     *
+     * @param playerCell тип фишки (клетки) игрока (BLACK или WHITE).
+     */
     public Player(Cell playerCell) {
+        this.playerId = playerCounter.incrementAndGet();
         this.playerCell = playerCell;
     }
-
     /**
      * Абстрактный метод makeMove, который должен быть реализован в подклассах.
      * Определяет ход игрока в зависимости от типа игрока (HumanPlayer или BotPlayer).
