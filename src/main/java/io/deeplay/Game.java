@@ -23,11 +23,13 @@ public class Game {
                 final Move blackMove = black.makeMove(copyBoard);
                 board.placePiece(blackMove.row, blackMove.col, black.playerCell);
                 Logging.logMove(board, blackMove.row, blackMove.col, black, fileForHuman, fileForBot);
+                UI.displayMove(board, black, blackMove);
             }
             if (!board.getAllAvailableMoves(white.playerCell).isEmpty()) {
                 final Move whiteMove = white.makeMove(copyBoard);
                 board.placePiece(whiteMove.row, whiteMove.col, white.playerCell);
                 Logging.logMove(board, whiteMove.row, whiteMove.col, white, fileForHuman, fileForBot);
+                UI.displayMove(board, white, whiteMove);
             }
         }
         Logging.logEnd(board, fileForHuman, fileForBot);
