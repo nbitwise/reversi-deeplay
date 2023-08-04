@@ -1,10 +1,9 @@
 package io.deeplay;
 
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
+import java.util.Objects;
 
 public class Board {
     private final Cell[][] board;
@@ -230,3 +229,7 @@ public class Board {
         return copy;
     }
 }
+
+
+
+

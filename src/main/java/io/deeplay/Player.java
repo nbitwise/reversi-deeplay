@@ -1,5 +1,6 @@
 package io.deeplay;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -18,6 +19,7 @@ public abstract class Player {
     private static final AtomicInteger playerCounter = new AtomicInteger(0);
     protected final int playerId;
     protected final Cell playerCell;
+
     /**
      * Конструктор создает объект игрока с указанным типом фишки (клетки) и присваивает
      * ему уникальный идентификатор.
@@ -28,6 +30,7 @@ public abstract class Player {
         this.playerId = playerCounter.incrementAndGet();
         this.playerCell = playerCell;
     }
+
     /**
      * Абстрактный метод makeMove, который должен быть реализован в подклассах.
      * Определяет ход игрока в зависимости от типа игрока (HumanPlayer или BotPlayer).
@@ -52,10 +55,11 @@ public abstract class Player {
             final List<Move> availableMoves = board.getAllAvailableMoves(playerCell);
             System.out.println("Доступные ходы: ");
             for (Move m : availableMoves) {
-                System.out.println(m.row + " " + m.col);
+                System.out.println(m.row + 1 + " " + (m.col + 1));
             }
 
             while (true) {
+                Date dateStart = new Date();
                 System.out.print("Введите строку и столбец (например, 2 3): ");
                 String input = scanner.nextLine();
                 String[] inputArray = input.trim().split("\\s+");
@@ -67,6 +71,9 @@ public abstract class Player {
 
                         if (availableMoves.contains(move)) {
                             board.placePiece(row, col, playerCell); // Размещаем фишку на доске
+                            Date dateEnd = new Date();
+                            long finalTime = dateEnd.getTime()- dateStart.getTime();
+                            move.setTimeOnMove(finalTime);
                             return move;
                         } else {
                             System.out.println("Недопустимый ход! Пожалуйста, выберите из доступных ходов.");
@@ -80,6 +87,7 @@ public abstract class Player {
             }
         }
     }
+
     /**
      * Подкласс BotPlayer представляет игрока-бота, который делает случайные ходы.
      */
@@ -94,7 +102,11 @@ public abstract class Player {
         @Override
         public Move makeMove(Board board) {
             List<Move> availableMoves = board.getAllAvailableMoves(playerCell);
+            Date dateStart = new Date();
             Move move = availableMoves.get(random.nextInt(availableMoves.size()));
+            Date dateEnd = new Date();
+            long time = dateEnd.getTime() - dateStart.getTime();
+            move.setTimeOnMove(time);
             board.placePiece(move.row, move.col, playerCell);
             return move;
         }

@@ -1,42 +1,43 @@
 package io.deeplay;
 
+import java.util.Date;
+
 /**
  * Класс Game дает возможность запустить игру.
  */
 public class Game {
-
-    private static final String fileForHuman = "fileForHuman";
-    private static final String fileForBot = "fileForBot";
-
     /**
      * Метод startGame запускает игру. По окончанию игры выводится результат.
      *
-     * @param board доска.
-     * @param black игрок черными.
-     * @param white игрок белыми.
+     * @param board             доска.
+     * @param black             игрок черными.
+     * @param white             игрок белыми.
+     * @param gameId            id игры.
+     * @param sessionPlayerFile файл в который будет записан лог игры.
+     * @param sessionSystemFile файл в который будут записаны ошибки.
      */
-    public static void startGame(Board board, final Player black, final Player white) {
-        Logging.logStart(fileForHuman);
+    public static void startGame(Board board, final Player black, final Player white, final int gameId,
+                                 final String sessionPlayerFile, final String sessionSystemFile) {
+        Logging.logStart(sessionPlayerFile, sessionSystemFile, gameId);
         int moveNumber = 1;
-
-        while (board.getQuantityOfEmpty() > 0) {
+        while (!board.getAllAvailableMoves(black.playerCell).isEmpty() || !board.getAllAvailableMoves(white.playerCell).isEmpty()) {
             Board copyBoard = board.getBoardCopy();
             if (!board.getAllAvailableMoves(black.playerCell).isEmpty()) {
                 final Move blackMove = black.makeMove(copyBoard);
                 board.placePiece(blackMove.row, blackMove.col, black.playerCell);
-                Logging.logMove(board, blackMove.row, blackMove.col, black, fileForHuman, fileForBot);
+                Logging.logMove(board, blackMove.row, blackMove.col, black, sessionPlayerFile, sessionSystemFile, blackMove.getTimeOnMove());
                 UI.displayMove(moveNumber, board, black, blackMove);
                 moveNumber++;
             }
             if (!board.getAllAvailableMoves(white.playerCell).isEmpty()) {
                 final Move whiteMove = white.makeMove(copyBoard);
                 board.placePiece(whiteMove.row, whiteMove.col, white.playerCell);
-                Logging.logMove(board, whiteMove.row, whiteMove.col, white, fileForHuman, fileForBot);
+                Logging.logMove(board, whiteMove.row, whiteMove.col, white, sessionPlayerFile, sessionSystemFile, whiteMove.getTimeOnMove());
                 UI.displayMove(moveNumber, board, white, whiteMove);
                 moveNumber++;
             }
         }
-        Logging.logEnd(board, fileForHuman, fileForBot);
+        Logging.logEnd(board, sessionPlayerFile, sessionSystemFile);
         displayResult(board);
     }
 
