@@ -40,10 +40,10 @@ public class LogAnalyzer {
                 }
                 if (line.startsWith("Winner")) {
                     final String winner = line.substring(8, 13);
-                    if(winner.equals("Black")){
+                    if (winner.equals("Black")) {
                         addAnalysis(idFirstPlayer, winner, idSecondPlayer, fileNameWriteLog);
                     }
-                    if(winner.equals("White")){
+                    if (winner.equals("White")) {
                         addAnalysis(idSecondPlayer, winner, idFirstPlayer, fileNameWriteLog);
                     }
 
@@ -60,7 +60,7 @@ public class LogAnalyzer {
     }
 
     /**
-     * Метод calculatePlayerId парсит строку и выдвает id игрока
+     * Метод calculatePlayerId парсит строку и выдает id игрока
      *
      * @param line  строка.
      * @param color цвет.
@@ -100,7 +100,7 @@ public class LogAnalyzer {
         final Path path = Paths.get(fileNameWriteLog);
 
         try (final Stream<String> stream = Files.lines(path, StandardCharsets.UTF_8);
-             FileReader file = new FileReader(fileNameWriteLog)) {
+             final FileReader file = new FileReader(fileNameWriteLog)) {
             boolean flag = false;
             final BufferedReader reader = new BufferedReader(file);
             String lineFromAnalysis = reader.readLine();

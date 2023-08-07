@@ -85,9 +85,9 @@ public class Logging {
     /**
      * Метод logEnd записывает результат игры.
      *
-     * @param board        доска.
+     * @param board         доска.
      * @param writeForHuman FileWriter файла человекочитаемых записей
-     * @param writeForBot  FileWriter фалйа для логов
+     * @param writeForBot   FileWriter фалйа для логов
      */
     public static void logEnd(final Board board, final FileWriter writeForHuman, final FileWriter writeForBot) {
         try {
