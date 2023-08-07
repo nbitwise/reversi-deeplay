@@ -1,9 +1,11 @@
 package io.deeplay;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 /**
  * Класс Logging дает возможность записывть ход игры.
@@ -12,54 +14,60 @@ public class Logging {
     /**
      * Метод logMove записыват в файлы ходы белых, черных и положение доски после сделанного хода.
      *
-     * @param board        доска.
-     * @param row          строка.
-     * @param col          колонка.
-     * @param player       игркок.
-     * @param fileForHuman Название файла в который будет записан ход понятный человеку.
-     * @param fileForBot   Название файла с укороченной записью.
+     * @param board      доска.
+     * @param row        строка.
+     * @param col        колонка.
+     * @param player     игркок.
+     * @param playerFile Название файла в который будет записан ход понятный человеку.
+     * @param systemFile Название файла с укороченной записью.
+     * @param timeOnMove Время потравченное игроком на ход
      */
-    public static void logMove(final Board board, final int row, final int col, Player player, final String fileForHuman, final String fileForBot) {
-        try (FileWriter writeForHuman = new FileWriter(fileForHuman, true);
-             FileWriter writerForBot = new FileWriter(fileForBot, true)) {
+    public static void logMove(final Board board, final int row, final int col, Player player, final String playerFile, final String systemFile, long timeOnMove) {
+        try (FileWriter writeForHuman = new FileWriter(playerFile, true);
+             FileWriter writerForBot = new FileWriter(systemFile, true)) {
             String textForHuman;
-            String textForBot;
+            String textForSystem = "";
             if (player.playerCell.equals(Cell.BLACK)) {
-                textForHuman = "Player BLACK placed his piece on " + (row + 1) + " " + (col + 1);
-                textForBot = "b" + row + "" + col;
+                textForHuman = "PlayerId: " + player.playerId + " BLACK placed his piece on " + (row + 1) + " "
+                        + (col + 1) + "and spent on it " + timeOnMove + " ms\n";
             } else {
-                textForHuman = "Player WHITE placed his piece on " + (row + 1) + " " + (col + 1);
-                textForBot = "w" + row + "" + col;
+                textForHuman = "PlayerId: " + player.playerId + " WHITE placed his piece on " + (row + 1) + " "
+                        + (col + 1) + "and spent on it " + timeOnMove + " ms\n";
             }
-            textForHuman += "\nboard\n";
             for (int i = 0; i < board.getSize(); i++) {
                 for (int j = 0; j < board.getSize(); j++) {
                     textForHuman += board.get(i, j).toString() + " ";
                 }
                 textForHuman += "\n";
             }
-            textForHuman += "\n";
-            writerForBot.write(textForBot);
+            writerForBot.write(textForSystem);
             writeForHuman.write(textForHuman);
             writerForBot.flush();
             writeForHuman.flush();
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            Logger logger = LogManager.getLogger(Logging.class);
+            logger.log(Level.ERROR, ex.getMessage());
         }
     }
 
     /**
      * Метод logStart записыват в файл дату игры.
      *
-     * @param fileForHuman Название файла в который будет записан ход понятный человеку.
+     * @param playerFile Название файла в который будет записан ход понятный человеку.
+     * @param systemFile Название файла в который будет записаны ошибки.
+     * @param gameId     id игры.
      */
-    public static void logStart(final String fileForHuman) {
-        try (FileWriter writeForHuman = new FileWriter(fileForHuman, true)) {
-            final String textForHuman = "Game " + new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()) + "\n";
-            writeForHuman.write(textForHuman);
+    public static void logStart(final String playerFile, final String systemFile, final int gameId) {
+        try (FileWriter writeForHuman = new FileWriter(playerFile, true);
+             FileWriter writeForSystem = new FileWriter(systemFile, true)) {
+            final String text = "Game id " + gameId + " \n";
+            writeForHuman.write(text);
+            writeForSystem.write(text);
             writeForHuman.flush();
+            writeForSystem.flush();
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            Logger logger = LogManager.getLogger(Logging.class);
+            logger.log(Level.ERROR, ex.getMessage());
         }
     }
 
@@ -96,7 +104,8 @@ public class Logging {
             writeForHuman.flush();
 
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            Logger logger = LogManager.getLogger(Logging.class);
+            logger.log(Level.ERROR, ex.getMessage());
         }
     }
 
