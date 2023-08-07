@@ -1,5 +1,8 @@
 package io.deeplay;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.ArrayList;
@@ -11,6 +14,7 @@ public class Board {
     private static final int BOARD_SIZE = 8;
     private int quantityOfWhite = 2;
     private int quantityOfBlack = 2;
+    private final Logger LOGGER = LogManager.getLogger(Board.class);
 
 
     /**
@@ -144,6 +148,7 @@ public class Board {
 
     private void checkArgument(int row, int col) {
         if (row >= BOARD_SIZE || row < 0 || col >= BOARD_SIZE || col < 0) {
+            LOGGER.error("на доску поданы неверные координаты");
             throw new IllegalArgumentException();
         }
     }
