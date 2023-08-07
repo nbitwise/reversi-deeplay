@@ -1,7 +1,9 @@
 package io.deeplay;
 
-import java.util.Date;
+import org.apache.logging.log4j.LogManager;
 
+import java.io.FileWriter;
+import java.io.IOException;
 /**
  * Класс Game дает возможность запустить игру.
  */
@@ -18,27 +20,33 @@ public class Game {
      */
     public static void startGame(Board board, final Player black, final Player white, final int gameId,
                                  final String sessionPlayerFile, final String sessionSystemFile) {
-        Logging.logStart(sessionPlayerFile, sessionSystemFile, gameId);
+        try(FileWriter writeForHuman = new FileWriter(sessionPlayerFile, true);
+            FileWriter writerForBot = new FileWriter(sessionSystemFile, true)){
+        Logging.logStart(gameId, writeForHuman, writerForBot);
         int moveNumber = 1;
         while (!board.getAllAvailableMoves(black.playerCell).isEmpty() || !board.getAllAvailableMoves(white.playerCell).isEmpty()) {
             Board copyBoard = board.getBoardCopy();
-            if (!board.getAllAvailableMoves(black.playerCell).isEmpty()) {
-                final Move blackMove = black.makeMove(copyBoard);
-                board.placePiece(blackMove.row, blackMove.col, black.playerCell);
-                Logging.logMove(board, blackMove.row, blackMove.col, black, sessionPlayerFile, sessionSystemFile, blackMove.getTimeOnMove());
-                UI.displayMove(moveNumber, board, black, blackMove);
-                moveNumber++;
-            }
-            if (!board.getAllAvailableMoves(white.playerCell).isEmpty()) {
-                final Move whiteMove = white.makeMove(copyBoard);
-                board.placePiece(whiteMove.row, whiteMove.col, white.playerCell);
-                Logging.logMove(board, whiteMove.row, whiteMove.col, white, sessionPlayerFile, sessionSystemFile, whiteMove.getTimeOnMove());
-                UI.displayMove(moveNumber, board, white, whiteMove);
-                moveNumber++;
-            }
+            moveNumber = makeMoveOnBoard(board, black, moveNumber, copyBoard, writeForHuman, writerForBot);
+            moveNumber = makeMoveOnBoard(board, white, moveNumber, copyBoard, writeForHuman, writerForBot);
         }
-        Logging.logEnd(board, sessionPlayerFile, sessionSystemFile);
+        Logging.logEnd(board, writeForHuman, writerForBot);
         displayResult(board);
+        }catch (IOException ex) {
+            org.apache.logging.log4j.Logger log4jLog = LogManager.getLogger(Logging.class);
+            log4jLog.debug("message {}", 1);
+        }
+    }
+
+    private static int makeMoveOnBoard(Board board, Player black,
+                                       int moveNumber, Board copyBoard, FileWriter writeForHuman, FileWriter writerForBot) {
+        if (!board.getAllAvailableMoves(black.playerCell).isEmpty()) {
+            final Move blackMove = black.makeMove(copyBoard);
+            board.placePiece(blackMove.row, blackMove.col, black.playerCell);
+            Logging.logMove(board, blackMove.row, blackMove.col, black, blackMove.getTimeOnMove(), writeForHuman, writerForBot);
+            UI.displayMove(moveNumber, board, black, blackMove);
+            moveNumber++;
+        }
+        return moveNumber;
     }
 
 

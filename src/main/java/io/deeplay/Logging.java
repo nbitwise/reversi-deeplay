@@ -14,26 +14,20 @@ public class Logging {
     /**
      * Метод logMove записыват в файлы ходы белых, черных и положение доски после сделанного хода.
      *
-     * @param board      доска.
-     * @param row        строка.
-     * @param col        колонка.
-     * @param player     игркок.
-     * @param playerFile Название файла в который будет записан ход понятный человеку.
-     * @param systemFile Название файла с укороченной записью.
-     * @param timeOnMove Время потравченное игроком на ход
+     * @param board         доска.
+     * @param row           строка.
+     * @param col           колонка.
+     * @param player        игркок.
+     * @param timeOnMove    Время потравченное игроком на ход
+     * @param writeForHuman FileWriter файла человекочитаемых записей
+     * @param writerForBot  FileWriter фалйа для логов
      */
-    public static void logMove(final Board board, final int row, final int col, Player player, final String playerFile, final String systemFile, long timeOnMove) {
-        try (FileWriter writeForHuman = new FileWriter(playerFile, true);
-             FileWriter writerForBot = new FileWriter(systemFile, true)) {
+    public static void logMove(final Board board, final int row, final int col, Player player,
+                               long timeOnMove, final FileWriter writeForHuman, final FileWriter writerForBot) {
+        try {
             String textForHuman;
             String textForSystem = "";
-            if (player.playerCell.equals(Cell.BLACK)) {
-                textForHuman = "PlayerId: " + player.playerId + " BLACK placed his piece on " + (row + 1) + " "
-                        + (col + 1) + "and spent on it " + timeOnMove + " ms\n";
-            } else {
-                textForHuman = "PlayerId: " + player.playerId + " WHITE placed his piece on " + (row + 1) + " "
-                        + (col + 1) + "and spent on it " + timeOnMove + " ms\n";
-            }
+            textForHuman = constructStringForLogMove(player, player.playerId, row + 1, col + 1, timeOnMove);
             for (int i = 0; i < board.getSize(); i++) {
                 for (int j = 0; j < board.getSize(); j++) {
                     textForHuman += board.get(i, j).toString() + " ";
@@ -45,21 +39,38 @@ public class Logging {
             writerForBot.flush();
             writeForHuman.flush();
         } catch (IOException ex) {
-            Logger logger = LogManager.getLogger(Logging.class);
-            logger.log(Level.ERROR, ex.getMessage());
+            org.apache.logging.log4j.Logger log4jLog = LogManager.getLogger(Logging.class);
+            log4jLog.debug("message {}", 1);
         }
+    }
+
+    /**
+     * Метод constructStringForLogMove создает строку для записи хода игрока
+     *
+     * @param player     игрок.
+     * @param playerId   id игрока.
+     * @param row        строка игры.
+     * @param col        колонка.
+     * @param timeOnMove время на ход.
+     */
+    public static String constructStringForLogMove(final Player player, final int playerId, final int row, final int col,
+                                                   final long timeOnMove) {
+        final String line;
+        if (player.playerCell.equals(Cell.BLACK)) {
+            line = String.format("PlayerId: %d BLACK placed his piece on %d %d and spent on it %d%n", playerId, row, col, timeOnMove);
+        } else {
+            line = String.format("PlayerId: %d WHITE placed his piece on %d %d and spent on it %d%n", playerId, row, col, timeOnMove);
+        }
+        return line;
     }
 
     /**
      * Метод logStart записыват в файл дату игры.
      *
-     * @param playerFile Название файла в который будет записан ход понятный человеку.
-     * @param systemFile Название файла в который будет записаны ошибки.
-     * @param gameId     id игры.
+     * @param gameId id игры.
      */
-    public static void logStart(final String playerFile, final String systemFile, final int gameId) {
-        try (FileWriter writeForHuman = new FileWriter(playerFile, true);
-             FileWriter writeForSystem = new FileWriter(systemFile, true)) {
+    public static void logStart(final int gameId, final FileWriter writeForHuman, final FileWriter writeForSystem) {
+        try {
             final String text = "Game id " + gameId + " \n";
             writeForHuman.write(text);
             writeForSystem.write(text);
@@ -75,17 +86,14 @@ public class Logging {
      * Метод logEnd записывает результат игры.
      *
      * @param board        доска.
-     * @param fileForHuman Название файла в который будет записан результат понятный человеку.
-     * @param fileForBot   Название файла для коротой записи.
+     * @param writeForHuman FileWriter файла человекочитаемых записей
+     * @param writeForBot  FileWriter фалйа для логов
      */
-    public static void logEnd(final Board board, final String fileForHuman, final String fileForBot) {
-        try (FileWriter writeForHuman = new FileWriter(fileForHuman, true);
-             FileWriter writeForBot = new FileWriter(fileForBot, true)) {
-
+    public static void logEnd(final Board board, final FileWriter writeForHuman, final FileWriter writeForBot) {
+        try {
             final int blackCount = board.getQuantityOfBlack();
             final int whiteCount = board.getQuantityOfWhite();
-
-            String textForHuman = "Number of Black pieces: " + blackCount + "\n" + "Number of white pieces: " + whiteCount + ".\n" + "Winner: ";
+            String textForHuman = String.format("Number of Black pieces: %d%nNumber of white pieces: %d.%nWinner: ", blackCount, whiteCount);
             String textForBot;
             if (blackCount > whiteCount) {
                 textForHuman += "Black\n";
@@ -97,12 +105,10 @@ public class Logging {
                 textForHuman += "It's tie\n";
                 textForBot = "T\n";
             }
-
             writeForBot.write(textForBot);
             writeForHuman.write(textForHuman);
             writeForBot.flush();
             writeForHuman.flush();
-
         } catch (IOException ex) {
             Logger logger = LogManager.getLogger(Logging.class);
             logger.log(Level.ERROR, ex.getMessage());
