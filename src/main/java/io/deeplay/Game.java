@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 
 import java.io.FileWriter;
 import java.io.IOException;
+
 /**
  * Класс Game дает возможность запустить игру.
  */
@@ -20,30 +21,30 @@ public class Game {
      */
     public static void startGame(Board board, final Player black, final Player white, final int gameId,
                                  final String sessionPlayerFile, final String sessionSystemFile) {
-        try(FileWriter writeForHuman = new FileWriter(sessionPlayerFile, true);
-            FileWriter writerForBot = new FileWriter(sessionSystemFile, true)){
-        Logging.logStart(gameId, writeForHuman, writerForBot);
-        int moveNumber = 1;
-        while (!board.getAllAvailableMoves(black.playerCell).isEmpty() || !board.getAllAvailableMoves(white.playerCell).isEmpty()) {
-            Board copyBoard = board.getBoardCopy();
-            moveNumber = makeMoveOnBoard(board, black, moveNumber, copyBoard, writeForHuman, writerForBot);
-            moveNumber = makeMoveOnBoard(board, white, moveNumber, copyBoard, writeForHuman, writerForBot);
-        }
-        Logging.logEnd(board, writeForHuman, writerForBot);
-        displayResult(board);
-        }catch (IOException ex) {
+        try (FileWriter writeForHuman = new FileWriter(sessionPlayerFile, true);
+             FileWriter writerForBot = new FileWriter(sessionSystemFile, true)) {
+            Logging.logStart(gameId, writeForHuman, writerForBot);
+            int moveNumber = 1;
+            while (!board.getAllAvailableMoves(black.playerCell).isEmpty() || !board.getAllAvailableMoves(white.playerCell).isEmpty()) {
+                Board copyBoard = board.getBoardCopy();
+                moveNumber = makeMoveOnBoard(board, black, moveNumber, copyBoard, writeForHuman, writerForBot);
+                moveNumber = makeMoveOnBoard(board, white, moveNumber, copyBoard, writeForHuman, writerForBot);
+            }
+            Logging.logEnd(board, writeForHuman, writerForBot);
+            displayResult(board);
+        } catch (IOException ex) {
             org.apache.logging.log4j.Logger log4jLog = LogManager.getLogger(Logging.class);
             log4jLog.debug("message {}", 1);
         }
     }
 
-    private static int makeMoveOnBoard(Board board, Player black,
-                                       int moveNumber, Board copyBoard, FileWriter writeForHuman, FileWriter writerForBot) {
-        if (!board.getAllAvailableMoves(black.playerCell).isEmpty()) {
-            final Move blackMove = black.makeMove(copyBoard);
-            board.placePiece(blackMove.row, blackMove.col, black.playerCell);
-            Logging.logMove(board, blackMove.row, blackMove.col, black, blackMove.getTimeOnMove(), writeForHuman, writerForBot);
-            UI.displayMove(moveNumber, board, black, blackMove);
+    private static int makeMoveOnBoard(final Board board, final Player player,
+                                       int moveNumber, final Board copyBoard, final FileWriter writeForHuman, final FileWriter writerForBot) {
+        if (!board.getAllAvailableMoves(player.playerCell).isEmpty()) {
+            final Move blackMove = player.makeMove(copyBoard);
+            board.placePiece(blackMove.row, blackMove.col, player.playerCell);
+            Logging.logMove(board, blackMove.row, blackMove.col, player, blackMove.getTimeOnMove(), writeForHuman, writerForBot);
+            UI.displayMove(moveNumber, board, player, blackMove);
             moveNumber++;
         }
         return moveNumber;
