@@ -11,6 +11,7 @@ import java.io.IOException;
  * Класс Game дает возможность запустить игру.
  */
 public class Game {
+    private final static Logger logger = LogManager.getLogger(Board.class);
     /**
      * Метод startGame запускает игру. По окончанию игры выводится результат.
      *
@@ -35,7 +36,6 @@ public class Game {
             Logging.logEnd(board, writeForHuman, writerForBot);
             displayResult(board);
         } catch (IOException ex) {
-            final Logger logger = LogManager.getLogger(Board.class);
             logger.log(Level.ERROR, "Ошибка в работе с файлами в методе startGame.");
         }
     }
