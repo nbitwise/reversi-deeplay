@@ -39,8 +39,8 @@ public class Logging {
             writerForBot.flush();
             writeForHuman.flush();
         } catch (IOException ex) {
-            org.apache.logging.log4j.Logger log4jLog = LogManager.getLogger(Logging.class);
-            log4jLog.debug("message {}", 1);
+            Logger logger = LogManager.getLogger(Logging.class);
+            logger.log(Level.ERROR, "Ошибка в логировании хода.");
         }
     }
 
@@ -78,7 +78,7 @@ public class Logging {
             writeForSystem.flush();
         } catch (IOException ex) {
             Logger logger = LogManager.getLogger(Logging.class);
-            logger.log(Level.ERROR, ex.getMessage());
+            logger.log(Level.ERROR, "ошибка в начале логирования, gameID: " + gameId);
         }
     }
 
@@ -111,7 +111,7 @@ public class Logging {
             writeForHuman.flush();
         } catch (IOException ex) {
             Logger logger = LogManager.getLogger(Logging.class);
-            logger.log(Level.ERROR, ex.getMessage());
+            logger.log(Level.ERROR, "ошибка в завершении логирования.");
         }
     }
 
