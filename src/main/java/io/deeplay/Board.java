@@ -1,5 +1,9 @@
 package io.deeplay;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +14,7 @@ public class Board {
     private static final int BOARD_SIZE = 8;
     private int quantityOfWhite = 2;
     private int quantityOfBlack = 2;
+    private final Logger logger = LogManager.getLogger(Board.class);
 
 
     /**
@@ -86,19 +91,20 @@ public class Board {
                 int c = col + dc;
                 boolean isValidDirection = false;
 
-                while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c]==cell.reverse()) {
+                while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c] == cell.reverse()) {
                     r += dr;
                     c += dc;
                     isValidDirection = true;
                 }
 
-                if (isValidDirection && r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c]==cell) {
+                if (isValidDirection && r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE && board[r][c] == cell) {
                     return true;
                 }
             }
         }
         return false;
     }
+
     /**
      * Метод getAllAvailableMoves в классе Board предназначен для получения списка всех доступных ходов для указанной
      * фишки (цвета) на текущей доске.
@@ -117,7 +123,6 @@ public class Board {
         }
         return moves;
     }
-
 
 
     /**
@@ -143,9 +148,11 @@ public class Board {
 
     private void checkArgument(int row, int col) {
         if (row >= BOARD_SIZE || row < 0 || col >= BOARD_SIZE || col < 0) {
+            logger.log(Level.ERROR, "Ошибка в передачи координат на доску.");
             throw new IllegalArgumentException();
         }
     }
+
     /**
      * Возвращает размер доски.
      */
@@ -169,6 +176,7 @@ public class Board {
 
     /**
      * Метод создает копию доски.
+     *
      * @return копия доски.
      */
     public Board getBoardCopy() {
@@ -181,6 +189,7 @@ public class Board {
 
     /**
      * Устанавливает фишку в указанное место, переворачивая другие фишки в соответсвии с логикой игры.
+     *
      * @param row - строка.
      * @param col - колонна.
      */
@@ -218,8 +227,9 @@ public class Board {
 
     /**
      * Выпоняет метод placePiece, создает копию доски после хода.
-     * @param row - строка.
-     * @param col - колонна.
+     *
+     * @param row        - строка.
+     * @param col        - колонна.
      * @param playerCell - клетка цвета игрока, осуществляющего ход.
      * @return возвращает копию доски после хода.
      */

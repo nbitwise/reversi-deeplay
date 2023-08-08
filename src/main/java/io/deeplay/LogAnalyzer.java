@@ -18,6 +18,9 @@ import java.util.stream.Stream;
  * количеству выигранных игр.
  */
 public class LogAnalyzer {
+
+    private final static Logger logger = LogManager.getLogger(Logging.class);
+
     /**
      * Метод parseLog записывает статистику по каждой игре в файле с логами игры.
      *
@@ -54,8 +57,7 @@ public class LogAnalyzer {
             }
 
         } catch (IOException ex) {
-            Logger logger = LogManager.getLogger(Logging.class);
-            logger.log(Level.ERROR, ex.getMessage());
+            logger.log(Level.ERROR, "Ошибка при попытке парсирования логов.");
         }
     }
 
@@ -83,8 +85,7 @@ public class LogAnalyzer {
             writeForHuman.write(textForHuman);
             writeForHuman.flush();
         } catch (IOException ex) {
-            Logger logger = LogManager.getLogger(Logging.class);
-            logger.log(Level.ERROR, ex.getMessage());
+            logger.log(Level.ERROR, "Ошибка при попытке использовать метод writeAnalysis.");
         }
     }
 
@@ -119,8 +120,7 @@ public class LogAnalyzer {
                 writeAnalysis(playerId, color, opponentId, fileNameWriteLog);
             }
         } catch (IOException ex) {
-            Logger logger = LogManager.getLogger(Logging.class);
-            logger.log(Level.ERROR, ex.getMessage());
+            logger.log(Level.ERROR, "Ошибка при попытке использовать метод addAnalysis.");
         }
     }
 

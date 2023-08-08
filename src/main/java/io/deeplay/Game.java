@@ -1,6 +1,8 @@
 package io.deeplay;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -33,8 +35,8 @@ public class Game {
             Logging.logEnd(board, writeForHuman, writerForBot);
             displayResult(board);
         } catch (IOException ex) {
-            org.apache.logging.log4j.Logger log4jLog = LogManager.getLogger(Logging.class);
-            log4jLog.debug("message {}", 1);
+            final Logger logger = LogManager.getLogger(Board.class);
+            logger.log(Level.ERROR, "Ошибка в работе с файлами в методе startGame.");
         }
     }
 
