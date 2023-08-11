@@ -1,4 +1,4 @@
-package GameLogging;
+package parsing;
 
 import logic.Board;
 import logic.Cell;

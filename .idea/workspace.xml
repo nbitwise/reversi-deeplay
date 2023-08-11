@@ -4,15 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a829ddee-ce1e-48e6-87b8-2bfca6fc2167" name="Changes" comment="fix: пофикшены баги с использованием парсера и логики завершения игры">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/a/4a2b30259a1a434c1e8ff9fa56c423be2f80a1da" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/4/a/4a2b30259a1a434c1e8ff9fa56c423be2f80a1da" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
+    <list default="true" id="a829ddee-ce1e-48e6-87b8-2bfca6fc2167" name="Changes" comment="feat: Добоавлены пакеты с логикой, локальным запуском игры.&#10; Вынесена в отдельный модуль логика игры, к которому будут подключаться в модуле клиента и в модуле сервера.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/src/main/java/GameLogging/BoardParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/parsing/BoardParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/src/main/java/GameLogging/LogAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/gamelogging/LogAnalyzer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/src/main/java/GameLogging/Logging.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/gamelogging/GameLogger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/src/main/java/logic/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/src/main/java/logic/Cell.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Cell.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/src/main/java/logic/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Move.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/src/main/java/logic/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/src/main/java/ui/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/ui/UI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/src/test/java/test/BoardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/test/java/test/BoardTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/src/test/java/test/LoggingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/test/java/test/LoggingTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/src/test/java/test/ParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/test/java/test/ParserTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/src/test/java/test/PlayerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/test/java/test/PlayerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameLogic/src/test/java/test/UITest.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/test/java/test/UITest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LocalGame/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/localgame/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LocalGame/src/main/java/io/deeplay/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/localgame/src/main/java/io/deeplay/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LocalGame/src/main/java/io/deeplay/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/localgame/src/main/java/io/deeplay/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LocalGame/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/localgame/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LocalGame/src/test/java/test/GameTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/localgame/src/test/java/test/GameTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -241,7 +254,7 @@
       <workItem from="1690775991121" duration="8378000" />
       <workItem from="1691668234711" duration="2906000" />
       <workItem from="1691671932106" duration="3325000" />
-      <workItem from="1691729189512" duration="2017000" />
+      <workItem from="1691729189512" duration="5490000" />
     </task>
     <task id="LOCAL-00001" summary="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest.">
       <created>1690538996230</created>
@@ -310,7 +323,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690954763272</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="feat: Добоавлены пакеты с логикой, локальным запуском игры.&#10; Вынесена в отдельный модуль логика игры, к которому будут подключаться в модуле клиента и в модуле сервера.">
+      <created>1691732766050</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1691732766050</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -331,18 +351,11 @@
     <MESSAGE value="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest." />
     <MESSAGE value="feat: добавлены тесты к isValidMove" />
     <MESSAGE value="fix: пофикшены баги с использованием парсера и логики завершения игры" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: пофикшены баги с использованием парсера и логики завершения игры" />
+    <MESSAGE value="feat: Добоавлены пакеты с логикой, локальным запуском игры.&#10; Вынесена в отдельный модуль логика игры, к которому будут подключаться в модуле клиента и в модуле сервера" />
+    <MESSAGE value="feat: Добоавлены пакеты с логикой, локальным запуском игры.&#10; Вынесена в отдельный модуль логика игры, к которому будут подключаться в модуле клиента и в модуле сервера." />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Добоавлены пакеты с логикой, локальным запуском игры.&#10; Вынесена в отдельный модуль логика игры, к которому будут подключаться в модуле клиента и в модуле сервера." />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/io/deeplay/Board.java</url>
-          <line>39</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="io.deeplay.Board" memberName="board" />

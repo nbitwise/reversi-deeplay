@@ -1,4 +1,4 @@
-package GameLogging;
+package gamelogging;
 
 import logic.*;
 import org.apache.logging.log4j.Level;
@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * Класс Logging дает возможность записывть ход игры.
  */
-public class Logging {
+public class GameLogger {
 
     /**
      * Метод logMove записыват в файлы ходы белых, черных и положение доски после сделанного хода.
@@ -43,7 +43,7 @@ public class Logging {
             writerForBot.flush();
             writeForHuman.flush();
         } catch (IOException ex) {
-            Logger logger = LogManager.getLogger(Logging.class);
+            Logger logger = LogManager.getLogger(GameLogger.class);
             logger.log(Level.ERROR, "Ошибка в логировании хода.");
         }
     }
@@ -81,7 +81,7 @@ public class Logging {
             writeForHuman.flush();
             writeForSystem.flush();
         } catch (IOException ex) {
-            Logger logger = LogManager.getLogger(Logging.class);
+            Logger logger = LogManager.getLogger(GameLogger.class);
             logger.log(Level.ERROR, "ошибка в начале логирования, gameID: " + gameId);
         }
     }
@@ -114,7 +114,7 @@ public class Logging {
             writeForBot.flush();
             writeForHuman.flush();
         } catch (IOException ex) {
-            Logger logger = LogManager.getLogger(Logging.class);
+            Logger logger = LogManager.getLogger(GameLogger.class);
             logger.log(Level.ERROR, "ошибка в завершении логирования.");
         }
     }

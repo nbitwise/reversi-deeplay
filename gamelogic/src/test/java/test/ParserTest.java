@@ -1,6 +1,6 @@
 package test;
 
-import GameLogging.BoardParser;
+import parsing.BoardParser;
 import logic.Board;
 import logic.Cell;
 import org.junit.jupiter.api.Test;
