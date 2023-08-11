@@ -1,0 +1,12 @@
+
+B
+java:S3416"'Update this logger to use "Game.class".(óßƒåúÿÿÿÿ
+U
+java:S1118":Add a private constructor to hide the implicit public one.(ôØù˜ıÿÿÿÿ
+`
+java:S1124"EReorder the modifiers to comply with the Java Language Specification.(óßƒåúÿÿÿÿ
+S	java:S106A"9Replace this use of System.out or System.err by a logger.(Ã˜Åùÿÿÿÿ
+S	java:S106B"9Replace this use of System.out or System.err by a logger.(º¶øıÿÿÿÿ
+S	java:S106E"9Replace this use of System.out or System.err by a logger.(±á™†ÿÿÿÿÿ
+S	java:S106G"9Replace this use of System.out or System.err by a logger.(°¬ÉÒùÿÿÿÿ
+S	java:S106I"9Replace this use of System.out or System.err by a logger.(“ïşûÿÿÿÿ
