@@ -5,7 +5,7 @@ public class GameVsHumanCreateRoomRequest implements Request {
     public String color;
     public String timeControl;
 
-    GameVsHumanCreateRoomRequest(String color, String timeControl) {
+    public GameVsHumanCreateRoomRequest(String color, String timeControl) {
         this.color = color;
         this.timeControl = timeControl;
     }
