@@ -1,7 +1,7 @@
 package responses;
 
 public class ResponseLeaveRoom extends Response {
-    public ResponseLeaveRoom(String status, String message) {
+    public ResponseLeaveRoom(final String status,final String message) {
         super(status, message);
     }
 }

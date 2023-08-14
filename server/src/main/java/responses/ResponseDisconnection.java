@@ -1,7 +1,7 @@
 package responses;
 
 public class ResponseDisconnection extends Response {
-    public ResponseDisconnection(String status, String message) {
+    public ResponseDisconnection(final String status,final String message) {
         super(status, message);
     }
 }

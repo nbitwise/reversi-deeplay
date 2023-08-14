@@ -2,7 +2,7 @@ package responses;
 
 public class ResponseGameOver extends Response {
 
-    public ResponseGameOver(String status, String message) {
+    public ResponseGameOver(final String status,final String message) {
         super(status, message);
     }
 }

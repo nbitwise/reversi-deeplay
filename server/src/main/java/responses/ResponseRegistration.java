@@ -1,7 +1,7 @@
 package responses;
 
 public class ResponseRegistration extends Response {
-    public ResponseRegistration(String status, String message) {
+    public ResponseRegistration(final String status,final String message) {
         super(status, message);
 
     }

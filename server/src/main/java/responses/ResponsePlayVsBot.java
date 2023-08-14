@@ -2,7 +2,7 @@ package responses;
 
 public class ResponsePlayVsBot extends Response {
 
-    public ResponsePlayVsBot(String status, String message) {
+    public ResponsePlayVsBot(final String status,final String message) {
         super(status, message);
     }
 }

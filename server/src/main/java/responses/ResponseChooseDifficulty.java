@@ -2,7 +2,7 @@ package responses;
 
 public class ResponseChooseDifficulty extends Response {
 
-    public ResponseChooseDifficulty(String status, String message) {
+    public ResponseChooseDifficulty(final String status,final String message) {
         super(status, message);
         this.message = message;
     }

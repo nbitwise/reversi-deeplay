@@ -1,7 +1,7 @@
 package responses;
 
 public class ResponseChooseColor extends Response {
-    public ResponseChooseColor(String status, String message) {
+    public ResponseChooseColor(final String status,final String message) {
         super(status, message);
         this.message = message;
     }
