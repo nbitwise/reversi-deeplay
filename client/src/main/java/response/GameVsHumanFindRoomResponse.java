@@ -4,14 +4,17 @@ import java.util.List;
 
 public class GameVsHumanFindRoomResponse implements Response {
     public String status;
-    List<AvailableRoomInfo> availableRooms;
+    public List<AvailableRoomInfo> availableRooms;
 
-    static class AvailableRoomInfo {
-        String roomId;
-        String timeControl;
+    public static class AvailableRoomInfo {
+        public String roomId;
+        public String timeControl;
+
+        public AvailableRoomInfo(String room, String rapid) {
+        }
     }
 
-    GameVsHumanFindRoomResponse(String status, List<AvailableRoomInfo> availableRooms) {
+    public GameVsHumanFindRoomResponse(String status, List<AvailableRoomInfo> availableRooms) {
         this.status = status;
         this.availableRooms = availableRooms;
     }

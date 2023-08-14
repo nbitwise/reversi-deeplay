@@ -7,7 +7,7 @@ public class GameMoveRequest implements Request {
     int row;
     int col;
 
-    GameMoveRequest(String playerId, String roomId, int row, int col) {
+    public GameMoveRequest(String playerId, String roomId, int row, int col) {
         this.playerId = playerId;
         this.roomId = roomId;
         this.row = row;
