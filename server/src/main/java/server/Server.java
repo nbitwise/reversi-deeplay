@@ -80,10 +80,10 @@ public class Server {
                 return new ResponseLeaveRoom("status", "message");
             }));
 
-            /*commands.add(Command.newCommand("MoveInGame", (jsonRequest) -> {
+            commands.add(Command.newCommand("MoveInGame", (jsonRequest) -> {
                 Board board = new Board();
                 return new ResponseMoveInGame("status", "message", board);
-            }));*/
+            }));
 
             commands.add(Command.newCommand("PlayVsBot", (jsonRequest) -> {
                 return new ResponsePlayVsBot("status", "message");
@@ -131,7 +131,6 @@ class ClientProcessor extends Thread {
     public void run() {
         String line;
         try {
-
             while (true) {
                 line = socketBufferedReader.readLine();
                 if (line == null) {
@@ -142,8 +141,7 @@ class ClientProcessor extends Thread {
                 final Command command = commands.get(commandName);
                 sendReply(command.process(request));
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException ignored) {
         }
 
     }
