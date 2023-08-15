@@ -11,6 +11,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/GameLogic" />
             <option value="$PROJECT_DIR$/LocalGame" />
+            <option value="$PROJECT_DIR$/client" />
+            <option value="$PROJECT_DIR$/server" />
           </set>
         </option>
       </GradleProjectSettings>
@@ -19,6 +21,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/client" />
+            <option value="$PROJECT_DIR$/client/GameLogic" />
+            <option value="$PROJECT_DIR$/client/LocalGame" />
+            <option value="$PROJECT_DIR$/client/client" />
           </set>
         </option>
       </GradleProjectSettings>
