@@ -1,6 +1,8 @@
 package server;
 
+import io.deeplay.Board;
 import responses.*;
+import request.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -26,7 +28,11 @@ public class Server {
             List<Command> commands = new ArrayList<>();
 
             commands.add(Command.newCommand("REGISTRATION", (jsonRequest) -> {
-                String nickname = jsonRequest.get("nickname").getAsString();
+
+                Gson gson = new Gson();
+                RegistrationRequest request = gson.fromJson(jsonRequest, RegistrationRequest.class);
+
+                String nickname = request.nickname;
                 if (nickname == null || !nickname.matches("^[a-zA-Z0-9_]+$")) {
                     return new ResponseRegistration("fail", "incorrect username");
                 }
@@ -113,7 +119,7 @@ public class Server {
 
 }
 
-class ClientProcessor extends Thread {
+class   ClientProcessor extends Thread {
 
     private final Map<String, Command> commands;
     private final BufferedReader socketBufferedReader;
