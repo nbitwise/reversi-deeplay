@@ -2,7 +2,7 @@ package responses;
 
 public class ResponseAutorization extends Response {
 
-    public ResponseAutorization(final String status, final String message) {
+    public ResponseAutorization(String status, String message) {
         super(status, message);
 
     }

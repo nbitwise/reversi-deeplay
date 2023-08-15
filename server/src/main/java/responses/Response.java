@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public abstract class Response {
-    String status;
-    String message;
+    private final String status;
+    private final String message;
 
     public Response(final String command, final String message) {
         this.status = command;

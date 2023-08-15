@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a829ddee-ce1e-48e6-87b8-2bfca6fc2167" name="Changes" comment="fix: пофикшены баги с использованием парсера и логики завершения игры">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/deeplay/HumanPlayer.java" beforeDir="false" />
-    </list>
+    <list default="true" id="a829ddee-ce1e-48e6-87b8-2bfca6fc2167" name="Changes" comment="fix: пофикшены баги с использованием парсера и логики завершения игры" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,7 +26,7 @@
             <expand>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="reversi-deeplay" type="f1a62948:ProjectNode" />
+                <item name="client" type="f1a62948:ProjectNode" />
               </path>
             </expand>
             <select />

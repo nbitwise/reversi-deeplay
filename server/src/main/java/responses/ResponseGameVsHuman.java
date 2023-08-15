@@ -1,7 +1,7 @@
 package responses;
 
 public class ResponseGameVsHuman extends Response {
-    int roomId;
+    private final int roomId;
 
     public ResponseGameVsHuman(final String status,final String message,final int roomId) {
         super(status, message);

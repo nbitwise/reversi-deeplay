@@ -5,9 +5,8 @@ import java.io.*;
 import java.net.Socket;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import io.deeplay.Board;
+import logic.Board;
 import org.junit.jupiter.api.*;
 import request.*;
 
@@ -24,7 +23,7 @@ class ServerTest {
     static Gson gson = new Gson();
 
     @BeforeAll
-    public void setup() throws IOException {
+    public static void setup() throws IOException {
         clientSocket = new Socket("localhost", 6070);
 
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -33,7 +32,7 @@ class ServerTest {
     }
 
     @AfterAll
-    public void close() throws IOException {
+    public static void close() throws IOException {
         clientSocket.close();
         in.close();
         out.close();

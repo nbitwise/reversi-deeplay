@@ -1,6 +1,7 @@
 package server;
 
-import io.deeplay.Board;
+
+import logic.Board;
 import responses.*;
 import request.*;
 import com.google.gson.Gson;
@@ -119,7 +120,7 @@ public class Server {
 
 }
 
-class   ClientProcessor extends Thread {
+class ClientProcessor extends Thread {
 
     private final Map<String, Command> commands;
     private final BufferedReader socketBufferedReader;
@@ -147,7 +148,8 @@ class   ClientProcessor extends Thread {
                 final Command command = commands.get(commandName);
                 sendReply(command.process(request));
             }
-        } catch (IOException ignored) {
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
 
     }
