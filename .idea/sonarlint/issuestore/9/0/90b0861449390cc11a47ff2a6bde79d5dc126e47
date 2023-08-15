@@ -1,0 +1,13 @@
+
+S
+java:S1854"8Remove this useless assignment to local variable "ilya".(κ›†ϋÿÿÿÿ
+Q
+java:S1854"6Remove this useless assignment to local variable "w2".(–ιρωÿÿÿÿ
+Q
+java:S1854"6Remove this useless assignment to local variable "b2".(Χ…Χόÿÿÿÿ
+B
+java:S1481"'Remove this unused "b2" local variable.(Χ…Χόÿÿÿÿ
+B
+java:S1481"'Remove this unused "w2" local variable.(–ιρωÿÿÿÿ
+D
+java:S1481")Remove this unused "ilya" local variable.(κ›†ϋÿÿÿÿ

@@ -1,3 +1,9 @@
 
-T
-java:S5993"9Change the visibility of this constructor to "protected".(·ˆÀÿÿÿÿÿ
+[
+java:S5993"9Change the visibility of this constructor to "protected".(¤£¢·ùÿÿÿÿ8×Ş´ğ1
+U	java:S1068"9Replace this use of System.out or System.err by a logger.(–²°8àŞ´ğ1
+U	java:S106:"9Replace this use of System.out or System.err by a logger.(‰öæ‰8áŞ´ğ1
+S	java:S106?"9Replace this use of System.out or System.err by a logger.(µàQ8âŞ´ğ1
+Z	java:S106O"9Replace this use of System.out or System.err by a logger.(ÃòŠªûÿÿÿÿ8åŞ´ğ1
+Z	java:S106R"9Replace this use of System.out or System.err by a logger.(ÏÛ®ôıÿÿÿÿ8åŞ´ğ1
+Z	java:S106U"9Replace this use of System.out or System.err by a logger.(ÏÛ®ôıÿÿÿÿ8æŞ´ğ1

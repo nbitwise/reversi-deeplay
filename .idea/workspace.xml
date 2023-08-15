@@ -4,7 +4,37 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+
     <list default="true" id="a829ddee-ce1e-48e6-87b8-2bfca6fc2167" name="Changes" comment="fix: пофикшены баги с использованием парсера и логики завершения игры" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/a/4a2b30259a1a434c1e8ff9fa56c423be2f80a1da" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/7/0/704d8acc01255821a36783e117e58d993626c8d4" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/7/0/704d8acc01255821a36783e117e58d993626c8d4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/4/a/4a2b30259a1a434c1e8ff9fa56c423be2f80a1da" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/request/AuthorizationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/request/AuthorizationRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/request/ChooseColorRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/request/ChooseColorRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/request/ChooseDifficultyRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/request/ChooseDifficultyRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/request/GameMoveRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/request/GameMoveRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/request/GameVsHumanConnectToRoomRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/request/GameVsHumanConnectToRoomRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/request/GameVsHumanCreateRoomRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/request/GameVsHumanCreateRoomRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/request/GameVsHumanFindRoomRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/request/GameVsHumanFindRoomRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/AuthorizationResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/AuthorizationResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/ChooseColorResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/ChooseColorResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/ChooseDifficultyResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/ChooseDifficultyResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/ConnectForViewResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/ConnectForViewResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/GameMoveResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/GameMoveResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/GameOverDoYouWantReMatchResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/GameOverDoYouWantReMatchResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/GameOverWantReMatchResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/GameOverWantReMatchResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/GameVsHumanConnectToRoomResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/GameVsHumanConnectToRoomResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/GameVsHumanCreateRoomResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/GameVsHumanCreateRoomResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/GameVsHumanFindRoomResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/GameVsHumanFindRoomResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/PlayVsBotResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/PlayVsBotResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/ViewAvailableRoomsResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/ViewAvailableRoomsResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/ViewStartedGamesResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/ViewStartedGamesResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/test/java/client/ClientTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/test/java/client/ClientTest.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,6 +42,9 @@
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/client">
       <ProjectState />
     </projectState>
   </component>
@@ -39,35 +72,34 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
-      </list>
-    </option>
-  </component>
-  <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="GameBranch_fix" />
-      </map>
-    </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
-  </component>
-  <component name="ProjectId" id="2T96IMlXDeiTzofSnA4shtQxOa1" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showLibraryContents" value="true" />
-  </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
+
+        <option value="module-info" />
+
+
+
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;true&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-17&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/job/deeplay/groupprogect/game/deeplay-reversi-othello/reversi-deeplay&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15917969&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -77,10 +109,14 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="test" />
+      <recent name="ui" />
+      <recent name="GameLogging" />
       <recent name="io.deeplay" />
+      <recent name="logic" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.PlayerTest">
+  <component name="RunManager" selected="Gradle.ClientTest (3)">
     <configuration name="BoardTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -102,13 +138,12 @@
       <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>true</ForceTestExec>
       <method v="2" />
     </configuration>
-    <configuration name="BoardTest.testIsValidMove" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="ClientTest (3)" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/client" />
         <option name="externalSystemIdString" value="GRADLE" />
         <option name="scriptParameters" value="" />
         <option name="taskDescriptions">
@@ -118,7 +153,53 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;io.deeplay.BoardTest.testIsValidMove&quot;" />
+            <option value="&quot;client.ClientTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="ClientTest.testConnectForViewResponseParsing" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/client" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;client.ClientTest.testConnectForViewResponseParsing&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="ClientTest.testRegistrationRequest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/client" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;client.ClientTest.testRegistrationRequest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -129,10 +210,10 @@
       <ForceTestExec>true</ForceTestExec>
       <method v="2" />
     </configuration>
-    <configuration name="GameTest.testStartGame" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="ClientTest.testRegistrationResponseParsing" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/client" />
         <option name="externalSystemIdString" value="GRADLE" />
         <option name="scriptParameters" value="" />
         <option name="taskDescriptions">
@@ -142,7 +223,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;io.deeplay.GameTest.testStartGame&quot;" />
+            <option value="&quot;client.ClientTest.testRegistrationResponseParsing&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -150,64 +231,15 @@
       <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>true</ForceTestExec>
-      <method v="2" />
-    </configuration>
-    <configuration name="ParserTest (1)" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;io.deeplay.ParserTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>false</ForceTestExec>
-      <method v="2" />
-    </configuration>
-    <configuration name="PlayerTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;io.deeplay.PlayerTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>true</ForceTestExec>
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.PlayerTest" />
-        <item itemvalue="Gradle.ParserTest (1)" />
-        <item itemvalue="Gradle.GameTest.testStartGame" />
+        <item itemvalue="Gradle.ClientTest (3)" />
         <item itemvalue="Gradle.BoardTest" />
-        <item itemvalue="Gradle.BoardTest.testIsValidMove" />
+        <item itemvalue="Gradle.ClientTest.testConnectForViewResponseParsing" />
+        <item itemvalue="Gradle.ClientTest.testRegistrationResponseParsing" />
+        <item itemvalue="Gradle.ClientTest.testRegistrationRequest" />
       </list>
     </recent_temporary>
   </component>
@@ -221,6 +253,9 @@
       <updated>1690442870816</updated>
       <workItem from="1690536391858" duration="6110000" />
       <workItem from="1690775991121" duration="8378000" />
+      <workItem from="1691668234711" duration="2906000" />
+      <workItem from="1691671932106" duration="3325000" />
+      <workItem from="1691729189512" duration="5490000" />
     </task>
     <task id="LOCAL-00001" summary="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest.">
       <created>1690538996230</created>
@@ -289,7 +324,47 @@
       <option name="project" value="LOCAL" />
       <updated>1690954763272</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="feat: Добоавлены пакеты с логикой, локальным запуском игры.&#10; Вынесена в отдельный модуль логика игры, к которому будут подключаться в модуле клиента и в модуле сервера.">
+      <created>1691732766050</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1691732766050</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00010" summary="GUI START">
+      <option name="closed" value="true" />
+      <created>1691647532407</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1691647532407</updated>
+    </task>
+    <task id="LOCAL-00011" summary="TEST">
+      <option name="closed" value="true" />
+      <created>1691674773759</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1691674773759</updated>
+    </task>
+    <task id="LOCAL-00012" summary="TESTER">
+      <option name="closed" value="true" />
+      <created>1691737457983</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1691737457983</updated>
+    </task>
+    <task id="LOCAL-00013" summary="feat: Добавлен класс client и mockserver, реализованы методы request и response, написаны тесты проверки работы клиента и сервера заглушки.">
+      <option name="closed" value="true" />
+      <created>1691994318382</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1691994318382</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -310,22 +385,27 @@
     <MESSAGE value="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest." />
     <MESSAGE value="feat: добавлены тесты к isValidMove" />
     <MESSAGE value="fix: пофикшены баги с использованием парсера и логики завершения игры" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: пофикшены баги с использованием парсера и логики завершения игры" />
+
+    <MESSAGE value="feat: Добоавлены пакеты с логикой, локальным запуском игры.&#10; Вынесена в отдельный модуль логика игры, к которому будут подключаться в модуле клиента и в модуле сервера" />
+    <MESSAGE value="feat: Добоавлены пакеты с логикой, локальным запуском игры.&#10; Вынесена в отдельный модуль логика игры, к которому будут подключаться в модуле клиента и в модуле сервера." />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Добоавлены пакеты с логикой, локальным запуском игры.&#10; Вынесена в отдельный модуль логика игры, к которому будут подключаться в модуле клиента и в модуле сервера." />
+
+    <MESSAGE value="GUI START" />
+    <MESSAGE value="TEST" />
+    <MESSAGE value="TESTER" />
+    <MESSAGE value="feat: Добавлен класс client и mockserver, реализованы методы request и response, написаны тесты проверки работы клиента и сервера заглушки." />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Добавлен класс client и mockserver, реализованы методы request и response, написаны тесты проверки работы клиента и сервера заглушки." />
+
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/io/deeplay/Board.java</url>
-          <line>39</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="io.deeplay.Board" memberName="board" />
       </pinned-members>
     </pin-to-top-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
