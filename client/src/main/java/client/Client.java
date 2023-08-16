@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Objects;
 
 
 public class Client {
@@ -43,6 +44,19 @@ public class Client {
         socket.close();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Client client = (Client) o;
+        return Objects.equals(socket, client.socket);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(socket);
+    }
+
     public static void main(String[] args) {
         try {
             Client client = new Client("localhost", 6070);
@@ -58,12 +72,12 @@ public class Client {
             }
 
 
-
             client.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }
 
 
