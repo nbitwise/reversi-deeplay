@@ -3,5 +3,6 @@ module reversi.deeplay.server.main {
     requires reversi.deeplay.gamelogic.main;
     exports server;
     exports responses;
-    exports request;
+    //exports request;
+    requires com.example.client;
 }

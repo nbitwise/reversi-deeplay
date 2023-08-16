@@ -1,6 +1,7 @@
 package server;
 
 
+import client.Client;
 import logic.Board;
 import responses.*;
 import request.*;
@@ -14,11 +15,16 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Server {
 
+    static ConcurrentMap<UUID, User> onlineUsers = new ConcurrentHashMap<>();
+
+    public static List<User> registratedClients = new ArrayList<>();
     private static final int PORT = 6070;
     private static LinkedList<ClientProcessor> serverList = new LinkedList<>();
 
@@ -28,7 +34,7 @@ public class Server {
 
             List<Command> commands = new ArrayList<>();
 
-            commands.add(Command.newCommand("REGISTRATION", (jsonRequest) -> {
+            commands.add(Command.newCommand("registration", (jsonRequest) -> {
 
                 Gson gson = new Gson();
                 RegistrationRequest request = gson.fromJson(jsonRequest, RegistrationRequest.class);
@@ -37,7 +43,28 @@ public class Server {
                 if (nickname == null || !nickname.matches("^[a-zA-Z0-9_]+$")) {
                     return new ResponseRegistration("fail", "incorrect username");
                 }
+                try {
+                    for (User u : registratedClients) {
+                        if(u.getName().equals(nickname))
+                        {
+                            return new ResponseRegistration("fail", "user with this nickname already registrated");
+                        }
+                    }
+                    registratedClients.add(new User(nickname, new Client("localhost", PORT)));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                System.out.println(registratedClients);
                 return new ResponseRegistration("success", "You was successfully registered");
+            }));
+
+            commands.add(Command.newCommand("authorization", (jsonRequest) -> {
+                Gson gson = new Gson();
+                RegistrationRequest request = gson.fromJson(jsonRequest, RegistrationRequest.class);
+
+
+
+                return new ResponseChooseColor("status", "message");
             }));
 
             commands.add(Command.newCommand("STOP", (jsonRequest) -> {

@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  */
 public class LogAnalyzer {
 
-    private final static Logger logger = LogManager.getLogger(Logging.class);
+    private final static Logger logger = LogManager.getLogger(LogAnalyzer.class);
 
     /**
      * Метод parseLog записывает статистику по каждой игре в файле с логами игры.
