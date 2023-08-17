@@ -7,6 +7,7 @@ public class ConnectToRoomRequest implements Request {
     public ConnectToRoomRequest(int roomId) {
 
         this.roomId = roomId;
+
     }
 
 }
