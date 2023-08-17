@@ -6,6 +6,6 @@ module com.example.client {
 
     opens client to javafx.fxml;
     exports client;
-    exports request;
-    exports response;
+    exports clientrequest;
+    exports clientresponse;
 }

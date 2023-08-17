@@ -2,8 +2,8 @@ package client;
 
 
 import com.google.gson.Gson;
-import request.*;
-import response.*;
+import clientrequest.*;
+import clientresponse.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -62,14 +62,12 @@ public class Client {
             Client client = new Client("localhost", 6070);
 
             RegistrationRequest registrationRequest = new RegistrationRequest("user123");
-            client.sendRequest((Request) registrationRequest);
+            client.sendRequest(registrationRequest);
 
-            Response response = client.getResponse();
-            if (response instanceof RegistrationResponse) {
-                RegistrationResponse registrationResponse = (RegistrationResponse) response;
-                System.out.println("Registration Status: " + registrationResponse.status);
-                System.out.println("Registration Message: " + registrationResponse.message);
-            }
+            RegistrationResponse response = (RegistrationResponse) client.getResponse();
+            System.out.println("Registration Status: " + response.status);
+            System.out.println("Registration Message: " + response.message);
+
 
 
             client.close();

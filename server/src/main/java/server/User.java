@@ -10,9 +10,14 @@ class User {
         this.name = name;
         this.client = client;
     }
+    public String token;
 
     public String getName() {
         return name;
+    }
+
+    public Client getClient() {
+        return client;
     }
 
     @Override
@@ -20,9 +25,5 @@ class User {
         return "User{" +
                 "name='" + name + '\'' +
                 '}';
-    }
-
-    public Client getClient() {
-        return client;
     }
 }
