@@ -1,12 +1,8 @@
 package server;
 
-import client.Client;
+import com.google.gson.*;
 import serverrequest.*;
 import serverresponses.*;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 
 import java.io.*;
@@ -19,9 +15,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static server.Authorization.generateToken;
-import static server.Room.checkHavePlace;
-
 public class Server {
 
     private static final int PORT = 6070;
@@ -33,10 +26,26 @@ public class Server {
     private static boolean roomExists(int roomId) {
         for (Room room : roomList) {
             if (room.getId() == roomId) {
-                return true; // Комната с таким ID найдена
+                return true;
             }
         }
-        return false; // Комната с таким ID не найдена
+        return false;
+    }
+    private static boolean roomExistsAndHasPlace(int roomId) {
+        for (Room room : roomList) {
+            if (room.getId() == roomId && room.checkHavePlace()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private static boolean roomExistsAndHasPlayer(int roomId, UUID uuid) {
+        for (Room room : roomList) {
+            if (room.getId() == roomId && room.hasPlayer(uuid)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void main(String[] args) throws IOException {
@@ -84,29 +93,44 @@ public class Server {
             }));
 
             commands.add(Command.newCommand("CREATEROOM", (jsonRequest, uuid) -> {
-
                 Room room = new Room();
                 roomList.add(room);
-                return new CreateRoomResponse("success", "Room was successfully registered", room.id);
+                room.setBlackPlayer(uuid);
+                return new CreateRoomResponse("success", "Room was successfully registered", room.getId());
             }));
 
             commands.add(Command.newCommand("CONNECTTOROOM", (jsonRequest, uuid) -> {
                 int roomId = jsonRequest.get("roomId").getAsInt();
+                Room room = roomList.stream()
+                        .filter(r -> r.getId() == roomId)
+                        .findFirst()
+                        .orElse(null);
 
-                if (roomExists(roomId)) {
-                    if(checkHavePlace())
-                        return new ConnectToRoomResponse("success", "Connected to room");
-                } else {
-                    // Комната не существует, возвращаем ответ об ошибке
+                if (room != null && room.hasNoPlayers()) {
+                    room.setBlackPlayer(uuid);
+                    return new ConnectToRoomResponse("success", "Connected to room as BlackPlayer");
+                } else if (room != null && !room.isFull()) {
+                    room.setWhitePlayer(uuid);
+                    return new ConnectToRoomResponse("success", "Connected to room as WhitePlayer");
+                } else if (room == null) {
                     return new ConnectToRoomResponse("fail", "Room with ID " + roomId + " not found");
+                } else {
+                    return new ConnectToRoomResponse("fail", "Room with ID " + roomId + " is already occupied");
                 }
-                return new ResponseAutorization("fail", "Server issue");
             }));
 
 
             commands.add(Command.newCommand("LEAVEROOM", (jsonRequest, uuid) -> {
-                // Ваша логика отключения от комнаты
-                // ...
+                JsonElement roomIdElement = jsonRequest.get("roomId");
+                if (roomIdElement != null && roomIdElement.isJsonPrimitive() && roomIdElement.getAsJsonPrimitive().isNumber()) {
+                    int roomId = roomIdElement.getAsInt();
+                    for (Room room : roomList) {
+                        if (room.getId() == roomId && room.hasPlayer(uuid)) {
+                            room.removePlayer(uuid);
+                            break;
+                        }
+                    }
+                }
                 return new LeaveRoomResponse("success");
             }));
 

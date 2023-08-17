@@ -14,6 +14,4 @@ public class ConnectToRoomResponse implements Response {
 
         return status;
     }
-
-    // Геттеры и сеттеры по необходимости
 }
