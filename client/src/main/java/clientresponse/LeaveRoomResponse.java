@@ -12,5 +12,4 @@ public class LeaveRoomResponse implements Response {
         return status;
     }
 
-    // Геттеры и сеттеры по необходимости
 }

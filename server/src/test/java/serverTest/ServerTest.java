@@ -9,6 +9,9 @@ import com.google.gson.JsonObject;
 import logic.Board;
 import org.junit.jupiter.api.*;
 import serverrequest.*;
+import serverresponses.ConnectToRoomResponse;
+import serverresponses.CreateRoomResponse;
+import serverresponses.LeaveRoomResponse;
 
 import java.io.IOException;
 
@@ -121,10 +124,103 @@ class ServerTest {
 
         Assertions.assertEquals("success", convertedObject.get("status").getAsString());
         Assertions.assertEquals("1", convertedObject.get("roomId").getAsString());
-        //Assertions.assertEquals("You was successfully authorization", convertedObject.get("message").getAsString());
 
+    }
+    @Test
+    public void testConnectToRoom() throws IOException {
+        CreateRoomRequest request1 = new CreateRoomRequest();
+        requestString = gson.toJson(request1);
+        out.write(requestString);
+        out.newLine();
+        out.flush();
+
+        String serverWord = in.readLine();
+
+        ConnectToRoomRequest request = new ConnectToRoomRequest(1);
+        String requestString = gson.toJson(request);
+        out.write(requestString);
+        out.newLine();
+        out.flush();
+
+        String serverWord1 = in.readLine();
+
+        ConnectToRoomResponse response = gson.fromJson(serverWord1, ConnectToRoomResponse.class);
+
+        Assertions.assertEquals("success", response.getStatus());
+        Assertions.assertEquals("Connected to room as WhitePlayer", response.getMessage());
+    }
+    @Test
+    public void testConnectToRoomRoomNotFound() throws IOException {
+        ConnectToRoomRequest request = new ConnectToRoomRequest(999);
+        String requestString = gson.toJson(request);
+        out.write(requestString);
+        out.newLine();
+        out.flush();
+
+        String serverWord = in.readLine();
+        ConnectToRoomResponse response = gson.fromJson(serverWord, ConnectToRoomResponse.class);
+
+        Assertions.assertEquals("fail", response.getStatus());
+        Assertions.assertEquals("Room with ID 999 not found", response.getMessage());
+    }
+
+    @Test
+    public void testConnectToRoomAlreadyOccupied() throws IOException {
+        CreateRoomRequest createRequest = new CreateRoomRequest();
+        String createRequestString = gson.toJson(createRequest);
+        out.write(createRequestString);
+        out.newLine();
+        out.flush();
+        String createResponseString = in.readLine();
+        CreateRoomResponse createResponse = gson.fromJson(createResponseString, CreateRoomResponse.class);
+
+        ConnectToRoomRequest connectRequest = new ConnectToRoomRequest(createResponse.getRoomId());
+        String connectRequestString = gson.toJson(connectRequest);
+        out.write(connectRequestString);
+        out.newLine();
+        out.flush();
+        String connectResponseString = in.readLine();
+        ConnectToRoomResponse connectResponse = gson.fromJson(connectResponseString, ConnectToRoomResponse.class);
+
+
+        ConnectToRoomRequest connectRequest2 = new ConnectToRoomRequest(createResponse.getRoomId());
+        String connectRequestString2 = gson.toJson(connectRequest2);
+        out.write(connectRequestString2);
+        out.newLine();
+        out.flush();
+        String connectResponseString2 = in.readLine();
+        ConnectToRoomResponse connectResponse2 = gson.fromJson(connectResponseString2, ConnectToRoomResponse.class);
+
+        Assertions.assertEquals("fail", connectResponse2.getStatus());
+        Assertions.assertEquals("Room with ID " + createResponse.getRoomId() + " is already occupied", connectResponse2.getMessage());
+    }
+
+    @Test
+    public void testLeaveRoom() throws IOException {
+        CreateRoomRequest request1 = new CreateRoomRequest();
+        requestString = gson.toJson(request1);
+        out.write(requestString);
+        out.newLine();
+        out.flush();
+
+        String serverWord = in.readLine();
+
+        LeaveRoomRequest request = new LeaveRoomRequest();
+        String requestString = gson.toJson(request);
+        out.write(requestString);
+        out.newLine();
+        out.flush();
+
+        // Читаем ответ от сервера
+        String serverWord1 = in.readLine();
+
+        LeaveRoomResponse response = gson.fromJson(serverWord1, LeaveRoomResponse.class);
+
+        Assertions.assertEquals("success", response.getStatus());
     }
 
 }
+
+
 
 

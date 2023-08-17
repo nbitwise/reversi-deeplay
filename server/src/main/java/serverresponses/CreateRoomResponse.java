@@ -19,6 +19,5 @@ public class CreateRoomResponse implements Response {
         return roomId;
     }
 
-    // Геттеры и сеттеры по необходимости
 }
 
