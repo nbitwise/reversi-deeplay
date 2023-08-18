@@ -1,7 +1,7 @@
 package clientresponse;
 
 public class LeaveRoomResponse implements Response {
-    public String message;
+    public String message = "You get out";
     public String status;
 
     public LeaveRoomResponse(String status) {

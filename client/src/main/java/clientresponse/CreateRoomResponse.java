@@ -3,7 +3,7 @@ package clientresponse;
 public class CreateRoomResponse implements Response {
     public String message;
     public String status;
-    private int roomId;
+    public int roomId;
 
     public CreateRoomResponse(String status, int roomId) {
         this.status = status;
