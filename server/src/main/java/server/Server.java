@@ -21,6 +21,7 @@ public class Server {
     public static ConcurrentMap<UUID, String> onlineUsers = new ConcurrentHashMap<>();
     public static ConcurrentMap<UUID, String> registratedUsers = new ConcurrentHashMap<>();
     private static LinkedList<ClientProcessor> serverList = new LinkedList<>();
+  
     static List<Room> roomList = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {

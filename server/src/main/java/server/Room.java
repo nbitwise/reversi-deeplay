@@ -64,6 +64,18 @@ public class Room {
     public UUID getWhitePlayer() {
         return whitePlayer;
     }
+  
+    public void addPlayer(UUID uuid) {
+        if (WhitePlayer == null) {
+            WhitePlayer = String.valueOf(uuid);
+        } else if (BlackPlayer == null) {
+            BlackPlayer = String.valueOf(uuid);
+        }
+    }
+
+    public UUID getWhitePlayer() {
+        return whitePlayer;
+    }
 
     public UUID getBlackPlayer() {
         return blackPlayer;
