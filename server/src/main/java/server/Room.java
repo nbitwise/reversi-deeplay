@@ -3,6 +3,8 @@ package server;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static server.Server.roomList;
+
 public class Room {
     int id;
     String WhitePlayer = "";
@@ -28,6 +30,41 @@ public class Room {
         }
     }
 
+    public void addPlayer(UUID uuid) {
+        if (WhitePlayer == null) {
+            WhitePlayer = String.valueOf(uuid);
+        } else if (BlackPlayer == null) {
+            BlackPlayer = String.valueOf(uuid);
+        }
+    }
+    private static boolean roomExists(int roomId) {
+        for (Room room : roomList) {
+            if (room.getId() == roomId) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private static boolean roomExistsAndHasPlace(int roomId) {
+        for (Room room : roomList) {
+            if (room.getId() == roomId && room.checkHavePlace()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private static boolean roomExistsAndHasPlayer(int roomId, UUID uuid) {
+        for (Room room : roomList) {
+            if (room.getId() == roomId && room.hasPlayer(uuid)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public UUID getWhitePlayer() {
+        return whitePlayer;
+    }
+  
     public void addPlayer(UUID uuid) {
         if (WhitePlayer == null) {
             WhitePlayer = String.valueOf(uuid);

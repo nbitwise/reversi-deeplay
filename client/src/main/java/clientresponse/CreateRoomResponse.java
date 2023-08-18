@@ -1,8 +1,9 @@
 package clientresponse;
 
 public class CreateRoomResponse implements Response {
-    private String status;
-    private int roomId;
+    public String message;
+    public String status;
+    public int roomId;
 
     public CreateRoomResponse(String status, int roomId) {
         this.status = status;

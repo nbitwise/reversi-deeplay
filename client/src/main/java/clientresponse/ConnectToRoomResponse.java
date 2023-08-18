@@ -1,8 +1,9 @@
 package clientresponse;
 
 public class ConnectToRoomResponse implements Response {
-    private String status;
-    private String message;
+    public String message;
+    public String status;
+
 
     public ConnectToRoomResponse(String status, String message) {
 
