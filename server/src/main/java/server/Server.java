@@ -80,13 +80,11 @@ public class Server {
                 if (registratedUsers.containsKey(uuid)) {
                     if (onlineUsers.containsKey(uuid) && onlineUsers.get(uuid).equals(nickname)) {
                         return new ResponseAutorization("fail", "user with this nickname already online");
-                    }
-                    else if(!onlineUsers.containsKey(uuid)){
+                    } else if (!onlineUsers.containsKey(uuid)) {
                         onlineUsers.put(uuid, nickname);
                         return new ResponseAutorization("success", "you have successfully logged in");
                     }
-                }
-                else{
+                } else {
                     return new ResponseAutorization("fail", "you are not registered");
                 }
                 return new ResponseAutorization("fail", "Server issue");
@@ -133,6 +131,18 @@ public class Server {
                 }
                 return new LeaveRoomResponse("success");
             }));
+
+            commands.add(Command.newCommand("GAMEOVER", (jsonRequest, uuid) -> {
+                for (Room room: roomList) {
+                    if(room.getBlackPlayer().equals(uuid) || room.getWhitePlayer().equals(uuid))
+                    {
+                        roomList.remove(room);
+                        break;
+                    }
+                }
+                return new GameoverResponse("success", "game is over. You are not in room anymore");
+            }));
+
 
             try {
                 while (!server.isClosed()) {
