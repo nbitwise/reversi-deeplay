@@ -43,6 +43,8 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation project(":GameLogic")
     implementation project(":LocalGame")
+    // https://jarcasting.com/artifacts/org.jline/jline/
+    implementation ("org.jline:jline:3.21.0")
 }
 
 test {
@@ -63,3 +65,8 @@ jlinkZip {
 task prepareKotlinBuildScriptModel {
 
 }
+
+task wrapper(type: Wrapper){
+    gradleVersion = '8.0'
+}
+

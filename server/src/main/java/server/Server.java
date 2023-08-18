@@ -21,32 +21,7 @@ public class Server {
     public static ConcurrentMap<UUID, String> onlineUsers = new ConcurrentHashMap<>();
     public static ConcurrentMap<UUID, String> registratedUsers = new ConcurrentHashMap<>();
     private static LinkedList<ClientProcessor> serverList = new LinkedList<>();
-    private static List<Room> roomList = new ArrayList<>();
-
-    private static boolean roomExists(int roomId) {
-        for (Room room : roomList) {
-            if (room.getId() == roomId) {
-                return true;
-            }
-        }
-        return false;
-    }
-    private static boolean roomExistsAndHasPlace(int roomId) {
-        for (Room room : roomList) {
-            if (room.getId() == roomId && room.checkHavePlace()) {
-                return true;
-            }
-        }
-        return false;
-    }
-    private static boolean roomExistsAndHasPlayer(int roomId, UUID uuid) {
-        for (Room room : roomList) {
-            if (room.getId() == roomId && room.hasPlayer(uuid)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    static List<Room> roomList = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
 

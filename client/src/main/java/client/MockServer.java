@@ -10,8 +10,6 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-
-
 public class MockServer {
 
     public static final int PORT = 6070;
