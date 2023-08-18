@@ -53,8 +53,6 @@ class ServerTest {
 
         convertedObject = new Gson().fromJson(serverWord, JsonObject.class);
 
-        System.out.println(convertedObject.get("message").getAsString());
-
         Assertions.assertEquals("success", convertedObject.get("status").getAsString());
         Assertions.assertEquals("You was successfully registered", convertedObject.get("message").getAsString());
 
@@ -68,10 +66,7 @@ class ServerTest {
 
         convertedObject = new Gson().fromJson(serverWord, JsonObject.class);
 
-        System.out.println(convertedObject.get("message").getAsString());
-
         Assertions.assertEquals("fail", convertedObject.get("status").getAsString());
-
 
         request = new RegistrationRequest("ilya");
         requestString = gson.toJson(request);
@@ -83,8 +78,6 @@ class ServerTest {
 
         convertedObject = new Gson().fromJson(serverWord, JsonObject.class);
 
-        System.out.println(convertedObject.get("message").getAsString());
-
         Assertions.assertEquals("success", convertedObject.get("status").getAsString());
         Assertions.assertEquals("You was successfully registered", convertedObject.get("message").getAsString());
 
@@ -92,19 +85,26 @@ class ServerTest {
 
     @Test
     public void testRequestAuthorization() throws IOException {
+        RegistrationRequest request1 = new RegistrationRequest("andrew");
+        requestString = gson.toJson(request1);
+        out.write(requestString);
+        out.newLine();
+        out.flush();
+
+        String serverWord = in.readLine();
 
         AuthorizationRequest request = new AuthorizationRequest("andrew");
-        requestString = gson.toJson(request);
+        String requestString = gson.toJson(request);
         out.write(requestString);
         out.newLine();
         out.flush();
 
         String serverWord1 = in.readLine();
 
-        convertedObject = new Gson().fromJson(serverWord1, JsonObject.class);
+        JsonObject convertedObject = new Gson().fromJson(serverWord1, JsonObject.class);
 
         Assertions.assertEquals("success", convertedObject.get("status").getAsString());
-        Assertions.assertEquals("You was successfully authorization", convertedObject.get("message").getAsString());
+        Assertions.assertEquals("you have successfully logged in", convertedObject.get("message").getAsString());
 
     }
     @Test
@@ -218,7 +218,47 @@ class ServerTest {
 
         Assertions.assertEquals("success", response.getStatus());
     }
+    @Test
+    public void testRequestGameover() throws IOException {
+        RegistrationRequest request1 = new RegistrationRequest("andrew");
+        requestString = gson.toJson(request1);
+        out.write(requestString);
+        out.newLine();
+        out.flush();
 
+        String serverWord = in.readLine();
+
+        AuthorizationRequest request = new AuthorizationRequest("andrew");
+        String requestString = gson.toJson(request);
+        out.write(requestString);
+        out.newLine();
+        out.flush();
+
+        String serverWord1 = in.readLine();
+
+        CreateRoomRequest request2 = new CreateRoomRequest();
+
+        requestString = gson.toJson(request2);
+        out.write(requestString);
+        out.newLine();
+        out.flush();
+
+        serverWord1 = in.readLine();
+
+        GameoverRequest requestgo = new GameoverRequest();
+
+        String requestStringgo = gson.toJson(requestgo);
+        out.write(requestStringgo);
+        out.newLine();
+        out.flush();
+
+        String serverWordgo = in.readLine();
+
+        JsonObject convertedObject = new Gson().fromJson(serverWordgo, JsonObject.class);
+
+        Assertions.assertEquals("success", convertedObject.get("status").getAsString());
+        Assertions.assertEquals("game is over. You are not in room anymore", convertedObject.get("message").getAsString());
+    }
 }
 
 
