@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class Board {
-    private final Cell[][] board;
-    private static final int BOARD_SIZE = 8;
-    private int quantityOfWhite = 2;
-    private int quantityOfBlack = 2;
-    private final Logger logger = LogManager.getLogger(Board.class);
+    public final Cell[][] board;
+    public static final int BOARD_SIZE = 8;
+    public int quantityOfWhite = 2;
+    public int quantityOfBlack = 2;
+//    public final Logger logger = LogManager.getLogger(Board.class);
 
 
     /**
@@ -148,7 +148,7 @@ public class Board {
 
     private void checkArgument(int row, int col) {
         if (row >= BOARD_SIZE || row < 0 || col >= BOARD_SIZE || col < 0) {
-            logger.log(Level.ERROR, "Ошибка в передачи координат на доску.");
+    //        logger.log(Level.ERROR, "Ошибка в передачи координат на доску.");
             throw new IllegalArgumentException();
         }
     }

@@ -43,12 +43,12 @@ public class Game {
         }
     }
 
-    private static int makeMoveOnBoard(final Board board, final Player player,
-                                       int moveNumber, final Board copyBoard, final FileWriter writeForHuman, final FileWriter writerForBot) {
+    public static int makeMoveOnBoard(final Board board, final Player player,
+                                      int moveNumber, final Board copyBoard, final FileWriter writeForHuman, final FileWriter writerForBot) throws IOException {
         if (!board.getAllAvailableMoves(player.playerCell).isEmpty()) {
             final Move blackMove = player.makeMove(copyBoard);
             board.placePiece(blackMove.row, blackMove.col, player.playerCell);
-            GameLogger.logMove(board, blackMove.row, blackMove.col, player, blackMove.getTimeOnMove(), writeForHuman, writerForBot);
+        //    GameLogger.logMove(board, blackMove.row, blackMove.col, player, blackMove.getTimeOnMove(), writeForHuman, writerForBot);
             UI.displayMove(moveNumber, board, player, blackMove);
             moveNumber++;
         }

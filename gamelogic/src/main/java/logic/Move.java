@@ -9,7 +9,7 @@ import java.util.Objects;
 public final class Move {
     public final int row;
     public final int col;
-    private long timeOnMove;
+    public long timeOnMove;
 
     public long getTimeOnMove() {
         return timeOnMove;

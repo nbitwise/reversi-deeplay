@@ -1,8 +1,16 @@
 package server;
 
+import gamelogging.GameLogger;
+import io.deeplay.Game;
+import logic.Board;
+import logic.Cell;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static io.deeplay.Game.makeMoveOnBoard;
 import static server.Server.roomList;
 
 public class Room {
@@ -11,6 +19,10 @@ public class Room {
     String BlackPlayer = "";
     private UUID whitePlayer;
     private UUID blackPlayer;
+
+    public Game game = new Game();
+
+    public Board board = new Board();
 
     public  boolean checkHavePlace() {
         if ((WhitePlayer.isEmpty() && BlackPlayer.isEmpty()) || (WhitePlayer.isEmpty() || BlackPlayer.isEmpty())) {
@@ -60,6 +72,41 @@ public class Room {
             }
         }
         return false;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public void startGame1() {
+        ServerHumanPlayer playerBlack = new ServerHumanPlayer(Cell.BLACK, BlackPlayer, blackPlayer);
+        ServerHumanPlayer playerWhite = new ServerHumanPlayer(Cell.WHITE, WhitePlayer, whitePlayer);
+        game.startGame(board, playerBlack, playerWhite, id, "fileForHuman", "systemFile");
+    }
+
+    // Предположим, у вас есть список комнат roomList
+
+    public void startGame2() throws IOException {
+        int gameId = 1;
+        ServerHumanPlayer playerBlack = new ServerHumanPlayer(Cell.BLACK, BlackPlayer, blackPlayer);
+        ServerHumanPlayer playerWhite = new ServerHumanPlayer(Cell.WHITE, WhitePlayer, whitePlayer);
+        int moveNumber = 1;
+        while (!board.getAllAvailableMoves(playerBlack.playerCell).isEmpty() || !board.getAllAvailableMoves(playerWhite.playerCell).isEmpty()) {
+            try (FileWriter writeForHuman = new FileWriter("fileForHuman", true);
+                 FileWriter writerForBot = new FileWriter("systemFile", true)) {
+                GameLogger.logStart(gameId, writeForHuman, writerForBot);
+                Board copyBoard = board.getBoardCopy();
+                //получать респонз с ходом
+
+                moveNumber = makeMoveOnBoard(board, playerBlack, moveNumber, copyBoard, writeForHuman, writerForBot);
+                moveNumber = makeMoveOnBoard(board, playerWhite, moveNumber, copyBoard, writeForHuman, writerForBot);
+            }
+        }
+
     }
     public UUID getWhitePlayer() {
         return whitePlayer;

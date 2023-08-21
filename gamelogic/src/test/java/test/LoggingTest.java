@@ -1,7 +1,9 @@
 package test;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import parsing.BoardParser;
-import gamelogging.Logging;
+
 import logic.*;
 import org.junit.jupiter.api.Test;
 
@@ -10,12 +12,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.regex.Pattern;
+import gamelogging.GameLogger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class LoggingTest {
+
 
     @Test
     void testLogMove() throws IOException {
@@ -43,7 +47,7 @@ class LoggingTest {
         FileWriter writeForHuman = new FileWriter("fileForHumanTest", true);
         FileWriter writerForBot = new FileWriter("fileForBotTest", true);
 
-        Logging.logMove(parsedBoard, 2, 4, player, 12345, writeForHuman, writerForBot);
+        GameLogger.logMove(parsedBoard, 2, 4, player, 12345, writeForHuman, writerForBot);
 
         final FileReader humanReader = new FileReader("fileForHumanTest");
         char[] massiveFromFile = new char[201];
@@ -78,7 +82,7 @@ class LoggingTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Logging.logStart(1, writeForHuman, writerForBot);
+        GameLogger.logStart(1, writeForHuman, writerForBot);
         final FileReader humanReader = new FileReader("fileForHumanTest");
         final StringBuilder result = new StringBuilder();
         char[] massiveFromFile = new char[11];
@@ -112,7 +116,7 @@ class LoggingTest {
                 w b w b b b w b\s
                 w w w w w b w b\s
                 w w w b b b b b""", 'b', 'w', '_');
-        Logging.logEnd(finalBoard, writeForHuman, writerForBot);
+        GameLogger.logEnd(finalBoard, writeForHuman, writerForBot);
         final FileReader humanReader = new FileReader("fileForHumanTest");
         char[] massiveFromFile = new char[71];
         humanReader.read(massiveFromFile);

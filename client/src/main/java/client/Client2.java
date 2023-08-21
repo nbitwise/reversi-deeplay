@@ -1,24 +1,19 @@
 package client;
 
-import com.google.gson.Gson;
 import clientrequest.*;
 import clientresponse.*;
+import com.google.gson.Gson;
 import logic.Board;
 import logic.Move;
-import org.jline.reader.*;
-import org.jline.reader.impl.completer.StringsCompleter;
-import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Client {
+public class Client2 {
 
     private final Socket socket;
     private final BufferedReader bufferedReader;
@@ -26,7 +21,7 @@ public class Client {
     private final Gson gson;
     private final ExecutorService executorService;
 
-    public Client(String host, int port) throws IOException {
+    public Client2(String host, int port) throws IOException {
         socket = new Socket(host, port);
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -42,10 +37,7 @@ public class Client {
     }
 
     public <T extends Response> T getResponse(Class<T> responseType) throws IOException {
-        String jsonResponse = "";
-        while (jsonResponse.isEmpty()) {
-            jsonResponse = bufferedReader.readLine();
-        }
+        String jsonResponse = bufferedReader.readLine();
         return gson.fromJson(jsonResponse, responseType);
     }
 
@@ -56,13 +48,14 @@ public class Client {
 
     public static void main(String[] args) {
         try {
-            Client client = new Client("localhost", 6070);
+            Client2 client = new Client2("localhost", 6070);
 
             Scanner scanner = new Scanner(System.in);
             boolean exitRequested = false;
-            handleCommand(client, "REGISTRATION p1");
-            handleCommand(client, "AUTHORIZATION p1");
-            handleCommand(client, "CREATEROOM");
+            handleCommand(client, "REGISTRATION p2");
+            handleCommand(client, "AUTHORIZATION p2");
+            handleCommand(client, "CONNECTTOROOM 1");
+            handleCommand(client, "STARTGAME2");
             while (!exitRequested) {
                 System.out.print("Enter command: ");
                 String input = scanner.nextLine().trim();
@@ -82,7 +75,7 @@ public class Client {
     }
 
 
-    private static void handleCommand(Client client, String input) throws IOException {
+    private static void handleCommand(Client2 client, String input) throws IOException {
         String[] commandParts = input.split("\\s+");
         String command = commandParts[0];
 
@@ -141,14 +134,23 @@ public class Client {
                 client.sendRequest(startGamRequest);
                 while (true) { //пока есть ходы
                     WhereIcanGoResponse whereIcanGoResponse = client.getResponse(WhereIcanGoResponse.class);
-                    if (whereIcanGoResponse==null) continue;
-
                     //сдесь должен быть реализован вывод доски и ходы
                     System.out.println("davai hodi");
                     MakeMoveRequest makeMoveRequest = makeMove(whereIcanGoResponse);
                     client.sendRequest(makeMoveRequest);//отправляет свой ход
-                  //  MadeMoveResponse madeMoveResponse = client.getResponse(MadeMoveResponse.class);
-                 //   System.out.println(madeMoveResponse.message);
+                    MadeMoveResponse madeMoveResponse = client.getResponse(MadeMoveResponse.class);
+                    System.out.println(madeMoveResponse.message);
+                }
+            case "STARTGAME2":
+                while (true) { //пока есть ходы
+                    WhereIcanGoResponse whereIcanGoResponse = client.getResponse(WhereIcanGoResponse.class);
+                    if (whereIcanGoResponse==null) continue;
+                    //pдесь должен быть реализован вывод доски и ходы
+                    System.out.println("davai hodi");
+                    MakeMoveRequest makeMoveRequest = makeMove(whereIcanGoResponse);
+                    client.sendRequest(makeMoveRequest);//отправляет свой ход
+                    //  MadeMoveResponse madeMoveResponse = client.getResponse(MadeMoveResponse.class);
+                    //   System.out.println(madeMoveResponse.message);
                 }
             default:
                 System.out.println("Unknown command: " + command);
@@ -169,7 +171,7 @@ public class Client {
     public static MakeMoveRequest makeMove(WhereIcanGoResponse whereIcanGoResponse) throws IOException {
 
         List<Move> availableMoves = whereIcanGoResponse.getAvailableMoves();
-          Board board = whereIcanGoResponse.getBoard();
+       // Board board = whereIcanGoResponse.getBoard();
         //   final List<Move> availableMoves = board.getAllAvailableMoves(playerCell);
         System.out.println("Доступные ходы: ");
         for (Move m : availableMoves) {
