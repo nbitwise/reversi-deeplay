@@ -36,6 +36,7 @@ javafx {
 
 dependencies {
 
+    implementation project(path: ':UI')
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -45,6 +46,7 @@ dependencies {
     implementation project(":LocalGame")
     // https://jarcasting.com/artifacts/org.jline/jline/
     implementation ("org.jline:jline:3.21.0")
+    implementation project(":UI")
 }
 
 test {

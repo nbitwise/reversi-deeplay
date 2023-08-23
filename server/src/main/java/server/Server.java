@@ -68,12 +68,12 @@ public class Server {
                         return new ResponseAutorization("fail", "user with this nickname already online");
                     } else if (!onlineUsers.containsKey(uuid)) {
                         onlineUsers.put(uuid, nickname);
-                        return new ResponseAutorization("success", "you have successfully logged in");
+                        return new ResponseAutorization("success", "You have successfully logged in");
                     } else {
                         return new ResponseAutorization("fail", "You are already logged in");
                     }
                 } else {
-                    return new ResponseAutorization("fail", "you are not registered");
+                    return new ResponseAutorization("fail", "You are not registered");
                 }
             }));
 
