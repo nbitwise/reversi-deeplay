@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Board {
-    private final Cell[][] board;
+    public final Cell[][] board;
     private static final int BOARD_SIZE = 8;
     private int quantityOfWhite = 2;
     private int quantityOfBlack = 2;

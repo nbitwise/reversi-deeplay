@@ -20,24 +20,16 @@ public class serverPlayer extends Player {
     private static final Scanner scanner = new Scanner(System.in);
     public int row;
     public int col;
-    public UUID uuid;
 
-    public serverPlayer(Cell playerCell, int row, int col, UUID uuid) {
+    public serverPlayer(Cell playerCell, int row, int col) {
         super(playerCell);
-        this.col = col - 1;
-        this.row = row - 1;
-        this.uuid = uuid;
-
+        this.col = col;
+        this.row = row;
     }
 
     @Override
     public Move makeMove(Board board) {
         final List<Move> availableMoves = board.getAllAvailableMoves(playerCell);
-
-        Server.ClientProcessor thisPlayer = Server.clients.get(uuid);
-        WhereIcanGoResponse whereIcanGoResponse = new WhereIcanGoResponse(availableMoves, board, playerCell);
-        thisPlayer.sendReply(whereIcanGoResponse);
-
 
         Date dateStart = new Date();
 
@@ -49,10 +41,8 @@ public class serverPlayer extends Player {
             long finalTime = dateEnd.getTime() - dateStart.getTime();
             move.setTimeOnMove(finalTime);
             return move;
-        } else {
-            System.out.println("Недопустимый ход! Пожалуйста, выберите из доступных ходов.");//response + return
         }
-        return move;//переделать
+        return null;
     }
 }
 

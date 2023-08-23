@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class Player {
-    private static final AtomicInteger playerCounter = new AtomicInteger(0);
+    public static final AtomicInteger playerCounter = new AtomicInteger(0);
     public final int playerId;
     public final Cell playerCell;
 
