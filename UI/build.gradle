@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'io.deeplay'
+group = 'ui'
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -10,14 +10,10 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.google.code.gson:gson:2.10.1'
     implementation project(path: ':GameLogic')
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation project(":GameLogic")
-    implementation project(":LocalGame")
-    implementation project(":UI")
+
 }
 
 test {

@@ -4,6 +4,7 @@ module com.example.client {
     requires com.google.gson;
     requires org.jline;
     requires reversi.deeplay.gamelogic.main;
+    requires reversi.deeplay.UI.main;
 
 
     opens client to javafx.fxml;

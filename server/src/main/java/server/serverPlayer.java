@@ -28,6 +28,11 @@ public class serverPlayer extends Player {
     }
 
     @Override
+    public String getPlayerID() {
+        return null;
+    }
+
+    @Override
     public Move makeMove(Board board) {
         final List<Move> availableMoves = board.getAllAvailableMoves(playerCell);
 
