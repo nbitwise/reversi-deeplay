@@ -133,6 +133,10 @@ public class NewClient {
                 client.close();
                 System.exit(0);
                 break;
+                case "SURRENDER":
+                SurrenderResponse surrenderResponse = (SurrenderResponse)client.getResponse(SurrenderResponse.class, input);
+                System.out.println(surrenderResponse.message);
+                break;
             default:
                 System.out.println("Unknown command: " + commandName);
                 break;
@@ -197,6 +201,10 @@ public class NewClient {
                 } else {
                     System.out.println("wrong coordinates");
                 }
+                break;
+            case "SURRENDER":
+                SurrenderRequest surrenderRequest = new SurrenderRequest();
+                client.sendRequest(surrenderRequest);
                 break;
             case "EXIT":
                 client.close();

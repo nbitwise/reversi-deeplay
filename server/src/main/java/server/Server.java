@@ -178,6 +178,31 @@ public class Server {
 
             }));
 
+            commands.add(Command.newCommand("SURRENDER", (jsonRequest, uuid) -> {
+                ClientProcessor opponent = null;
+                Room thisRoom = null;
+                for (Room r : roomList) {
+                    if (r.getBlackPlayerUUID() == uuid) {
+                        opponent = clients.get(r.getWhitePlayerUUID());
+                        thisRoom = r;
+                    }
+                    if (r.getWhitePlayerUUID() == uuid) {
+                        opponent = clients.get(r.getBlackPlayerUUID());
+                        thisRoom = r;
+                        break;
+                    }
+                }
+                assert opponent != null;
+                //надо еще команду завершения игры допилить и сюда впихнуть
+                final int blackCount = thisRoom.board.getQuantityOfBlack();
+                final int whiteCount = thisRoom.board.getQuantityOfWhite();
+                System.out.println("Number of Black pieces: " + blackCount);
+                System.out.println("Number of White pieces: " + whiteCount);
+                opponent.sendReply(new SurrenderResponse("Your opponent has surrendered\n" + "Number of Black pieces: " + blackCount + "\nNumber of White pieces: " + whiteCount));
+
+                return new SurrenderResponse("you surrendered\n" + "Number of Black pieces: " + blackCount + "\nNumber of White pieces: " + whiteCount);
+            }));
+
             commands.add(Command.newCommand("MAKEMOVE", (jsonRequest, uuid) -> {
 
                 int row = jsonRequest.get("row").getAsInt() - 1;
