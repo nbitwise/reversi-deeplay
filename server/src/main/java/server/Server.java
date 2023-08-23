@@ -69,10 +69,12 @@ public class Server {
                         onlineUsers.put(uuid, nickname);
                         return new ResponseAutorization("success", "you have successfully logged in");
                     }
+                    else{
+                        return new ResponseAutorization("fail", "You are already logged in");
+                    }
                 } else {
                     return new ResponseAutorization("fail", "you are not registered");
                 }
-                return new ResponseAutorization("fail", "Server issue");
             }));
 
             commands.add(Command.newCommand("CREATEROOM", (jsonRequest, uuid) -> {
@@ -177,18 +179,30 @@ public class Server {
                 }
 
                 if (uuid == room.getBlackPlayerUUID()) {
+                    if (room.game.nextTurnOfPlayerColor.equals(Cell.WHITE)) {
+                        return new MakeMoveResponse("fail", "it's not your turn");
+                    }
                     Board copyBoard = room.board.getBoardCopy();
-                    serverPlayer player = new serverPlayer(Cell.BLACK, row, col);
+                    serverPlayer player = new serverPlayer(Cell.BLACK, row, col, uuid);
                     try {
                         room.moveNumber = makeMoveOnBoardWithOutLog(room.board, player, room.moveNumber, copyBoard);
+                        if (!room.board.getAllAvailableMoves(Cell.WHITE).isEmpty()) {
+                            room.game.nextTurnOfPlayerColor = Cell.WHITE;
+                        }
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                } else {
+                } else if (uuid == room.getWhitePlayerUUID()) {
+                    if (room.game.nextTurnOfPlayerColor.equals(Cell.BLACK)) {
+                        return new MakeMoveResponse("fail", "it's not your turn");
+                    }
                     Board copyBoard = room.board.getBoardCopy();
-                    serverPlayer player = new serverPlayer(Cell.WHITE, row, col);
+                    serverPlayer player = new serverPlayer(Cell.WHITE, row, col, uuid);
                     try {
                         room.moveNumber = makeMoveOnBoardWithOutLog(room.board, player, room.moveNumber, copyBoard);
+                        if (!room.board.getAllAvailableMoves(Cell.BLACK).isEmpty()) {
+                            room.game.nextTurnOfPlayerColor = Cell.BLACK;
+                        }
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -248,7 +262,21 @@ public class Server {
             }
         }
 
+
         public synchronized void sendReply(Response response) {
+            try {
+                GsonBuilder builder = new GsonBuilder();
+                Gson gson = builder.create();
+                String jsonRequest = gson.toJson(response);
+                this.socketBufferedWriter.write(jsonRequest);
+                this.socketBufferedWriter.newLine();
+                this.socketBufferedWriter.flush();
+            } catch (IOException var5) {
+                throw new IllegalStateException(var5);
+            }
+        }
+
+        public synchronized void sendReply(WhereIcanGoResponse response) {
             try {
                 GsonBuilder builder = new GsonBuilder();
                 Gson gson = builder.create();
