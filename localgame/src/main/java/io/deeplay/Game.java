@@ -14,6 +14,8 @@ import java.io.IOException;
  * Класс Game дает возможность запустить игру.
  */
 public class Game {
+
+    public Cell nextTurnOfPlayerColor = Cell.BLACK;
     private final static Logger logger = LogManager.getLogger(Board.class);
     /**
      * Метод startGame запускает игру. По окончанию игры выводится результат.

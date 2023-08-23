@@ -39,18 +39,18 @@ public class NewClient {
         new Thread(() -> {
             String msg;
             while (socket.isConnected()) {
-                try{
+                try {
                     String line = bufferedReader.readLine();
-                    if(line != null)
-                    {
+                    if (line != null) {
                         viewOnInComeMessage(this, line);
                     }
-                }catch (IOException e){
+                } catch (IOException e) {
                     System.out.println(e);
                 }
             }
         }).start();
     }
+
     public void sendMessage() throws IOException {
         Scanner scanner = new Scanner(System.in);
         while (socket.isConnected()) {
@@ -58,6 +58,7 @@ public class NewClient {
             createJsonAndSendCommand(this, msg);
         }
     }
+
     public <T extends Response> T getResponse(Class<T> responseType, String jsonResponse) throws IOException {
         return gson.fromJson(jsonResponse, responseType);
     }
@@ -80,6 +81,7 @@ public class NewClient {
             e.printStackTrace();
         }
     }
+
     private static void viewOnInComeMessage(NewClient client, String input) throws IOException {
 
         JsonObject request = JsonParser.parseString(input).getAsJsonObject();
@@ -123,7 +125,7 @@ public class NewClient {
                 break;
             case "STARTGAME":
                 StartGameResponse startGameResponse = client.getResponse(StartGameResponse.class, input);
-                System.out.println("MakeMove response " + startGameResponse.message);
+                System.out.println("StartGame response " + startGameResponse.message);
                 break;
             case "EXIT":
                 client.close();
@@ -176,15 +178,23 @@ public class NewClient {
                 client.sendRequest(leaveRoomRequest);
                 break;
             case "STARTGAME":
-                int roomId = Integer.parseInt(commandParts[1]);
-                StartGameRequest startGameRequest = new StartGameRequest(roomId);
-                client.sendRequest(startGameRequest);
+                if (commandParts.length > 1) {
+                    int roomId = Integer.parseInt(commandParts[1]);
+                    StartGameRequest startGameRequest = new StartGameRequest(roomId);
+                    client.sendRequest(startGameRequest);
+                } else {
+                    System.out.println("Usage: connecttoroom you didn't enter id of the room");
+                }
                 break;
             case "MAKEMOVE":
-                int row = Integer.parseInt(commandParts[1]);
-                int col = Integer.parseInt(commandParts[2]);
-                MakeMoveRequest makeMoveRequest = new MakeMoveRequest(row, col);
-                client.sendRequest(makeMoveRequest);
+                if (commandParts.length > 2) {
+                    int row = Integer.parseInt(commandParts[1]);
+                    int col = Integer.parseInt(commandParts[2]);
+                    MakeMoveRequest makeMoveRequest = new MakeMoveRequest(row, col);
+                    client.sendRequest(makeMoveRequest);
+                } else {
+                    System.out.println("wrong coordinates");
+                }
                 break;
             case "EXIT":
                 client.close();

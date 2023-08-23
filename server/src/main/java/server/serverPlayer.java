@@ -20,21 +20,23 @@ public class serverPlayer extends Player {
     private static final Scanner scanner = new Scanner(System.in);
     public int row;
     public int col;
+    public UUID uuid;
 
-    public serverPlayer(Cell playerCell, int row, int col) {
+    public serverPlayer(Cell playerCell, int row, int col, UUID uuid) {
         super(playerCell);
         this.col = col - 1;
         this.row = row - 1;
+        this.uuid = uuid;
 
     }
 
     @Override
     public Move makeMove(Board board) {
         final List<Move> availableMoves = board.getAllAvailableMoves(playerCell);
-        /*System.out.println("Доступные ходы: ");
-        for (Move m : availableMoves) {
-            System.out.println(m.row + 1 + " " + (m.col + 1));
-        }*/ //response + return
+
+        Server.ClientProcessor thisPlayer = Server.clients.get(uuid);
+        WhereIcanGoResponse whereIcanGoResponse = new WhereIcanGoResponse(availableMoves, board, playerCell);
+        thisPlayer.sendReply(whereIcanGoResponse);
 
 
         Date dateStart = new Date();
