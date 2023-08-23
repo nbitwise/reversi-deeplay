@@ -1,8 +1,14 @@
 package server;
 
 import com.google.gson.*;
+import io.deeplay.Game;
+import logic.Board;
+import logic.Cell;
+import logic.Move;
+import logic.Player;
 import serverrequest.*;
 import serverresponses.*;
+import ui.UI;
 
 
 import java.io.*;
@@ -15,13 +21,17 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static io.deeplay.Game.makeMoveOnBoardWithOutLog;
+import static server.Authorization.checkAuth;
+
 public class Server {
 
     private static final int PORT = 6070;
+    public static ConcurrentMap<UUID, ClientProcessor> clients = new ConcurrentHashMap<>();
     public static ConcurrentMap<UUID, String> onlineUsers = new ConcurrentHashMap<>();
     public static ConcurrentMap<UUID, String> registratedUsers = new ConcurrentHashMap<>();
-    private static LinkedList<ClientProcessor> serverList = new LinkedList<>();
-  
+    public static LinkedList<ClientProcessor> serverList = new LinkedList<>();
+
     static List<Room> roomList = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
@@ -39,11 +49,10 @@ public class Server {
                 if (nickname == null || !nickname.matches("^[a-zA-Z0-9_]+$")) {
                     return new ResponseRegistration("fail", "incorrect username");
                 }
-                if (registratedUsers.containsKey(uuid)) {
+                if (registratedUsers.values().contains(nickname)) {
                     return new ResponseRegistration("fail", "user with this nickname already registrated");
                 }
                 registratedUsers.put(uuid, nickname);
-
                 return new ResponseRegistration("success", "You was successfully registered");
             }));
 
@@ -67,56 +76,125 @@ public class Server {
             }));
 
             commands.add(Command.newCommand("CREATEROOM", (jsonRequest, uuid) -> {
-                Room room = new Room();
-                roomList.add(room);
-                room.setBlackPlayer(uuid);
-                return new CreateRoomResponse("success", "Room was successfully registered", room.getId());
+                if (onlineUsers.containsKey(uuid)) {
+                    if (!checkAuth(uuid, onlineUsers.get(uuid), onlineUsers)) {
+                        return new ConnectToRoomResponse("fail", "you are not logged in");
+                    }
+
+                    Room room = new Room();
+                    roomList.add(room);
+                    room.setBlackPlayerUUID(uuid);
+                    return new CreateRoomResponse("success", "Room was successfully registered", room.getId());
+                }
+                return new CreateRoomResponse("fail", "you are not logged in", null);
             }));
 
             commands.add(Command.newCommand("CONNECTTOROOM", (jsonRequest, uuid) -> {
-                int roomId = jsonRequest.get("roomId").getAsInt();
-                Room room = roomList.stream()
-                        .filter(r -> r.getId() == roomId)
-                        .findFirst()
-                        .orElse(null);
+                if (onlineUsers.containsKey(uuid)) {
+                    if (!checkAuth(uuid, onlineUsers.get(uuid), onlineUsers)) {
+                        return new ConnectToRoomResponse("fail", "you are not logged in");
+                    }
+                    int roomId = jsonRequest.get("roomId").getAsInt();
+                    Room room = roomList.stream()
+                            .filter(r -> r.getId() == roomId)
+                            .findFirst()
+                            .orElse(null);
 
-                if (room != null && room.hasNoPlayers()) {
-                    room.setBlackPlayer(uuid);
-                    return new ConnectToRoomResponse("success", "Connected to room as BlackPlayer");
-                } else if (room != null && !room.isFull()) {
-                    room.setWhitePlayer(uuid);
-                    return new ConnectToRoomResponse("success", "Connected to room as WhitePlayer");
-                } else if (room == null) {
-                    return new ConnectToRoomResponse("fail", "Room with ID " + roomId + " not found");
-                } else {
-                    return new ConnectToRoomResponse("fail", "Room with ID " + roomId + " is already occupied");
+                    if (room != null && room.hasNoPlayers()) {
+                        room.setBlackPlayerUUID(uuid);
+                        return new ConnectToRoomResponse("success", "Connected to room as BlackPlayer");
+                    } else if (room != null && !room.isFull()) {
+                        room.setWhitePlayerUUID(uuid);
+                        return new ConnectToRoomResponse("success", "Connected to room as WhitePlayer");
+                    } else if (room == null) {
+                        return new ConnectToRoomResponse("fail", "Room with ID " + roomId + " not found");
+                    } else {
+                        return new ConnectToRoomResponse("fail", "Room with ID " + roomId + " is already occupied");
+                    }
                 }
+                return new ConnectToRoomResponse("fail", "you are not logged in");
             }));
 
 
             commands.add(Command.newCommand("LEAVEROOM", (jsonRequest, uuid) -> {
-                JsonElement roomIdElement = jsonRequest.get("roomId");
-                if (roomIdElement != null && roomIdElement.isJsonPrimitive() && roomIdElement.getAsJsonPrimitive().isNumber()) {
-                    int roomId = roomIdElement.getAsInt();
-                    for (Room room : roomList) {
-                        if (room.getId() == roomId && room.hasPlayer(uuid)) {
-                            room.removePlayer(uuid);
-                            break;
+                if (onlineUsers.containsKey(uuid)) {
+                    if (!checkAuth(uuid, onlineUsers.get(uuid), onlineUsers)) {
+                        return new LeaveRoomResponse("fail", "you are not logged in");
+                    }
+                    JsonElement roomIdElement = jsonRequest.get("roomId");
+                    if (roomIdElement != null && roomIdElement.isJsonPrimitive() && roomIdElement.getAsJsonPrimitive().isNumber()) {
+                        int roomId = roomIdElement.getAsInt();
+                        for (Room room : roomList) {
+                            if (room.getId() == roomId && room.hasPlayer(uuid)) {
+                                room.removePlayer(uuid);
+                                break;
+                            }
                         }
                     }
+                    return new LeaveRoomResponse("success", "you successfully get out");
                 }
-                return new LeaveRoomResponse("success");
+                return new LeaveRoomResponse("fail", "you are not logged in");
             }));
 
             commands.add(Command.newCommand("GAMEOVER", (jsonRequest, uuid) -> {
-                for (Room room: roomList) {
-                    if(room.getBlackPlayer().equals(uuid) || room.getWhitePlayer().equals(uuid))
-                    {
-                        roomList.remove(room);
+                if (onlineUsers.containsKey(uuid)) {
+                    if (!checkAuth(uuid, onlineUsers.get(uuid), onlineUsers)) {
+                        return new GameoverResponse("fail", "you are not logged in");
+                    }
+                    for (Room room : roomList) {
+                        if (room.getBlackPlayerUUID().equals(uuid) || room.getWhitePlayerUUID().equals(uuid)) {
+                            roomList.remove(room);
+                            break;
+                        }
+                    }
+                    return new GameoverResponse("success", "game is over. You are not in room anymore");
+                }
+                return new GameoverResponse("fail", "you are not logged in");
+            }));
+
+            commands.add(Command.newCommand("STARTGAME", (jsonRequest, uuid) -> {
+                int roomId = jsonRequest.get("roomId").getAsInt();
+                Room room = new Room();
+                for (Room r : roomList) {
+                    if (r.id == roomId) {
+                        room = r;
                         break;
                     }
                 }
-                return new GameoverResponse("success", "game is over. You are not in room anymore");
+                room.game = new Game();
+                return new StartGameResponse("success", "game started");
+            }));
+
+            commands.add(Command.newCommand("MAKEMOVE", (jsonRequest, uuid) -> {
+                int row = jsonRequest.get("row").getAsInt();
+                int col = jsonRequest.get("col").getAsInt();
+                Room room = new Room();
+                for (Room r : roomList) {
+                    if (r.getBlackPlayerUUID() == uuid || r.getWhitePlayerUUID() == uuid) {
+                        room = r;
+                        break;
+                    }
+                }
+
+                if (uuid == room.getBlackPlayerUUID()) {
+                    Board copyBoard = room.board.getBoardCopy();
+                    serverPlayer player = new serverPlayer(Cell.BLACK, row, col);
+                    try {
+                        room.moveNumber = makeMoveOnBoardWithOutLog(room.board, player, room.moveNumber, copyBoard);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    Board copyBoard = room.board.getBoardCopy();
+                    serverPlayer player = new serverPlayer(Cell.WHITE, row, col);
+                    try {
+                        room.moveNumber = makeMoveOnBoardWithOutLog(room.board, player, room.moveNumber, copyBoard);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                return new MakeMoveResponse("success", "you did your turn");
             }));
 
 
@@ -124,7 +202,9 @@ public class Server {
                 while (!server.isClosed()) {
                     Socket socket = server.accept();
                     try {
-                        serverList.add(new ClientProcessor(socket, commands));
+                        ClientProcessor thisClient = new ClientProcessor(socket, commands);
+                        serverList.add(thisClient);
+                        clients.put(thisClient.uuid, thisClient);
                     } catch (IOException e) {
 
                         socket.close();
@@ -137,7 +217,7 @@ public class Server {
     }
 
     public static class ClientProcessor extends Thread {
-        public  final Map commands;
+        public final Map commands;
         public final BufferedReader socketBufferedReader;
         public final BufferedWriter socketBufferedWriter;
         public final UUID uuid;
@@ -152,15 +232,15 @@ public class Server {
 
         public void run() {
             try {
-                while(true) {
+                while (true) {
                     String line = this.socketBufferedReader.readLine();
                     if (line == null) {
                         return;
                     }
-
+                    System.out.println(line);
                     JsonObject request = JsonParser.parseString(line).getAsJsonObject();
                     String commandName = request.get("command").getAsString().toUpperCase();
-                    Command command = (Command)this.commands.get(commandName);
+                    Command command = (Command) this.commands.get(commandName);
                     this.sendReply(command.process(request, this.uuid));
                 }
             } catch (IOException var5) {
@@ -199,5 +279,7 @@ public class Server {
             };
         }
     }
+
+
 }
 

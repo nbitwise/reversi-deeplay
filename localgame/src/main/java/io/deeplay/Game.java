@@ -43,8 +43,29 @@ public class Game {
         }
     }
 
+    public void startGameWithOutLog(Board board, final Player black, final Player white) throws IOException {
+            int moveNumber = 1;
+            while (!board.getAllAvailableMoves(black.playerCell).isEmpty() || !board.getAllAvailableMoves(white.playerCell).isEmpty()) {
+                Board copyBoard = board.getBoardCopy();
+                moveNumber = makeMoveOnBoardWithOutLog(board, black, moveNumber, copyBoard);
+                moveNumber = makeMoveOnBoardWithOutLog(board, white, moveNumber, copyBoard);
+            }
+            displayResult(board);
+    }
+
+    public static int makeMoveOnBoardWithOutLog(final Board board, final Player player,
+                                       int moveNumber, final Board copyBoard) throws IOException {
+        if (!board.getAllAvailableMoves(player.playerCell).isEmpty()) {
+            final Move blackMove = player.makeMove(copyBoard);
+            board.placePiece(blackMove.row, blackMove.col, player.playerCell);
+            UI.displayMove(moveNumber, board, player, blackMove);
+            moveNumber++;
+        }
+        return moveNumber;
+    }
+
     private static int makeMoveOnBoard(final Board board, final Player player,
-                                       int moveNumber, final Board copyBoard, final FileWriter writeForHuman, final FileWriter writerForBot) {
+                                       int moveNumber, final Board copyBoard, final FileWriter writeForHuman, final FileWriter writerForBot) throws IOException {
         if (!board.getAllAvailableMoves(player.playerCell).isEmpty()) {
             final Move blackMove = player.makeMove(copyBoard);
             board.placePiece(blackMove.row, blackMove.col, player.playerCell);
@@ -76,4 +97,6 @@ public class Game {
             System.out.println("It's a Tie");
         }
     }
+
+
 }

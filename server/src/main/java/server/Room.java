@@ -1,16 +1,27 @@
 package server;
 
+import io.deeplay.Game;
+import logic.Board;
+
+import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static server.Server.roomList;
 
 public class Room {
+
     int id;
     String WhitePlayer = "";
     String BlackPlayer = "";
-    private UUID whitePlayer;
-    private UUID blackPlayer;
+    private UUID whitePlayerUUID;
+    private UUID blackPlayerUUID;
+
+    Board board = new Board();
+
+    Game game = new Game();
+
+    public int moveNumber = 1;
 
     public  boolean checkHavePlace() {
         if ((WhitePlayer.isEmpty() && BlackPlayer.isEmpty()) || (WhitePlayer.isEmpty() || BlackPlayer.isEmpty())) {
@@ -61,27 +72,32 @@ public class Room {
         }
         return false;
     }
-    public UUID getWhitePlayer() {
-        return whitePlayer;
+    public void startServerGame() throws IOException {
+        game = new Game();
+        board = new Board();
+        moveNumber = 1;
+    }
+    public UUID getWhitePlayerUUID() {
+        return whitePlayerUUID;
     }
 
-    public UUID getBlackPlayer() {
-        return blackPlayer;
+    public UUID getBlackPlayerUUID() {
+        return blackPlayerUUID;
     }
 
-    public void setWhitePlayer(UUID player) {
-        this.whitePlayer = player;
+    public void setWhitePlayerUUID(UUID player) {
+        this.whitePlayerUUID = player;
     }
 
-    public void setBlackPlayer(UUID player) {
-        this.blackPlayer = player;
+    public void setBlackPlayerUUID(UUID player) {
+        this.blackPlayerUUID = player;
     }
 
     public boolean hasNoPlayers() {
         return WhitePlayer == null && BlackPlayer == null;
     }
     public boolean isFull() {
-        return whitePlayer != null && blackPlayer != null;
+        return whitePlayerUUID != null && blackPlayerUUID != null;
     }
     public Room() {
         this.id = roomCounter.incrementAndGet();
