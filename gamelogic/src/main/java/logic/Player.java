@@ -4,12 +4,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+
+/**
+ * Абстрактный класс Player представляет игрока в игре.
+ * У каждого игрока есть свой тип фишки (клетки) - Cell,
+ * который представляет цвет игрока (BLACK или WHITE).
+ *
+ * Каждый игрок получает уникальный идентификатор, который может быть использован
+ * для статистики или для других целей, требующих идентификации игрока.
+ */
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class Player {
     private static final AtomicInteger playerCounter = new AtomicInteger(0);
     public final int playerId;
     public final Cell playerCell;
+
+    public abstract String getPlayerID();
 
     /**
      * Конструктор создает объект игрока с указанным типом фишки (клетки) и присваивает
@@ -35,7 +46,7 @@ public abstract class Player {
      * Подкласс HumanPlayer представляет человеческого игрока, который делает ходы с помощью ввода с клавиатуры.
      */
     public static class HumanPlayer extends Player {
-        private static final Scanner scanner = new Scanner(System.in);
+        public static final Scanner scanner = new Scanner(System.in);
 
         public HumanPlayer(Cell playerCell) {
             super(playerCell);
@@ -48,10 +59,10 @@ public abstract class Player {
             for (Move m : availableMoves) {
                 System.out.println(m.row + 1 + " " + (m.col + 1));
             }
-
+            boolean invalidInput = false;
             while (true) {
                 Date dateStart = new Date();
-                System.out.print("Введите строку и столбец (например, 2 3): ");
+                System.out.print("Введите строку и столбец: ");
                 String input = scanner.nextLine();
                 String[] inputArray = input.trim().split("\\s+");
                 if (inputArray.length == 2) {
@@ -61,23 +72,34 @@ public abstract class Player {
                         final Move move = new Move(row, col);
 
                         if (availableMoves.contains(move)) {
-                            board.placePiece(row, col, playerCell); // Размещаем фишку на доске
+                            board.placePiece(row, col, playerCell);
                             Date dateEnd = new Date();
-                            long finalTime = dateEnd.getTime()- dateStart.getTime();
+                            long finalTime = dateEnd.getTime() - dateStart.getTime();
                             move.setTimeOnMove(finalTime);
                             return move;
                         } else {
                             System.out.println("Недопустимый ход! Пожалуйста, выберите из доступных ходов.");
+                            invalidInput = true; // Устанавливаем флаг в true при недопустимом ходе
                         }
                     } catch (NumberFormatException e) {
                         System.out.println("Недопустимый ввод! Пожалуйста, введите два числа через пробел.");
+                        invalidInput = true; // Устанавливаем флаг в true при недопустимом вводе
                     }
                 } else {
-                    System.out.println("Недопустимый ввод! Пожалуйста, введите два числа через пробел.");
+                    if (invalidInput) {
+                        System.out.println("Недопустимый ввод! Пожалуйста, введите два числа через пробел.");
+                    }
                 }
             }
         }
+
+        @Override
+        public String getPlayerID() {
+            // Возвращаем идентификатор игрока (например, имя)
+            return "1"; // Замените на нужное имя игрока
+        }
     }
+
 
     /**
      * Подкласс BotPlayer представляет игрока-бота, который делает случайные ходы.
@@ -100,6 +122,11 @@ public abstract class Player {
             move.setTimeOnMove(time);
             board.placePiece(move.row, move.col, playerCell);
             return move;
+        }
+
+        public String getPlayerID() {
+            // Возвращаем идентификатор бота (например, его уникальный номер)
+            return "Bot1"; // Замените на нужный уникальный номер
         }
     }
 }

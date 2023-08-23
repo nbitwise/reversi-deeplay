@@ -238,6 +238,36 @@ public class Board {
         copy.placePiece(row, col, playerCell);
         return copy;
     }
+
+    public boolean isGameOver() {
+        List<Move> blackMoves = getAllAvailableMoves(Cell.BLACK);
+        List<Move> whiteMoves = getAllAvailableMoves(Cell.WHITE);
+
+        return blackMoves.isEmpty() && whiteMoves.isEmpty();
+    }
+
+    public Cell getWinner() {
+        int blackCount = 0;
+        int whiteCount = 0;
+
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if (get(row, col) == Cell.BLACK) {
+                    blackCount++;
+                } else if (get(row, col) == Cell.WHITE) {
+                    whiteCount++;
+                }
+            }
+        }
+
+        if (blackCount > whiteCount) {
+            return Cell.BLACK;
+        } else if (whiteCount > blackCount) {
+            return Cell.WHITE;
+        } else {
+            return Cell.EMPTY; // Ничья
+        }
+    }
 }
 
 
