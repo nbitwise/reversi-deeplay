@@ -9,7 +9,7 @@ import java.util.Objects;
 public final class Move {
     public final int row;
     public final int col;
-    private long timeOnMove;
+    public long timeOnMove;
 
     public long getTimeOnMove() {
         return timeOnMove;
@@ -51,5 +51,13 @@ public final class Move {
     @Override
     public int hashCode() {
         return Objects.hash(row, col);
+    }
+
+    @Override
+    public String toString() {
+        return "Move{" +
+                "row=" + row +
+                ", col=" + col +
+                '}';
     }
 }

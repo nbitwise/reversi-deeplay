@@ -2,6 +2,7 @@ package serverresponses;
 
 
 public class ResponseAutorization implements Response {
+    public final String command = "AUTHORIZATION";
     public String status;
     public String message;
 

@@ -1,8 +1,9 @@
 package clientresponse;
 
 public class RegistrationResponse implements Response {
+    public final String command = "REGISTRATION";
     public String status;
-    public static String message = "success";
+    public String message;
 
     public RegistrationResponse(String status, String message) {
         this.status = status;

@@ -1,14 +1,14 @@
 package serverresponses;
 
-public class ConnectToRoomResponse implements Response {
-    protected final String command = "CONNECTTOROOM";
+public class MakeMoveResponse implements Response {
+    public String command = "MAKEMOVE";
+
     private String status;
     private String message;
 
-    public ConnectToRoomResponse(String status, String message) {
-
-        this.status = status;
+    public MakeMoveResponse(String status, String message) {
         this.message = message;
+        this.status = status;
     }
 
     public String getStatus() {

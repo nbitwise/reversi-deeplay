@@ -3,7 +3,7 @@ package logic;
 public enum Cell {
     BLACK("b"), WHITE("w"), EMPTY(" ");
 
-    private final String string;
+    public final String string;
 
     Cell(String name) {
         this.string = name;
