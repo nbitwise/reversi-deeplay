@@ -5,6 +5,7 @@ import clientresponse.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import ui.UI;
 
 import java.io.*;
 import java.net.Socket;
@@ -113,6 +114,7 @@ public class NewClient {
                 break;
             case "WHEREICANGORESPONSE":
                 WhereIcanGoResponse whereIcanGoResponse = client.getResponse(WhereIcanGoResponse.class, input);
+                System.out.println(whereIcanGoResponse.board);
                 System.out.println("Your available moves " + whereIcanGoResponse.availableMoves);
                 break;
             case "GAMEOVER":

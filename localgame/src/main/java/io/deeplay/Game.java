@@ -17,6 +17,7 @@ public class Game {
 
     public Cell nextTurnOfPlayerColor = Cell.BLACK;
     private final static Logger logger = LogManager.getLogger(Board.class);
+
     /**
      * Метод startGame запускает игру. По окончанию игры выводится результат.
      *
@@ -28,7 +29,7 @@ public class Game {
      * @param sessionSystemFile файл в который будут записаны ошибки.
      */
     public void startGame(Board board, final Player black, final Player white, final int gameId,
-                                 final String sessionPlayerFile, final String sessionSystemFile) {
+                          final String sessionPlayerFile, final String sessionSystemFile) {
         try (FileWriter writeForHuman = new FileWriter(sessionPlayerFile, true);
              FileWriter writerForBot = new FileWriter(sessionSystemFile, true)) {
             GameLogger.logStart(gameId, writeForHuman, writerForBot);
@@ -46,21 +47,21 @@ public class Game {
     }
 
     public void startGameWithOutLog(Board board, final Player black, final Player white) throws IOException {
-            int moveNumber = 1;
-            while (!board.getAllAvailableMoves(black.playerCell).isEmpty() || !board.getAllAvailableMoves(white.playerCell).isEmpty()) {
-                Board copyBoard = board.getBoardCopy();
-                moveNumber = makeMoveOnBoardWithOutLog(board, black, moveNumber, copyBoard);
-                moveNumber = makeMoveOnBoardWithOutLog(board, white, moveNumber, copyBoard);
-            }
-            displayResult(board);
+        int moveNumber = 1;
+        while (!board.getAllAvailableMoves(black.playerCell).isEmpty() || !board.getAllAvailableMoves(white.playerCell).isEmpty()) {
+            Board copyBoard = board.getBoardCopy();
+            moveNumber = makeMoveOnBoardWithOutLog(board, black, moveNumber, copyBoard);
+            moveNumber = makeMoveOnBoardWithOutLog(board, white, moveNumber, copyBoard);
+        }
+        displayResult(board);
     }
 
     public static int makeMoveOnBoardWithOutLog(final Board board, final Player player,
-                                       int moveNumber, final Board copyBoard) throws IOException {
+                                                int moveNumber, final Board copyBoard) throws IOException {
         if (!board.getAllAvailableMoves(player.playerCell).isEmpty()) {
-            final Move blackMove = player.makeMove(copyBoard);
-            board.placePiece(blackMove.row, blackMove.col, player.playerCell);
-            UI.displayMove(moveNumber, board, player, blackMove);
+            final Move move = player.makeMove(copyBoard);
+            board.placePiece(move.row, move.col, player.playerCell);
+            UI.displayMove(moveNumber, board, player, move);
             moveNumber++;
         }
         return moveNumber;
@@ -98,6 +99,23 @@ public class Game {
         } else {
             System.out.println("It's a Tie");
         }
+    }
+
+    public static String displayResultOnClient(final Board board) {
+        final int blackCount = board.getQuantityOfBlack();
+        final int whiteCount = board.getQuantityOfWhite();
+        String results = "";
+        results += "Number of Black pieces: " + blackCount + "\n";
+        results += "Number of White pieces: " + whiteCount + "\n";
+
+        if (blackCount > whiteCount) {
+            results +="Winner: Black"+ "\n";
+        } else if (whiteCount > blackCount) {
+            results +="Winner: White"+ "\n";
+        } else {
+            results +="It's a Tie"+ "\n";
+        }
+        return results;
     }
 
 

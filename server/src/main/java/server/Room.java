@@ -23,6 +23,15 @@ public class Room {
 
     public int moveNumber = 1;
 
+    public UUID getOpponentUUID(UUID uuid){
+        if(uuid == whitePlayerUUID){
+            return blackPlayerUUID;
+        }
+        else {
+            return whitePlayerUUID;
+        }
+    }
+
     public  boolean checkHavePlace() {
         if ((WhitePlayer.isEmpty() && BlackPlayer.isEmpty()) || (WhitePlayer.isEmpty() || BlackPlayer.isEmpty())) {
             return true;
