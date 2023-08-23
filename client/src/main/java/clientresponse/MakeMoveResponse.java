@@ -1,11 +1,12 @@
-package serverresponses;
+package clientresponse;
 
-public class LeaveRoomResponse implements Response {
-    protected final String command = "LEAVEROOM";
+public class MakeMoveResponse implements Response {
+    public String command = "MAKEMOVE";
+
     private String status;
     private String message;
 
-    public LeaveRoomResponse(String status, String message) {
+    public MakeMoveResponse(String status, String message) {
         this.message = message;
         this.status = status;
     }
@@ -18,5 +19,4 @@ public class LeaveRoomResponse implements Response {
 
         return message;
     }
-
 }

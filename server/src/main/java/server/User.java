@@ -1,3 +1,4 @@
+/*
 package server;
 
 import client.Client;
@@ -27,3 +28,4 @@ class User {
                 '}';
     }
 }
+*/

@@ -2,6 +2,7 @@ package server;
 
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 
 public class Authorization {
@@ -14,9 +15,9 @@ public class Authorization {
         secureRandom.nextBytes(randomBytes);
         return base64Encoder.encodeToString(randomBytes);
     }
-    public static boolean checkAuth(User user, ConcurrentMap<String, User> onlineUsers){
-        String userToken = user.token;
-        if(onlineUsers.get(userToken).getName().equals(user.getName())){
+
+    public static boolean checkAuth(UUID uuid, String name, ConcurrentMap<UUID, String> onlineUsers) {
+        if (onlineUsers.get(uuid).equals(name)) {
             return true;
         }
         return false;

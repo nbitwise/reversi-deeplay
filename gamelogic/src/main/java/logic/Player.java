@@ -1,5 +1,6 @@
 package logic;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -29,7 +30,7 @@ public abstract class Player {
      * @param board доска, на которой происходит игра.
      * @return возвращает объект Move, представляющий сделанный игроком ход.
      */
-    public abstract Move makeMove(Board board);
+    public abstract Move makeMove(Board board) throws IOException;
 
     /**
      * Подкласс HumanPlayer представляет человеческого игрока, который делает ходы с помощью ввода с клавиатуры.

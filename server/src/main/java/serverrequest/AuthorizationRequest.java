@@ -1,7 +1,7 @@
 package serverrequest;
 
 public class AuthorizationRequest implements Request {
-    public final String command = "authorization";
+    public final String command = "AUTHORIZATION";
     public String nickname;
 
     public AuthorizationRequest(String nickname) {

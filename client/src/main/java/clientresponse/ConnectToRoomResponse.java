@@ -1,6 +1,7 @@
 package clientresponse;
 
 public class ConnectToRoomResponse implements Response {
+    public String command = "CONNECTTOROOM";
     public String message;
     public String status;
 
