@@ -6,5 +6,4 @@ module reversi.deeplay.gamelogic.main {
     exports gamelogging;
     exports parsing;
     exports gui;
-    opens logic to com.google.gson;
 }

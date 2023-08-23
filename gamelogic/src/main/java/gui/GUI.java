@@ -15,6 +15,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -144,21 +145,7 @@ public class GUI extends JFrame {
         playerInfoPanel.add(player2InfoLabel);
 
 
-        playerInfoPanel.add(new JLabel("Player 1 Color: ")).setFont(shotCustomFont);
 
-        playerInfoPanel.add(new JLabel("Black"));
-
-        playerInfoPanel.add(new JLabel("Player 2 Color: ")).setFont(shotCustomFont);
-
-        playerInfoPanel.add(new JLabel("White"));
-
-        playerInfoPanel.add(new JLabel("Player 1 Wins: ")).setFont(shotCustomFont);
-
-        playerInfoPanel.add(new JLabel(String.valueOf(player1Wins)));
-
-        playerInfoPanel.add(new JLabel("Player 2 Wins: ")).setFont(shotCustomFont);
-
-        playerInfoPanel.add(new JLabel(String.valueOf(player2Wins)));
 
         JButton humanVsBotButton = new JButton("Human vs Bot");
         humanVsBotButton.addActionListener(new ActionListener() {
@@ -379,7 +366,11 @@ public class GUI extends JFrame {
                             }
                         }
                     } else if (currentPlayer instanceof Player.BotPlayer) {
-                        makeBotMove();
+                        try {
+                            makeBotMove();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         currentPlayer = player1;
                     }
 
@@ -410,7 +401,7 @@ public class GUI extends JFrame {
         }).start();
     }
 
-    private void makeBotMove() {
+    private void makeBotMove() throws IOException {
         if (currentPlayer instanceof Player.BotPlayer) {
             Move move = currentPlayer.makeMove(board);
             board.placePiece(move.row, move.col, currentPlayer.playerCell);
@@ -432,7 +423,12 @@ public class GUI extends JFrame {
                 int moveNumber = 1;
                 while (!board.isGameOver()) {
                     if (currentPlayer instanceof Player.BotPlayer) {
-                        Move move = currentPlayer.makeMove(board);
+                        Move move = null;
+                        try {
+                            move = currentPlayer.makeMove(board);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         board.placePiece(move.row, move.col, currentPlayer.playerCell);
 
                         String botName = currentPlayer == player1 ? "Bot 1 (Black)" : "Bot 2 (White)";
