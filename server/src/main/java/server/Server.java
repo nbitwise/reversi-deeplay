@@ -8,8 +8,6 @@ import logic.Move;
 import logic.Player;
 import serverrequest.*;
 import serverresponses.*;
-import ui.UI;
-
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -23,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static io.deeplay.Game.displayResultOnClient;
 import static io.deeplay.Game.makeMoveOnBoardWithOutLog;
+import static logic.Board.toStringBoard;
 import static server.Authorization.checkAuth;
 
 public class Server {
@@ -35,6 +34,7 @@ public class Server {
 
     static List<Room> roomList = new ArrayList<>();
 
+    public static ConcurrentMap<UUID, Integer> PlayersAndRoomIds = new ConcurrentHashMap<>();//обсудить
     public static void main(String[] args) throws IOException {
 
         try (ServerSocket server = new ServerSocket(PORT)) {
@@ -84,8 +84,10 @@ public class Server {
                     }
 
                     Room room = new Room();
-                    roomList.add(room);
+
                     room.setBlackPlayerUUID(uuid);
+                    room.BlackPlayer = onlineUsers.get(uuid);
+                    roomList.add(room);
                     return new CreateRoomResponse("success", "Room was successfully registered", room.getId());
                 }
                 return new CreateRoomResponse("fail", "you are not logged in", null);
@@ -104,9 +106,11 @@ public class Server {
 
                     if (room != null && room.hasNoPlayers()) {
                         room.setBlackPlayerUUID(uuid);
+                        room.BlackPlayer = onlineUsers.get(uuid);
                         return new ConnectToRoomResponse("success", "Connected to room as BlackPlayer");
                     } else if (room != null && !room.isFull()) {
                         room.setWhitePlayerUUID(uuid);
+                        room.WhitePlayer = onlineUsers.get(uuid);
                         return new ConnectToRoomResponse("success", "Connected to room as WhitePlayer");
                     } else if (room == null) {
                         return new ConnectToRoomResponse("fail", "Room with ID " + roomId + " not found");
@@ -171,10 +175,9 @@ public class Server {
                 List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.BLACK);
 
                 String availableMovesString = availableMoves.toString();
-                String boardString = availableMoves.toString();
-                String cellString = availableMoves.toString();
+                String boardString = toStringBoard(room.board);
 
-                return new WhereIcanGoResponse(availableMovesString, boardString, cellString);
+                return new WhereIcanGoResponse(availableMovesString, boardString);
 
             }));
 
@@ -196,8 +199,7 @@ public class Server {
                 //надо еще команду завершения игры допилить и сюда впихнуть
                 final int blackCount = thisRoom.board.getQuantityOfBlack();
                 final int whiteCount = thisRoom.board.getQuantityOfWhite();
-                System.out.println("Number of Black pieces: " + blackCount);
-                System.out.println("Number of White pieces: " + whiteCount);
+
                 opponent.sendReply(new SurrenderResponse("Your opponent has surrendered\n" + "Number of Black pieces: " + blackCount + "\nNumber of White pieces: " + whiteCount));
 
                 return new SurrenderResponse("you surrendered\n" + "Number of Black pieces: " + blackCount + "\nNumber of White pieces: " + whiteCount);
@@ -222,21 +224,23 @@ public class Server {
 
                     opponent = room.getOpponentUUID(uuid);
                     ClientProcessor thisPlayer = Server.clients.get(opponent);
-                    List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
+                    List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.BLACK);
 
-                    if(!availableMoves.contains(new Move(row, col))){
+                    if (!availableMoves.contains(new Move(row, col))) {
                         return new MakeMoveResponse("fail", "wrong move");
                     }
-
-                    String availableMovesString = availableMoves.toString();
-                    String boardString = availableMoves.toString();
-                    String cellString = availableMoves.toString();
-                    thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, cellString));
 
                     Board copyBoard = room.board.getBoardCopy();
                     serverPlayer player = new serverPlayer(Cell.BLACK, row, col);
                     try {
                         room.moveNumber = makeMoveOnBoardWithOutLog(room.board, player, room.moveNumber, copyBoard);
+
+                        List<Move> opponentavailableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
+                        String availableMovesString = opponentavailableMoves.toString();
+                        String boardString = toStringBoard(room.board);
+
+                        thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString));
+
                         if (!room.board.getAllAvailableMoves(Cell.WHITE).isEmpty()) {
                             room.game.nextTurnOfPlayerColor = Cell.WHITE;
                         }
@@ -250,21 +254,23 @@ public class Server {
 
                     opponent = room.getOpponentUUID(uuid);
                     ClientProcessor thisPlayer = Server.clients.get(opponent);
-                    List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.BLACK);
+                    List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
 
-                    if(!availableMoves.contains(new Move(row, col))){
+                    if (!availableMoves.contains(new Move(row, col))) {
                         return new MakeMoveResponse("fail", "wrong move");
                     }
-
-                    String availableMovesString = availableMoves.toString();
-                    String boardString = availableMoves.toString();
-                    String cellString = availableMoves.toString();
-                    thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, cellString));
 
                     Board copyBoard = room.board.getBoardCopy();
                     serverPlayer player = new serverPlayer(Cell.WHITE, row, col);
                     try {
                         room.moveNumber = makeMoveOnBoardWithOutLog(room.board, player, room.moveNumber, copyBoard);
+
+                        List<Move> opponentavailableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
+                        String availableMovesString = opponentavailableMoves.toString();
+                        String boardString = toStringBoard(room.board);
+
+                        thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString));
+
                         if (!room.board.getAllAvailableMoves(Cell.BLACK).isEmpty()) {
                             room.game.nextTurnOfPlayerColor = Cell.BLACK;
                         }
@@ -272,7 +278,7 @@ public class Server {
                         throw new RuntimeException(e);
                     }
                 }
-                if(room.board.getAllAvailableMoves(Cell.BLACK).isEmpty() && room.board.getAllAvailableMoves(Cell.WHITE).isEmpty()){
+                if (room.board.getAllAvailableMoves(Cell.BLACK).isEmpty() && room.board.getAllAvailableMoves(Cell.WHITE).isEmpty()) {
                     String gameovermsg = displayResultOnClient(room.board);
                     Server.clients.get(room.getOpponentUUID(uuid)).sendReply(new GameoverResponse("success", "gameovermsg"));
                     return new GameoverResponse("success", "gameovermsg");

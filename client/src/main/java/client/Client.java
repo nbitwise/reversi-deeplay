@@ -5,7 +5,6 @@ import clientresponse.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import ui.UI;
 
 import java.io.*;
 import java.net.Socket;
@@ -13,7 +12,7 @@ import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class NewClient {
+public class Client {
 
     private final Socket socket;
     private final BufferedReader bufferedReader;
@@ -21,7 +20,7 @@ public class NewClient {
     private final Gson gson;
     private final ExecutorService executorService;
 
-    public NewClient(String host, int port) throws IOException {
+    public Client(String host, int port) throws IOException {
         socket = new Socket(host, port);
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -72,7 +71,7 @@ public class NewClient {
 
     public static void main(String[] args) {
         try {
-            NewClient client = new NewClient("localhost", 6070);
+            Client client = new Client("localhost", 6070);
 
             client.getMessage();
             client.sendMessage();
@@ -83,7 +82,7 @@ public class NewClient {
         }
     }
 
-    private static void viewOnInComeMessage(NewClient client, String input) throws IOException {
+    private static void viewOnInComeMessage(Client client, String input) throws IOException {
 
         JsonObject request = JsonParser.parseString(input).getAsJsonObject();
         String commandName = request.get("command").getAsString().toUpperCase();
@@ -143,7 +142,7 @@ public class NewClient {
         }
     }
 
-    private static void createJsonAndSendCommand(NewClient client, String input) throws IOException {
+    private static void createJsonAndSendCommand(Client client, String input) throws IOException {
         String[] commandParts = input.split("\\s+");
         String command = commandParts[0];
 

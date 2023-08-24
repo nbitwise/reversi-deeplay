@@ -29,6 +29,7 @@ public final class Move {
         this.row = row;
         this.col = col;
     }
+
     /**
      * Метод переопределяет метод equals, чтобы сравнивать объекты ходов на равенство.
      *
@@ -42,6 +43,7 @@ public final class Move {
         Move move = (Move) o;
         return row == move.row && col == move.col;
     }
+
     /**
      * Метод переопределяет метод hashCode, чтобы объекты ходов, которые равны по equals,
      * имели одинаковый хэш-код.
@@ -55,9 +57,6 @@ public final class Move {
 
     @Override
     public String toString() {
-        return "Move{" +
-                "row=" + row +
-                ", col=" + col +
-                '}';
+        return (row + 1) + " " + (col + 1) + " ";
     }
 }

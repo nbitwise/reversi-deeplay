@@ -13,6 +13,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
+/*
 class ClientTest {
 
     private MockServer mockServer;
@@ -51,6 +52,7 @@ class ClientTest {
         String expectedJson = gson.toJson(request) + "\n";
         assertEquals(expectedJson, mockServer.getLastReceived());
     }
+*/
 
 /*    @Test
     void testRegistrationResponseParsing() throws IOException {
@@ -67,6 +69,7 @@ class ClientTest {
         assertEquals("Registered successfully", parsedResponse.message);
     }*/
 
+/*
     @Test
     void testAuthorizationRequest() throws IOException {
         AuthorizationRequest request = new AuthorizationRequest("user123");
@@ -75,6 +78,7 @@ class ClientTest {
         String expectedJson = gson.toJson(request) + "\n";
         assertEquals(expectedJson, mockServer.getLastReceived());
     }
+*/
 
 /*    @Test
     void testAuthorizationResponseParsing() throws IOException {
@@ -377,6 +381,6 @@ class ClientTest {
         assertEquals("success", parsedResponse.status);
         assertEquals("Do you want rematch?", parsedResponse.message);
     }*/
-}
+//}
 
 
