@@ -113,7 +113,7 @@ public class GUI extends JFrame {
         Font customFont2 = new Font("Arial", Font.BOLD, 20);
         Font italicCustomFont = customFont2.deriveFont(Font.ITALIC);
 
-        Font customFont3 = new Font("Arial", Font.BOLD, 14);
+        Font customFont3 = new Font("Arial", Font.BOLD, 16);
         Font shotCustomFont = customFont3.deriveFont(Font.ITALIC);
 
         TitledBorder orangeTitledBorder = BorderFactory.createTitledBorder(
@@ -128,18 +128,18 @@ public class GUI extends JFrame {
 
         JPanel playerInfoPanel = new JPanel(new GridLayout(3, 2));
         playerInfoPanel.setBorder(orangeTitledBorder);
-
+        playerInfoPanel.setPreferredSize(new Dimension(300, 100)); // Замените width и height на нужные значения
         player1InfoLabel = new JLabel();
         player2InfoLabel = new JLabel();
         updatePlayerInfo(true);
 
-        JLabel player1Label = new JLabel("Player 1: ");
-        player1Label.setFont(shotCustomFont);
+        JLabel player1Label = new JLabel("                         Player 1: ");
+        //player1Label.setFont(shotCustomFont);
         playerInfoPanel.add(player1Label);
         playerInfoPanel.add(player1InfoLabel);
 
-        JLabel player2Label = new JLabel("Player 2: ");
-        player2Label.setFont(shotCustomFont);
+        JLabel player2Label = new JLabel("                         Player 2: ");
+        //player2Label.setFont(shotCustomFont);
         playerInfoPanel.add(player2Label);
         playerInfoPanel.add(player2InfoLabel);
 
@@ -231,33 +231,35 @@ public class GUI extends JFrame {
 
 
         JPanel additionalInfoPanel = new JPanel(new BorderLayout());
-        JLabel additionalInfoLabel = new JLabel("Rooms");
+        JLabel additionalInfoLabel = new JLabel("PLAYERS");
 
-        Font newFont = new Font("Arial", Font.BOLD, 18); // Пример
+
+        Font newFont = new Font("Arial", Font.BOLD | Font.ITALIC, 18); // Пример
         additionalInfoLabel.setFont(newFont);
 
         Color newTextColor = Color.GRAY;
         additionalInfoLabel.setForeground(newTextColor);
-
+        additionalInfoLabel.add(Box.createVerticalStrut(50), BorderLayout.NORTH);
         additionalInfoLabel.setHorizontalAlignment(JLabel.CENTER);
         additionalInfoPanel.add(additionalInfoLabel, BorderLayout.NORTH);
         ;
 
         JPanel roomInfoPanel = new JPanel(new BorderLayout());
-        JLabel roomInfoLabel = new JLabel("Available Rooms");
+        JLabel roomInfoLabel = new JLabel("Available players");
         roomInfoLabel.setHorizontalAlignment(JLabel.CENTER);
         roomInfoPanel.add(roomInfoLabel, BorderLayout.NORTH);
 
-        JPanel roomListPanel = new JPanel(new GridLayout(1, 1));
-        String[] availableRooms = new String[5];
-        for (String roomName : availableRooms) {
-            JLabel roomLabel = new JLabel(roomName);
-            roomListPanel.add(roomLabel);
+        JPanel roomListPanel = new JPanel(new GridLayout(0, 1)); // Один столбец, неограниченное количество строк
+        String[] availablePlayers = new String[0];
+        for (String playerName : availablePlayers) {
+            PlayerPanel playerPanel = new PlayerPanel(playerName);
+            roomListPanel.add(playerPanel);
         }
-        additionalInfoLabel.setPreferredSize(new Dimension(200, 50));
-        JTextArea roomsTextArea = new JTextArea();
-        roomsTextArea.setEditable(false);
-        additionalInfoPanel.add(new JScrollPane(roomsTextArea), BorderLayout.CENTER);
+
+        JScrollPane roomListScrollPane = new JScrollPane(roomListPanel);
+        roomListScrollPane.setPreferredSize(new Dimension(200, 50)); // Устанавливаем желаемые размеры
+        additionalInfoPanel.add(roomListScrollPane, BorderLayout.CENTER);
+
 
         roomInfoPanel.add(roomListPanel, BorderLayout.CENTER);
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -379,14 +381,13 @@ public class GUI extends JFrame {
                 if (board.getWinner() == Cell.BLACK) {
                     winner = "Black";
                     blackScore++;
-                    updatePlayerWins("Black");
+                    player1Wins++;
                 } else if (board.getWinner() == Cell.WHITE) {
                     winner = "White";
                     whiteScore++;
-                    updatePlayerWins("White");
                 } else {
                     winner = "Draw";
-                    updatePlayerWins("None");
+                    player2Wins++;
                 }
                 updatePlayerWins(winner);
                 JOptionPane.showMessageDialog(GUI.this, "Game Over! The winner is " + winner, "Game Over", JOptionPane.INFORMATION_MESSAGE);
@@ -453,16 +454,12 @@ public class GUI extends JFrame {
                 if (board.getWinner() == Cell.BLACK) {
                     winner = "Black";
                     blackScore++;
-                    player1Wins++;
                 } else if (board.getWinner() == Cell.WHITE) {
                     winner = "White";
                     whiteScore++;
-                    player2Wins++;
                 } else {
                     winner = "Draw";
-                    updatePlayerWins("None");
                 }
-                updatePlayerWins(winner);
                 JOptionPane.showMessageDialog(GUI.this, "Game Over! The winner is " + winner, "Game Over", JOptionPane.INFORMATION_MESSAGE);
 
                 resetGame();
