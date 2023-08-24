@@ -268,6 +268,30 @@ public class Board {
             return Cell.EMPTY; // Ничья
         }
     }
+
+    public static String toStringBoard(Board board) {
+        return displayBoardOnClient(board);
+    }
+    public static String displayBoardOnClient(final Board board) {
+        final int size = board.getSize();
+
+        String boardInSrting = "  ";
+        for (int i = 0; i < size; i++) {
+            boardInSrting += (i + 1) + " ";
+        }
+        boardInSrting += "\n";
+
+        for (int row = 0; row < size; row++) {
+            boardInSrting += (row + 1) + " ";
+            for (int col = 0; col < size; col++) {
+                final Cell cell = board.get(row, col);
+                final String cellSymbol = cell == Cell.BLACK ? "B" : cell == Cell.WHITE ? "W" : "-";
+                boardInSrting += cellSymbol + " ";
+            }
+            boardInSrting += "\n";
+        }
+        return boardInSrting;
+    }
 }
 
 
