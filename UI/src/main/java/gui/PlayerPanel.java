@@ -24,4 +24,5 @@ public class PlayerPanel extends JPanel {
         this.add(nameLabel, BorderLayout.CENTER);
         this.add(inviteButton, BorderLayout.EAST);
     }
+
 }
