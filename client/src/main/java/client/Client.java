@@ -5,7 +5,9 @@ import clientresponse.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.deeplay.Application;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
@@ -132,9 +134,14 @@ public class Client {
                 client.close();
                 System.exit(0);
                 break;
-                case "SURRENDER":
-                SurrenderResponse surrenderResponse = (SurrenderResponse)client.getResponse(SurrenderResponse.class, input);
+            case "SURRENDER":
+                SurrenderResponse surrenderResponse = client.getResponse(SurrenderResponse.class, input);
                 System.out.println(surrenderResponse.message);
+                break;
+            case "GUI":
+                GUIResponse guiResponse = client.getResponse(GUIResponse.class, input);
+                System.out.println(guiResponse.message);
+                SwingUtilities.invokeLater(() -> Application.startGUIInterface());
                 break;
             default:
                 System.out.println("Unknown command: " + commandName);
@@ -204,6 +211,10 @@ public class Client {
             case "SURRENDER":
                 SurrenderRequest surrenderRequest = new SurrenderRequest();
                 client.sendRequest(surrenderRequest);
+                break;
+            case "GUI":
+                GUIRequest guiRequest = new GUIRequest();
+                client.sendRequest(guiRequest);
                 break;
             case "EXIT":
                 client.close();
