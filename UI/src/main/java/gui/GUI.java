@@ -14,7 +14,8 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -39,9 +40,12 @@ public class GUI extends JFrame {
 
     private JTextArea gameInfoTextArea;
     private JScrollPane gameInfoScrollPane;
+    private ArrayList<PlayerPanel> playerList;
+
 
     public GUI() {
         super();
+        playerList = new ArrayList<>();
         Font customFont = new Font("Arial", Font.BOLD, 25);
 
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -109,7 +113,6 @@ public class GUI extends JFrame {
         playerLabel = new JLabel("Current player: " + (currentPlayer.playerCell == Cell.BLACK ? "Black" : "White"));
         scoreLabel = new JLabel("Score: Black " + blackScore + " - " + whiteScore + " White");
 
-        // Создание кастомного шрифта
         Font customFont2 = new Font("Arial", Font.BOLD, 20);
         Font italicCustomFont = customFont2.deriveFont(Font.ITALIC);
 
@@ -128,7 +131,7 @@ public class GUI extends JFrame {
 
         JPanel playerInfoPanel = new JPanel(new GridLayout(3, 2));
         playerInfoPanel.setBorder(orangeTitledBorder);
-        playerInfoPanel.setPreferredSize(new Dimension(300, 100)); // Замените width и height на нужные значения
+        playerInfoPanel.setPreferredSize(new Dimension(300, 100));
         player1InfoLabel = new JLabel();
         player2InfoLabel = new JLabel();
         updatePlayerInfo(true);
@@ -143,7 +146,63 @@ public class GUI extends JFrame {
         playerInfoPanel.add(player2Label);
         playerInfoPanel.add(player2InfoLabel);
 
+        JPanel controlButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
+        JButton surrenderButton = new JButton("Surrender");
+        surrenderButton.setPreferredSize(new Dimension(120, 30));
+
+        surrenderButton.setFocusPainted(false);
+        surrenderButton.setContentAreaFilled(false);
+        surrenderButton.setOpaque(true);
+        surrenderButton.setFont(new Font("Arial", Font.BOLD, 14));
+        surrenderButton.setForeground(Color.WHITE);
+        surrenderButton.setBackground(Color.DARK_GRAY);
+        surrenderButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        surrenderButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                surrenderButton.setBackground(new Color(100, 100, 100));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                surrenderButton.setBackground(Color.DARK_GRAY);
+            }
+        });
+        surrenderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
+
+        JButton quitButton = new JButton("Quit Game");
+        quitButton.setPreferredSize(new Dimension(120, 30));
+
+        quitButton.setFocusPainted(false);
+        quitButton.setContentAreaFilled(false);
+        quitButton.setOpaque(true);
+        quitButton.setFont(new Font("Arial", Font.BOLD, 14));
+        quitButton.setForeground(Color.WHITE);
+        quitButton.setBackground(Color.RED);
+        quitButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        quitButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                quitButton.setBackground(new Color(170, 40, 40));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                quitButton.setBackground(Color.RED);
+            }
+        });
+        quitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+        controlButtonPanel.add(surrenderButton);
+        controlButtonPanel.add(quitButton);
 
 
         JButton humanVsBotButton = new JButton("Human vs Bot");
@@ -228,13 +287,12 @@ public class GUI extends JFrame {
         gameInfoScrollPane = new JScrollPane(gameInfoTextArea);
         gameInfoTextArea.setFont(new Font("Arial", Font.PLAIN, 12));
         rightPanel.add(gameInfoScrollPane, BorderLayout.CENTER);
-
+        rightPanel.add(controlButtonPanel, BorderLayout.SOUTH);
 
         JPanel additionalInfoPanel = new JPanel(new BorderLayout());
         JLabel additionalInfoLabel = new JLabel("PLAYERS");
 
-
-        Font newFont = new Font("Arial", Font.BOLD | Font.ITALIC, 18); // Пример
+        Font newFont = new Font("Arial", Font.BOLD | Font.ITALIC, 18);
         additionalInfoLabel.setFont(newFont);
 
         Color newTextColor = Color.GRAY;
@@ -242,32 +300,82 @@ public class GUI extends JFrame {
         additionalInfoLabel.add(Box.createVerticalStrut(50), BorderLayout.NORTH);
         additionalInfoLabel.setHorizontalAlignment(JLabel.CENTER);
         additionalInfoPanel.add(additionalInfoLabel, BorderLayout.NORTH);
-        ;
 
-        JPanel roomInfoPanel = new JPanel(new BorderLayout());
-        JLabel roomInfoLabel = new JLabel("Available players");
-        roomInfoLabel.setHorizontalAlignment(JLabel.CENTER);
-        roomInfoPanel.add(roomInfoLabel, BorderLayout.NORTH);
-
-        JPanel roomListPanel = new JPanel(new GridLayout(0, 1)); // Один столбец, неограниченное количество строк
-        String[] availablePlayers = new String[0];
-        for (String playerName : availablePlayers) {
-            PlayerPanel playerPanel = new PlayerPanel(playerName);
-            roomListPanel.add(playerPanel);
-        }
-
-        JScrollPane roomListScrollPane = new JScrollPane(roomListPanel);
-        roomListScrollPane.setPreferredSize(new Dimension(200, 50)); // Устанавливаем желаемые размеры
-        additionalInfoPanel.add(roomListScrollPane, BorderLayout.CENTER);
+        JPanel playerListPanel = new JPanel(new GridLayout(0, 1));
+        JScrollPane  playersListScrollPane = new JScrollPane(playerListPanel);
+        playersListScrollPane.setPreferredSize(new Dimension(200, 50));
+        additionalInfoPanel.add(playersListScrollPane, BorderLayout.CENTER);
 
 
-        roomInfoPanel.add(roomListPanel, BorderLayout.CENTER);
+        JButton refreshButton = new JButton("Update players list");
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Здесь добавьте логику для обновления информации о доступных игроках
+                // Например, запрос к серверу и получение списка игроков в response
+                String[] updatedPlayerNames = new String[]{"Player1", "Player2", "Player3"}; // полученные имена игроков из response
+                updatePlayerList(updatedPlayerNames); // Обновляем список игроков в GUI
+            }
+        });
+
+        refreshButton.setFocusPainted(false);
+        refreshButton.setContentAreaFilled(false);
+        refreshButton.setOpaque(true);
+        refreshButton.setFont(new Font("Arial", Font.BOLD, 14));
+        refreshButton.setForeground(Color.WHITE);
+        refreshButton.setBackground(Color.GRAY);
+        refreshButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        refreshButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                refreshButton.setBackground(new Color(70, 70, 70));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                refreshButton.setBackground(Color.GRAY);
+            }
+        });
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(refreshButton);
+        additionalInfoPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        JButton InfoButton = new JButton("GAME INFO");
+        InfoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                intro.info(); // Вызов метода для открытия PDF
+            }
+        });
+
+        InfoButton.setFocusPainted(false);
+        InfoButton.setContentAreaFilled(false);
+        InfoButton.setOpaque(true);
+        InfoButton.setFont(new Font("Arial", Font.BOLD, 14));
+        InfoButton.setForeground(Color.WHITE);
+        InfoButton.setBackground(Color.DARK_GRAY);
+        InfoButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        InfoButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                InfoButton.setBackground(new Color(100, 100, 100));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                InfoButton.setBackground(Color.DARK_GRAY);
+            }
+        });
+
+        JPanel buttonPanel1 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel1.add(InfoButton);
+
+
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(additionalInfoPanel, BorderLayout.WEST);
         mainPanel.add(boardPanel, BorderLayout.CENTER);
         mainPanel.add(modePanel, BorderLayout.NORTH);
         mainPanel.add(rightPanel, BorderLayout.EAST);
-        mainPanel.add(statusPanel, BorderLayout.SOUTH);
+        mainPanel.add(buttonPanel1, BorderLayout.SOUTH);
 
         add(mainPanel);
 
@@ -278,6 +386,29 @@ public class GUI extends JFrame {
         updateBoardGUI();
 
     }
+
+    private void updatePlayerList(String[] playerNames) {
+        playerList.clear(); // Очищаем текущий список игроков
+
+        for (String playerName : playerNames) {
+            PlayerPanel playerPanel = new PlayerPanel(playerName);
+            playerList.add(playerPanel);
+        }
+
+        // Обновляем отображение панели с игроками
+        JPanel playerListPanel = new JPanel(new GridLayout(0, 1));
+        for (PlayerPanel playerPanel : playerList) {
+            playerListPanel.add(playerPanel);
+        }
+
+        JScrollPane playersListScrollPane = new JScrollPane(playerListPanel);
+        playersListScrollPane.setPreferredSize(new Dimension(200, 50));
+        playerListPanel.add(playersListScrollPane, BorderLayout.CENTER);
+
+        revalidate(); // Перерисовываем компоненты
+        repaint();
+    }
+
 
     private void updatePlayerInfo(boolean isHumanVsBotMode) {
         if (isHumanVsBotMode) {
@@ -294,7 +425,6 @@ public class GUI extends JFrame {
         JScrollBar verticalScrollBar = gameInfoScrollPane.getVerticalScrollBar();
         verticalScrollBar.setValue(verticalScrollBar.getMaximum());
     }
-
 
     private void updateBoardGUI() {
         for (int row = 0; row < BOARD_SIZE; row++) {
