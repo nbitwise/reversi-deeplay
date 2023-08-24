@@ -31,10 +31,7 @@ public class Server {
     public static ConcurrentMap<UUID, String> onlineUsers = new ConcurrentHashMap<>();
     public static ConcurrentMap<UUID, String> registratedUsers = new ConcurrentHashMap<>();
     public static LinkedList<ClientProcessor> serverList = new LinkedList<>();
-
     static List<Room> roomList = new ArrayList<>();
-
-    public static ConcurrentMap<UUID, Integer> PlayersAndRoomIds = new ConcurrentHashMap<>();//обсудить
     public static void main(String[] args) throws IOException {
 
         try (ServerSocket server = new ServerSocket(PORT)) {
@@ -281,11 +278,14 @@ public class Server {
                 if (room.board.getAllAvailableMoves(Cell.BLACK).isEmpty() && room.board.getAllAvailableMoves(Cell.WHITE).isEmpty()) {
                     String gameovermsg = displayResultOnClient(room.board);
                     Server.clients.get(room.getOpponentUUID(uuid)).sendReply(new GameoverResponse("success", "gameovermsg"));
-                    return new GameoverResponse("success", "gameovermsg");
+                    return new GameoverResponse("success", gameovermsg);
                 }
                 return new MakeMoveResponse("success", "you did your turn");
             }));
 
+            commands.add(Command.newCommand("GUI", (jsonRequest, uuid) -> {
+                return new GUIResponse("success", "Run gui....");
+            }));
 
             try {
                 while (!server.isClosed()) {
