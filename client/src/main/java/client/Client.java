@@ -138,19 +138,19 @@ class Client {
             case "EXIT" -> {
                 client.close();
                 System.exit(0);
-                break;
-            case "SURRENDER":
+            }
+            case "SURRENDER"-> {
                 SurrenderResponse surrenderResponse = client.getResponse(SurrenderResponse.class, input);
                 System.out.println(surrenderResponse.message);
-                break;
-            case "GUI":
+            }
+            case "GUI"-> {
                 GUIResponse guiResponse = client.getResponse(GUIResponse.class, input);
                 System.out.println(guiResponse.message);
                 SwingUtilities.invokeLater(() -> Application.startGUIInterface());
-                break;
-            default:
+            }
+            default-> {
                 System.out.println("Unknown command: " + commandName);
-                break;
+            }
         }
     }
 
@@ -229,12 +229,12 @@ class Client {
             case "SURRENDER" -> {
                 SurrenderRequest surrenderRequest = new SurrenderRequest();
                 client.sendRequest(surrenderRequest);
-                break;
-            case "GUI":
+            }
+            case "GUI"-> {
                 GUIRequest guiRequest = new GUIRequest();
                 client.sendRequest(guiRequest);
-                break;
-            case "EXIT":
+            }
+            case "EXIT"-> {
                 client.close();
                 System.exit(0);
             }
