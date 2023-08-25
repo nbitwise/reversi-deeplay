@@ -25,7 +25,7 @@ public class Application {
             startConsoleInterface();
 
         } else if (choice == 2) {
-            SwingUtilities.invokeLater(() -> startGUIInterface());
+            SwingUtilities.invokeLater(() -> new GUI());
 
         } else {
             System.out.println("Неверный выбор");

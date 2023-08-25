@@ -5,9 +5,13 @@ import clientresponse.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import gui.GUI;
+
 import io.deeplay.Application;
 
 
@@ -17,6 +21,8 @@ import java.net.Socket;
 import java.util.Scanner;
 
 class Client {
+
+    GUI 
 
     private final Socket socket;
     private final BufferedReader bufferedReader;
