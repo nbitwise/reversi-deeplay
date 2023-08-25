@@ -6,9 +6,12 @@ module com.example.client {
     requires reversi.deeplay.gamelogic.main;
     requires reversi.deeplay.UI.main;
     requires org.apache.logging.log4j;
+    requires reversi.deeplay.localGame.main;
+    requires java.desktop;
 
 
     opens client to javafx.fxml;
+    opens clientrequest to com.google.gson;
     opens clientresponse to com.google.gson;
     exports client;
     exports clientrequest;

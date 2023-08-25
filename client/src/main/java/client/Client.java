@@ -8,7 +8,10 @@ import com.google.gson.JsonParser;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import io.deeplay.Application;
 
+
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
@@ -135,12 +138,19 @@ class Client {
             case "EXIT" -> {
                 client.close();
                 System.exit(0);
-            }
-            case "SURRENDER" -> {
+                break;
+            case "SURRENDER":
                 SurrenderResponse surrenderResponse = client.getResponse(SurrenderResponse.class, input);
                 System.out.println(surrenderResponse.message);
-            }
-            default -> System.out.println("Unknown command: " + commandName);
+                break;
+            case "GUI":
+                GUIResponse guiResponse = client.getResponse(GUIResponse.class, input);
+                System.out.println(guiResponse.message);
+                SwingUtilities.invokeLater(() -> Application.startGUIInterface());
+                break;
+            default:
+                System.out.println("Unknown command: " + commandName);
+                break;
         }
     }
 
@@ -219,8 +229,12 @@ class Client {
             case "SURRENDER" -> {
                 SurrenderRequest surrenderRequest = new SurrenderRequest();
                 client.sendRequest(surrenderRequest);
-            }
-            case "EXIT" -> {
+                break;
+            case "GUI":
+                GUIRequest guiRequest = new GUIRequest();
+                client.sendRequest(guiRequest);
+                break;
+            case "EXIT":
                 client.close();
                 System.exit(0);
             }

@@ -67,7 +67,7 @@ public class Application {
                 Integer.parseInt(nonStableId), "fileForHuman", "systemFile");
     }
 
-    private static void startGUIInterface() {
+    public static void startGUIInterface() {
         new GUI();
     }
 }

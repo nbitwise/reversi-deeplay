@@ -269,6 +269,9 @@ class Server {
                 return new MakeMoveResponse("success", "You did your turn.");
             }));
 
+            commands.add(Command.newCommand("GUI", (jsonRequest, uuid) -> {
+                return new GUIResponse("success", "Run gui....");
+            }));
 
             try {
                 while (!server.isClosed()) {
