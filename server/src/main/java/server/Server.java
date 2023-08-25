@@ -182,10 +182,10 @@ class Server {
                 assert opponent != null;
                 final int blackCount = thisRoom.board.getQuantityOfBlack();
                 final int whiteCount = thisRoom.board.getQuantityOfWhite();
-                String stringReply = String.format("Number of Black pieces: {0} %n Number of White pieces: {1}", blackCount, whiteCount);
-                opponent.sendReply(new SurrenderResponse("Your opponent has surrendered %n" + stringReply));
+                String stringReply = String.format("Number of Black pieces: %d %n Number of White pieces: %d ", blackCount, whiteCount);
+                opponent.sendReply(new SurrenderResponse("Your opponent has surrendered \n" + stringReply));
 
-                return new SurrenderResponse("you surrendered %n" + stringReply);
+                return new SurrenderResponse("You surrendered %n" + stringReply);
             }));
 
             commands.add(Command.newCommand("MAKEMOVE", (jsonRequest, uuid) -> {
@@ -202,7 +202,7 @@ class Server {
                 UUID opponent;
                 if (uuid == room.getBlackPlayerUUID()) {
                     if (room.game.nextTurnOfPlayerColor.equals(Cell.WHITE)) {
-                        return new MakeMoveResponse("fail", "it's not your turn");
+                        return new MakeMoveResponse("fail", "It's not your turn");
                     }
 
                     opponent = room.getOpponentUUID(uuid);
@@ -210,7 +210,7 @@ class Server {
                     List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.BLACK);
 
                     if (!availableMoves.contains(new Move(row, col))) {
-                        return new MakeMoveResponse("fail", "wrong move");
+                        return new MakeMoveResponse("fail", "Wrong move");
                     }
 
                     Board copyBoard = room.board.getBoardCopy();
@@ -232,7 +232,7 @@ class Server {
                     }
                 } else if (uuid == room.getWhitePlayerUUID()) {
                     if (room.game.nextTurnOfPlayerColor.equals(Cell.BLACK)) {
-                        return new MakeMoveResponse("fail", "it's not your turn");
+                        return new MakeMoveResponse("fail", "It's not your turn");
                     }
 
                     opponent = room.getOpponentUUID(uuid);
@@ -240,7 +240,7 @@ class Server {
                     List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
 
                     if (!availableMoves.contains(new Move(row, col))) {
-                        return new MakeMoveResponse("fail", "wrong move");
+                        return new MakeMoveResponse("fail", "Wrong move");
                     }
 
                     Board copyBoard = room.board.getBoardCopy();
