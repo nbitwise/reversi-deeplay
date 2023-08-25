@@ -265,7 +265,7 @@ public class Board {
         } else if (whiteCount > blackCount) {
             return Cell.WHITE;
         } else {
-            return Cell.EMPTY; // Ничья
+            return Cell.EMPTY;
         }
     }
 

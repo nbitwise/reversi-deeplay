@@ -180,12 +180,12 @@ class Server {
                     }
                 }
                 assert opponent != null;
-                //надо еще команду завершения игры допилить и сюда впихнуть
                 final int blackCount = thisRoom.board.getQuantityOfBlack();
                 final int whiteCount = thisRoom.board.getQuantityOfWhite();
-                opponent.sendReply(new SurrenderResponse("Your opponent has surrendered\n" + "Number of Black pieces: " + blackCount + "\nNumber of White pieces: " + whiteCount));
+                String stringReply = String.format("Number of Black pieces: {0} %n Number of White pieces: {1}", blackCount, whiteCount);
+                opponent.sendReply(new SurrenderResponse("Your opponent has surrendered %n" + stringReply));
 
-                return new SurrenderResponse("you surrendered\n" + "Number of Black pieces: " + blackCount + "\nNumber of White pieces: " + whiteCount);
+                return new SurrenderResponse("you surrendered %n" + stringReply);
             }));
 
             commands.add(Command.newCommand("MAKEMOVE", (jsonRequest, uuid) -> {
@@ -303,6 +303,7 @@ class ClientProcessor extends Thread {
         this.start();
     }
 
+    @Override
     public void run() {
         try {
             while (true) {
@@ -323,7 +324,8 @@ class ClientProcessor extends Thread {
 
     /**
      * отправляет на клиент реплай в виде json строки.
-     * @param response  - строка.
+     *
+     * @param response - строка.
      */
     synchronized void sendReply(Response response) {
         try {

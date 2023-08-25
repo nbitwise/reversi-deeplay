@@ -5,6 +5,7 @@ module com.example.client {
     requires org.jline;
     requires reversi.deeplay.gamelogic.main;
     requires reversi.deeplay.UI.main;
+    requires org.apache.logging.log4j;
 
 
     opens client to javafx.fxml;

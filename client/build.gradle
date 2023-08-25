@@ -47,6 +47,8 @@ dependencies {
     // https://jarcasting.com/artifacts/org.jline/jline/
     implementation ("org.jline:jline:3.21.0")
     implementation project(":UI")
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
 }
 
 test {

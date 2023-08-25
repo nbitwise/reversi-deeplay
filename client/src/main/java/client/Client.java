@@ -5,6 +5,9 @@ import clientresponse.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
@@ -17,6 +20,8 @@ class Client {
     private final BufferedWriter bufferedWriter;
     private final Gson gson;
     private int roomId = 0;
+
+    private static final Logger logger = LogManager.getLogger(Client.class);
 
 
     private Client(String host, int port) throws IOException {
@@ -42,6 +47,7 @@ class Client {
                         viewOnInComeMessage(this, line);
                     }
                 } catch (IOException e) {
+                    logger.log(Level.ERROR, "Обрыв канала чтения");
                     e.printStackTrace();
                 }
             }
@@ -75,6 +81,7 @@ class Client {
             client.close();
         } catch (IOException e) {
             e.printStackTrace();
+            logger.log(Level.ERROR, "Работа клиента была прервана");
         }
     }
 

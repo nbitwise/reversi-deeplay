@@ -21,7 +21,6 @@ class ServerTest {
     private static Socket clientSocket;
     private static BufferedReader in;
     private static BufferedWriter out;
-    private static String requestString;
     private static JsonObject convertedObject;
     static Gson gson = new Gson();
 
@@ -42,41 +41,26 @@ class ServerTest {
     }
 
     @Test
-    public void testRequestRegistration() throws IOException {
-        RegistrationRequest request = new RegistrationRequest("andrew");
-        requestString = gson.toJson(request);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
+    void testRequestRegistration() throws IOException {
+        final RegistrationRequest registrationRequest1 = new RegistrationRequest("andrew");
+        final String serverWord1 = writeAndRead(registrationRequest1);
 
-        String serverWord = in.readLine();
-
-        convertedObject = new Gson().fromJson(serverWord, JsonObject.class);
+        convertedObject = new Gson().fromJson(serverWord1, JsonObject.class);
 
         Assertions.assertEquals("success", convertedObject.get("status").getAsString());
         Assertions.assertEquals("You was successfully registered", convertedObject.get("message").getAsString());
 
-        request = new RegistrationRequest("andrew");
-        requestString = gson.toJson(request);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
+        final RegistrationRequest registrationRequest2 = new RegistrationRequest("andrew");
+        final String serverWord2 = writeAndRead(registrationRequest2);
 
-        serverWord = in.readLine();
-
-        convertedObject = new Gson().fromJson(serverWord, JsonObject.class);
+        convertedObject = new Gson().fromJson(serverWord2, JsonObject.class);
 
         Assertions.assertEquals("fail", convertedObject.get("status").getAsString());
 
-        request = new RegistrationRequest("ilya");
-        requestString = gson.toJson(request);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
+        final RegistrationRequest registrationRequest3 = new RegistrationRequest("ilya");
+        final String serverWord3 = writeAndRead(registrationRequest3);
 
-        serverWord = in.readLine();
-
-        convertedObject = new Gson().fromJson(serverWord, JsonObject.class);
+        convertedObject = new Gson().fromJson(serverWord3, JsonObject.class);
 
         Assertions.assertEquals("success", convertedObject.get("status").getAsString());
         Assertions.assertEquals("You was successfully registered", convertedObject.get("message").getAsString());
@@ -84,192 +68,108 @@ class ServerTest {
     }
 
     @Test
-    public void testRequestCreateRoom() throws IOException {
-       RegistrationRequest request1 = new RegistrationRequest("andrew");
-        requestString = gson.toJson(request1);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
+    void testRequestCreateRoom() throws IOException {
+        final RegistrationRequest registrationRequest = new RegistrationRequest("andrew");
+        writeAndRead(registrationRequest);
 
-        String serverWord1 = in.readLine();
+        final AuthorizationRequest authorizationRequest = new AuthorizationRequest("andrew");
+        writeAndRead(authorizationRequest);
 
-        AuthorizationRequest authorizationRequest = new AuthorizationRequest("andrew");
-        requestString = gson.toJson(authorizationRequest);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
+        final CreateRoomRequest request = new CreateRoomRequest();
+        final String serverWord = writeAndRead(request);
 
-        String serverWord2 = in.readLine();
-
-        CreateRoomRequest request = new CreateRoomRequest();
-        requestString = gson.toJson(request);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
-
-        String serverWord3 = in.readLine();
-
-        convertedObject = new Gson().fromJson(serverWord3, JsonObject.class);
-     //   System.out.println(convertedObject.get("message").getAsString());
-     //   System.out.println(convertedObject.get("status").getAsString());
-      //  System.out.println(convertedObject.get("roomId").getAsString());
-
+        convertedObject = new Gson().fromJson(serverWord, JsonObject.class);
         Assertions.assertEquals("success", convertedObject.get("status").getAsString());
         Assertions.assertEquals("1", convertedObject.get("roomId").getAsString());
 
     }
+
     @Test
-    public void testConnectToRoom() throws IOException {
+    void testConnectToRoom() throws IOException {
 
-        RegistrationRequest registrationRequest = new RegistrationRequest("andrew");
-        requestString = gson.toJson(registrationRequest);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
+        final RegistrationRequest registrationRequest = new RegistrationRequest("andrew");
+        writeAndRead(registrationRequest);
 
-        String serverWord1 = in.readLine();
+        final AuthorizationRequest authorizationRequest = new AuthorizationRequest("andrew");
+        writeAndRead(authorizationRequest);
 
-        AuthorizationRequest authorizationRequest = new AuthorizationRequest("andrew");
-        requestString = gson.toJson(authorizationRequest);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
+        final LeaveRoomRequest leaveRoomRequest1 = new LeaveRoomRequest();
+        writeAndRead(leaveRoomRequest1);
 
-        String serverWord2 = in.readLine();
+        final CreateRoomRequest createRoomRequest = new CreateRoomRequest();
+        writeAndRead(createRoomRequest);
 
-        LeaveRoomRequest leaveRoomRequest = new LeaveRoomRequest();
-        String requestLeaveRoom = gson.toJson(leaveRoomRequest);
-        out.write(requestLeaveRoom);
-        out.newLine();
-        out.flush();
+        final LeaveRoomRequest leaveRoomRequest2 = new LeaveRoomRequest();
+        writeAndRead(leaveRoomRequest2);
 
-        String serverWord0 = in.readLine();
+        final ConnectToRoomRequest connectToRoomRequest = new ConnectToRoomRequest(1);
+        final String serverWord = writeAndRead(connectToRoomRequest);
 
-        CreateRoomRequest request1 = new CreateRoomRequest();
-        requestString = gson.toJson(request1);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
-
-        String serverWord = in.readLine();
-
-        LeaveRoomRequest leaveRoomRequest2 = new LeaveRoomRequest();
-        String requestLeaveRoom2 = gson.toJson(leaveRoomRequest);
-        out.write(requestLeaveRoom);
-        out.newLine();
-        out.flush();
-        String serverWordLeave = in.readLine();
-
-        ConnectToRoomRequest request = new ConnectToRoomRequest(1);
-        String requestString = gson.toJson(request);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
-
-        String serverWord3 = in.readLine();
-
-        ConnectToRoomResponse response = gson.fromJson(serverWord3, ConnectToRoomResponse.class);
+        final ConnectToRoomResponse response = gson.fromJson(serverWord, ConnectToRoomResponse.class);
 
         Assertions.assertEquals("success", response.getStatus());
         Assertions.assertEquals("Connected to room as WhitePlayer", response.getMessage());
     }
+
     @Test
-    public void testConnectToRoomRoomNotFound() throws IOException {
+    void testConnectToRoomRoomNotFound() throws IOException {
 
-        ConnectToRoomRequest request = new ConnectToRoomRequest(999);
-        String requestString = gson.toJson(request);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
-
-        String serverWord = in.readLine();
-        ConnectToRoomResponse response = gson.fromJson(serverWord, ConnectToRoomResponse.class);
+        final ConnectToRoomRequest request = new ConnectToRoomRequest(999);
+        final String serverWord = writeAndRead(request);
+        final ConnectToRoomResponse response = gson.fromJson(serverWord, ConnectToRoomResponse.class);
 
         Assertions.assertEquals("fail", response.getStatus());
         Assertions.assertEquals("you are not logged in", response.getMessage());
     }
 
 
-
     @Test
-    public void testLeaveRoom() throws IOException {
+    void testLeaveRoom() throws IOException {
 
-        RegistrationRequest request1 = new RegistrationRequest("andrew");
-        requestString = gson.toJson(request1);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
+        final RegistrationRequest registrationRequest = new RegistrationRequest("andrew");
+        writeAndRead(registrationRequest);
 
-        String serverWord1 = in.readLine();
+        final AuthorizationRequest authorizationRequest = new AuthorizationRequest("andrew");
+        writeAndRead(authorizationRequest);
 
-        AuthorizationRequest authorizationRequest = new AuthorizationRequest("andrew");
-        requestString = gson.toJson(authorizationRequest);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
+        final CreateRoomRequest createRoomRequest = new CreateRoomRequest();
+        writeAndRead(createRoomRequest);
 
-        String serverWord2 = in.readLine();
+        final LeaveRoomRequest leaveRoomRequest = new LeaveRoomRequest();
+        final String serverWord = writeAndRead(leaveRoomRequest);
 
-        CreateRoomRequest request3 = new CreateRoomRequest();
-        requestString = gson.toJson(request3);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
-
-        String serverWord = in.readLine();
-
-        LeaveRoomRequest request = new LeaveRoomRequest();
-        String requestString = gson.toJson(request);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
-
-        String serverWord3 = in.readLine();
-
-        LeaveRoomResponse response = gson.fromJson(serverWord3, LeaveRoomResponse.class);
+        final LeaveRoomResponse response = gson.fromJson(serverWord, LeaveRoomResponse.class);
 
         Assertions.assertEquals("success", response.getStatus());
     }
+
     @Test
-    public void testRequestGameover() throws IOException {
-        RegistrationRequest request1 = new RegistrationRequest("andrew");
-        requestString = gson.toJson(request1);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
+    void testRequestGameOver() throws IOException {
+        final RegistrationRequest request1 = new RegistrationRequest("andrew");
+        writeAndRead(request1);
 
-        String serverWord = in.readLine();
+        final AuthorizationRequest request = new AuthorizationRequest("andrew");
+        writeAndRead(request);
 
-        AuthorizationRequest request = new AuthorizationRequest("andrew");
+        final CreateRoomRequest request2 = new CreateRoomRequest();
+        writeAndRead(request2);
+
+        final GameoverRequest gameoverRequest = new GameoverRequest();
+        final String serverWord = writeAndRead(gameoverRequest);
+
+        final JsonObject convertedObject = new Gson().fromJson(serverWord, JsonObject.class);
+
+        Assertions.assertEquals("success", convertedObject.get("status").getAsString());
+        Assertions.assertEquals("game is over. You are not in room anymore", convertedObject.get("message").getAsString());
+    }
+
+    private String writeAndRead(Request request) throws IOException {
         String requestString = gson.toJson(request);
         out.write(requestString);
         out.newLine();
         out.flush();
 
-        String serverWord1 = in.readLine();
-
-        CreateRoomRequest request2 = new CreateRoomRequest();
-
-        requestString = gson.toJson(request2);
-        out.write(requestString);
-        out.newLine();
-        out.flush();
-
-        serverWord1 = in.readLine();
-
-        GameoverRequest requestgo = new GameoverRequest();
-
-        String requestStringgo = gson.toJson(requestgo);
-        out.write(requestStringgo);
-        out.newLine();
-        out.flush();
-
-        String serverWordgo = in.readLine();
-
-        JsonObject convertedObject = new Gson().fromJson(serverWordgo, JsonObject.class);
-
-        Assertions.assertEquals("success", convertedObject.get("status").getAsString());
-        Assertions.assertEquals("game is over. You are not in room anymore", convertedObject.get("message").getAsString());
+        return in.readLine();
     }
 }
 
