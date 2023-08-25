@@ -9,35 +9,32 @@ import com.google.gson.JsonParser;
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class Client {
+class Client {
 
     private final Socket socket;
     private final BufferedReader bufferedReader;
     private final BufferedWriter bufferedWriter;
     private final Gson gson;
-    private final ExecutorService executorService;
+    private int roomId = 0;
 
-    public Client(String host, int port) throws IOException {
+
+    private Client(String host, int port) throws IOException {
         socket = new Socket(host, port);
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         gson = new Gson();
-        executorService = Executors.newFixedThreadPool(2); // Adjust the thread pool size as needed
     }
 
-    public void sendRequest(Request request) throws IOException {
+    private void sendRequest(Request request) throws IOException {
         String jsonRequest = gson.toJson(request);
         bufferedWriter.write(jsonRequest);
         bufferedWriter.newLine();
         bufferedWriter.flush();
     }
 
-    public void getMessage() {
+    private void getMessage() {
         new Thread(() -> {
-            String msg;
             while (socket.isConnected()) {
                 try {
                     String line = bufferedReader.readLine();
@@ -45,13 +42,13 @@ public class Client {
                         viewOnInComeMessage(this, line);
                     }
                 } catch (IOException e) {
-                    System.out.println(e);
+                    e.printStackTrace();
                 }
             }
         }).start();
     }
 
-    public void sendMessage() throws IOException {
+    private void sendMessage() throws IOException {
         Scanner scanner = new Scanner(System.in);
         while (socket.isConnected()) {
             String msg = scanner.nextLine();
@@ -59,13 +56,12 @@ public class Client {
         }
     }
 
-    public <T extends Response> T getResponse(Class<T> responseType, String jsonResponse) throws IOException {
+    private <T extends Response> T getResponse(Class<T> responseType, String jsonResponse) throws IOException {
         return gson.fromJson(jsonResponse, responseType);
     }
 
     public void close() throws IOException {
         socket.close();
-        executorService.shutdown();
     }
 
 
@@ -82,72 +78,71 @@ public class Client {
         }
     }
 
-    private static void viewOnInComeMessage(Client client, String input) throws IOException {
+    private void viewOnInComeMessage(Client client, String input) throws IOException {
 
         JsonObject request = JsonParser.parseString(input).getAsJsonObject();
         String commandName = request.get("command").getAsString().toUpperCase();
 
         switch (commandName) {
-            case "REGISTRATION":
+            case "REGISTRATION" -> {
                 RegistrationResponse registrationResponse = client.getResponse(RegistrationResponse.class, input);
                 System.out.println("Registration response: " + registrationResponse.message);
-                break;
-            case "AUTHORIZATION":
+            }
+            case "AUTHORIZATION" -> {
                 AuthorizationResponse authorizationResponse = client.getResponse(AuthorizationResponse.class, input);
                 System.out.println("Authorization response: " + authorizationResponse.message);
-                break;
-            case "CREATEROOM":
+            }
+            case "CREATEROOM" -> {
                 CreateRoomResponse createRoomResponse = client.getResponse(CreateRoomResponse.class, input);
                 if (createRoomResponse.status.equals("fail")) {
                     System.out.println("Create room response: " + createRoomResponse.message);
                 }
+                roomId = createRoomResponse.getRoomId();
                 System.out.println("Create room response: " + createRoomResponse.message + ", Room ID: " + createRoomResponse.getRoomId());
-                break;
-            case "CONNECTTOROOM":
+            }
+            case "CONNECTTOROOM" -> {
                 ConnectToRoomResponse connectToRoomResponse = client.getResponse(ConnectToRoomResponse.class, input);
                 System.out.println("Connect to room response: " + connectToRoomResponse.message);
-                break;
-            case "LEAVEROOM":
+            }
+            case "LEAVEROOM" -> {
                 LeaveRoomResponse leaveRoomResponse = client.getResponse(LeaveRoomResponse.class, input);
                 System.out.println("Leave room response: " + leaveRoomResponse.message);
-                break;
-            case "WHEREICANGORESPONSE":
+            }
+            case "WHEREICANGORESPONSE" -> {
                 WhereIcanGoResponse whereIcanGoResponse = client.getResponse(WhereIcanGoResponse.class, input);
                 System.out.println(whereIcanGoResponse.board);
                 System.out.println("Your available moves " + whereIcanGoResponse.availableMoves);
-                break;
-            case "GAMEOVER":
+            }
+            case "GAMEOVER" -> {
                 GameoverResponse gameoverResponse = client.getResponse(GameoverResponse.class, input);
                 System.out.println("Game over response " + gameoverResponse.message);
-                break;
-            case "MAKEMOVE":
+            }
+            case "MAKEMOVE" -> {
                 MakeMoveResponse makeMoveResponse = client.getResponse(MakeMoveResponse.class, input);
                 System.out.println("MakeMove response " + makeMoveResponse.getMessage());
-                break;
-            case "STARTGAME":
+            }
+            case "STARTGAME" -> {
                 StartGameResponse startGameResponse = client.getResponse(StartGameResponse.class, input);
                 System.out.println("StartGame response " + startGameResponse.message);
-                break;
-            case "EXIT":
+            }
+            case "EXIT" -> {
                 client.close();
                 System.exit(0);
-                break;
-                case "SURRENDER":
-                SurrenderResponse surrenderResponse = (SurrenderResponse)client.getResponse(SurrenderResponse.class, input);
+            }
+            case "SURRENDER" -> {
+                SurrenderResponse surrenderResponse = client.getResponse(SurrenderResponse.class, input);
                 System.out.println(surrenderResponse.message);
-                break;
-            default:
-                System.out.println("Unknown command: " + commandName);
-                break;
+            }
+            default -> System.out.println("Unknown command: " + commandName);
         }
     }
 
-    private static void createJsonAndSendCommand(Client client, String input) throws IOException {
+    private void createJsonAndSendCommand(Client client, String input) throws IOException {
         String[] commandParts = input.split("\\s+");
         String command = commandParts[0];
 
         switch (command) {
-            case "REGISTRATION":
+            case "REGISTRATION" -> {
                 if (commandParts.length > 1) {
                     String nickname = commandParts[1];
                     RegistrationRequest registrationRequest = new RegistrationRequest(nickname);
@@ -155,8 +150,8 @@ public class Client {
                 } else {
                     System.out.println("Usage: register <nickname>");
                 }
-                break;
-            case "AUTHORIZATION":
+            }
+            case "AUTHORIZATION" -> {
                 if (commandParts.length > 1) {
                     String nickname = commandParts[1];
                     AuthorizationRequest authorizationRequest = new AuthorizationRequest(nickname);
@@ -164,34 +159,47 @@ public class Client {
                 } else {
                     System.out.println("Usage: login <nickname>");
                 }
-                break;
-            case "CREATEROOM":
+            }
+            case "CREATEROOM" -> {
+                if (roomId != 0) {
+                    System.out.println("You can't create another room because you are already in room.");
+                    break;
+                }
                 CreateRoomRequest createRoomRequest = new CreateRoomRequest();
                 client.sendRequest(createRoomRequest);
-                break;
-            case "CONNECTTOROOM":
+            }
+            case "CONNECTTOROOM" -> {
+                if (roomId != 0) {
+                    System.out.println("You can't connect to another room because you are already in room.");
+                    break;
+                }
                 if (commandParts.length > 1) {
                     int roomId = Integer.parseInt(commandParts[1]);
                     ConnectToRoomRequest connectToRoomRequest = new ConnectToRoomRequest(roomId);
                     client.sendRequest(connectToRoomRequest);
+                    this.roomId = roomId;
                 } else {
-                    System.out.println("Usage: connecttoroom <room_id>");
+                    System.out.println("Usage: connect to room <room_id>.");
                 }
-                break;
-            case "LEAVEROOM":
+            }
+            case "LEAVEROOM" -> {
+                if (roomId == 0) {
+                    System.out.println("You can't leave room because you are not in room.");
+                    break;
+                }
                 LeaveRoomRequest leaveRoomRequest = new LeaveRoomRequest();
                 client.sendRequest(leaveRoomRequest);
-                break;
-            case "STARTGAME":
-                if (commandParts.length > 1) {
-                    int roomId = Integer.parseInt(commandParts[1]);
-                    StartGameRequest startGameRequest = new StartGameRequest(roomId);
-                    client.sendRequest(startGameRequest);
-                } else {
-                    System.out.println("Usage: connecttoroom you didn't enter id of the room");
+                roomId = 0;
+            }
+            case "STARTGAME" -> {
+                if (roomId == 0) {
+                    System.out.println("You can't start game because you are not in room.");
+                    break;
                 }
-                break;
-            case "MAKEMOVE":
+                StartGameRequest startGameRequest = new StartGameRequest(roomId);
+                client.sendRequest(startGameRequest);
+            }
+            case "MOVE" -> {
                 if (commandParts.length > 2) {
                     int row = Integer.parseInt(commandParts[1]);
                     int col = Integer.parseInt(commandParts[2]);
@@ -200,18 +208,16 @@ public class Client {
                 } else {
                     System.out.println("wrong coordinates");
                 }
-                break;
-            case "SURRENDER":
+            }
+            case "SURRENDER" -> {
                 SurrenderRequest surrenderRequest = new SurrenderRequest();
                 client.sendRequest(surrenderRequest);
-                break;
-            case "EXIT":
+            }
+            case "EXIT" -> {
                 client.close();
                 System.exit(0);
-                break;
-            default:
-                System.out.println("Unknown command: " + command);
-                break;
+            }
+            default -> System.out.println("Unknown command: " + command);
         }
     }
 }

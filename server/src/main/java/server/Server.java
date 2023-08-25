@@ -5,7 +5,6 @@ import io.deeplay.Game;
 import logic.Board;
 import logic.Cell;
 import logic.Move;
-import logic.Player;
 import serverrequest.*;
 import serverresponses.*;
 
@@ -22,19 +21,17 @@ import java.util.stream.Collectors;
 import static io.deeplay.Game.displayResultOnClient;
 import static io.deeplay.Game.makeMoveOnBoardWithOutLog;
 import static logic.Board.toStringBoard;
-import static server.Authorization.checkAuth;
 
-public class Server {
+class Server {
 
     private static final int PORT = 6070;
-    public static ConcurrentMap<UUID, ClientProcessor> clients = new ConcurrentHashMap<>();
-    public static ConcurrentMap<UUID, String> onlineUsers = new ConcurrentHashMap<>();
-    public static ConcurrentMap<UUID, String> registratedUsers = new ConcurrentHashMap<>();
-    public static LinkedList<ClientProcessor> serverList = new LinkedList<>();
+    private static ConcurrentMap<UUID, ClientProcessor> clients = new ConcurrentHashMap<>();
+    private static ConcurrentMap<UUID, String> onlineUsers = new ConcurrentHashMap<>();
+    private static ConcurrentMap<UUID, String> registratedUsers = new ConcurrentHashMap<>();
+    private static LinkedList<ClientProcessor> serverList = new LinkedList<>();
 
     static List<Room> roomList = new ArrayList<>();
 
-    public static ConcurrentMap<UUID, Integer> PlayersAndRoomIds = new ConcurrentHashMap<>();//обсудить
     public static void main(String[] args) throws IOException {
 
         try (ServerSocket server = new ServerSocket(PORT)) {
@@ -50,7 +47,7 @@ public class Server {
                 if (nickname == null || !nickname.matches("^[a-zA-Z0-9_]+$")) {
                     return new ResponseRegistration("fail", "incorrect username");
                 }
-                if (registratedUsers.values().contains(nickname)) {
+                if (registratedUsers.containsValue(nickname)) {
                     return new ResponseRegistration("fail", "user with this nickname already registrated");
                 }
                 registratedUsers.put(uuid, nickname);
@@ -79,10 +76,6 @@ public class Server {
 
             commands.add(Command.newCommand("CREATEROOM", (jsonRequest, uuid) -> {
                 if (onlineUsers.containsKey(uuid)) {
-                    if (!checkAuth(uuid, onlineUsers.get(uuid), onlineUsers)) {
-                        return new ConnectToRoomResponse("fail", "you are not logged in");
-                    }
-
                     Room room = new Room();
 
                     room.setBlackPlayerUUID(uuid);
@@ -95,9 +88,6 @@ public class Server {
 
             commands.add(Command.newCommand("CONNECTTOROOM", (jsonRequest, uuid) -> {
                 if (onlineUsers.containsKey(uuid)) {
-                    if (!checkAuth(uuid, onlineUsers.get(uuid), onlineUsers)) {
-                        return new ConnectToRoomResponse("fail", "you are not logged in");
-                    }
                     int roomId = jsonRequest.get("roomId").getAsInt();
                     Room room = roomList.stream()
                             .filter(r -> r.getId() == roomId)
@@ -124,9 +114,6 @@ public class Server {
 
             commands.add(Command.newCommand("LEAVEROOM", (jsonRequest, uuid) -> {
                 if (onlineUsers.containsKey(uuid)) {
-                    if (!checkAuth(uuid, onlineUsers.get(uuid), onlineUsers)) {
-                        return new LeaveRoomResponse("fail", "you are not logged in");
-                    }
                     JsonElement roomIdElement = jsonRequest.get("roomId");
                     if (roomIdElement != null && roomIdElement.isJsonPrimitive() && roomIdElement.getAsJsonPrimitive().isNumber()) {
                         int roomId = roomIdElement.getAsInt();
@@ -144,9 +131,6 @@ public class Server {
 
             commands.add(Command.newCommand("GAMEOVER", (jsonRequest, uuid) -> {
                 if (onlineUsers.containsKey(uuid)) {
-                    if (!checkAuth(uuid, onlineUsers.get(uuid), onlineUsers)) {
-                        return new GameoverResponse("fail", "you are not logged in");
-                    }
                     for (Room room : roomList) {
                         if (room.getBlackPlayerUUID().equals(uuid) || room.getWhitePlayerUUID().equals(uuid)) {
                             roomList.remove(room);
@@ -199,7 +183,6 @@ public class Server {
                 //надо еще команду завершения игры допилить и сюда впихнуть
                 final int blackCount = thisRoom.board.getQuantityOfBlack();
                 final int whiteCount = thisRoom.board.getQuantityOfWhite();
-
                 opponent.sendReply(new SurrenderResponse("Your opponent has surrendered\n" + "Number of Black pieces: " + blackCount + "\nNumber of White pieces: " + whiteCount));
 
                 return new SurrenderResponse("you surrendered\n" + "Number of Black pieces: " + blackCount + "\nNumber of White pieces: " + whiteCount);
@@ -279,11 +262,11 @@ public class Server {
                     }
                 }
                 if (room.board.getAllAvailableMoves(Cell.BLACK).isEmpty() && room.board.getAllAvailableMoves(Cell.WHITE).isEmpty()) {
-                    String gameovermsg = displayResultOnClient(room.board);
-                    Server.clients.get(room.getOpponentUUID(uuid)).sendReply(new GameoverResponse("success", "gameovermsg"));
-                    return new GameoverResponse("success", "gameovermsg");
+                    String gameOverMsg = displayResultOnClient(room.board);
+                    Server.clients.get(room.getOpponentUUID(uuid)).sendReply(new GameoverResponse("success", gameOverMsg));
+                    return new GameoverResponse("success", gameOverMsg);
                 }
-                return new MakeMoveResponse("success", "you did your turn");
+                return new MakeMoveResponse("success", "You did your turn.");
             }));
 
 
@@ -304,85 +287,76 @@ public class Server {
             }
         }
     }
+}
 
-    public static class ClientProcessor extends Thread {
-        public final Map commands;
-        public final BufferedReader socketBufferedReader;
-        public final BufferedWriter socketBufferedWriter;
-        public final UUID uuid;
+class ClientProcessor extends Thread {
+    public final Map commands;
+    public final BufferedReader socketBufferedReader;
+    public final BufferedWriter socketBufferedWriter;
+    public final UUID uuid;
 
-        public ClientProcessor(Socket socket, List<Command> commands) throws IOException {
-            this.commands = commands.stream().collect(Collectors.toMap(Command::getName, Function.identity()));
-            this.uuid = UUID.randomUUID();
-            this.socketBufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.socketBufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.start();
-        }
+    ClientProcessor(Socket socket, List<Command> commands) throws IOException {
+        this.commands = commands.stream().collect(Collectors.toMap(Command::getName, Function.identity()));
+        this.uuid = UUID.randomUUID();
+        this.socketBufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.socketBufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        this.start();
+    }
 
-        public void run() {
-            try {
-                while (true) {
-                    String line = this.socketBufferedReader.readLine();
-                    if (line == null) {
-                        return;
-                    }
-                    System.out.println(line);
-                    JsonObject request = JsonParser.parseString(line).getAsJsonObject();
-                    String commandName = request.get("command").getAsString().toUpperCase();
-                    Command command = (Command) this.commands.get(commandName);
-                    this.sendReply(command.process(request, this.uuid));
+    public void run() {
+        try {
+            while (true) {
+                String line = this.socketBufferedReader.readLine();
+                if (line == null) {
+                    return;
                 }
-            } catch (IOException var5) {
-                var5.printStackTrace();
+                System.out.println(line);
+                JsonObject request = JsonParser.parseString(line).getAsJsonObject();
+                String commandName = request.get("command").getAsString().toUpperCase();
+                Command command = (Command) this.commands.get(commandName);
+                this.sendReply(command.process(request, this.uuid));
             }
-        }
-
-
-        public synchronized void sendReply(Response response) {
-            try {
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-                String jsonRequest = gson.toJson(response);
-                this.socketBufferedWriter.write(jsonRequest);
-                this.socketBufferedWriter.newLine();
-                this.socketBufferedWriter.flush();
-            } catch (IOException var5) {
-                throw new IllegalStateException(var5);
-            }
-        }
-
-        public synchronized void sendReply(WhereIcanGoResponse response) {
-            try {
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-                String jsonRequest = gson.toJson(response);
-                this.socketBufferedWriter.write(jsonRequest);
-                this.socketBufferedWriter.newLine();
-                this.socketBufferedWriter.flush();
-            } catch (IOException var5) {
-                throw new IllegalStateException(var5);
-            }
+        } catch (IOException var5) {
+            var5.printStackTrace();
         }
     }
 
-    public interface Command {
-        String getName();
-
-        Response process(JsonObject var1, UUID var2);
-
-        static Command newCommand(final String name, final BiFunction<JsonObject, UUID, Response> process) {
-            return new Command() {
-                public String getName() {
-                    return name;
-                }
-
-                public Response process(JsonObject request, UUID uuid) {
-                    return process.apply(request, uuid);
-                }
-            };
+    /**
+     * отправляет на клиент реплай в виде json строки.
+     * @param response  - строка.
+     */
+    synchronized void sendReply(Response response) {
+        try {
+            GsonBuilder builder = new GsonBuilder();
+            Gson gson = builder.create();
+            String jsonRequest = gson.toJson(response);
+            this.socketBufferedWriter.write(jsonRequest);
+            this.socketBufferedWriter.newLine();
+            this.socketBufferedWriter.flush();
+        } catch (IOException var5) {
+            throw new IllegalStateException(var5);
         }
     }
-
 
 }
+
+interface Command {
+    String getName();
+
+    Response process(JsonObject var1, UUID var2);
+
+    static Command newCommand(final String name, final BiFunction<JsonObject, UUID, Response> process) {
+        return new Command() {
+            public String getName() {
+                return name;
+            }
+
+            public Response process(JsonObject request, UUID uuid) {
+                return process.apply(request, uuid);
+            }
+        };
+    }
+}
+
+
 
