@@ -20,7 +20,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
-class Client {
+class ClientBot {
 
     private final Socket socket;
     private final BufferedReader bufferedReader;
@@ -31,7 +31,7 @@ class Client {
     private static final Logger logger = LogManager.getLogger(Client.class);
 
 
-    private Client(String host, int port) throws IOException {
+    private ClientBot(String host, int port) throws IOException {
         socket = new Socket(host, port);
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -80,10 +80,35 @@ class Client {
 
     public static void main(String[] args) {
         try {
-            Client client = new Client("localhost", 6070);
+            ClientBot client = new ClientBot("localhost", 6070);
+
+            Scanner scanner = new Scanner(System.in);
+            String botName = scanner.nextLine();
+
+            RegistrationRequest registrationRequest = new RegistrationRequest(botName);
+            client.sendRequest(registrationRequest);
+
+            AuthorizationRequest authorizationRequest = new AuthorizationRequest(botName);
+            client.sendRequest(authorizationRequest);
+
+            ViewCreatedRoomsRequest viewCreatedRoomsRequest = new ViewCreatedRoomsRequest(1);
+            client.sendRequest(viewCreatedRoomsRequest);
+
+            try {
+                String line = client.bufferedReader.readLine();
+                if (line != null) {
+                    client.viewOnInComeMessage(client, line);
+                }
+            } catch (IOException e) {
+                logger.log(Level.ERROR, "Обрыв канала чтения");
+                e.printStackTrace();
+            }
+
 
             client.getMessage();
             client.sendMessage();
+
+
 
             client.close();
         } catch (IOException e) {
@@ -92,7 +117,7 @@ class Client {
         }
     }
 
-    private void viewOnInComeMessage(Client client, String input) throws IOException {
+    private void viewOnInComeMessage(ClientBot client, String input) throws IOException {
 
         JsonObject request = JsonParser.parseString(input).getAsJsonObject();
         String commandName = request.get("command").getAsString().toUpperCase();
@@ -105,6 +130,19 @@ class Client {
             case "AUTHORIZATION" -> {
                 AuthorizationResponse authorizationResponse = client.getResponse(AuthorizationResponse.class, input);
                 System.out.println("Authorization response: " + authorizationResponse.message);
+            }
+            case "VIEWROOMS" -> {
+                ViewCreatedRoomsResponse viewCreatedRoomsResponse = client.getResponse(ViewCreatedRoomsResponse.class, input);
+                if(viewCreatedRoomsResponse.status.equals("fail")){
+                    CreateRoomRequest createRoomRequest = new CreateRoomRequest();
+                    client.sendRequest(createRoomRequest);
+                    System.out.println("Room was created");
+                }
+                else{
+                    ConnectToRoomRequest connectToRoomRequest = new ConnectToRoomRequest(1);
+                    client.sendRequest(connectToRoomRequest);
+                    System.out.println("Connected to room");
+                }
             }
             case "CREATEROOM" -> {
                 CreateRoomResponse createRoomResponse = client.getResponse(CreateRoomResponse.class, input);
@@ -158,7 +196,7 @@ class Client {
         }
     }
 
-    private void createJsonAndSendCommand(Client client, String input) throws IOException {
+    private void createJsonAndSendCommand(ClientBot client, String input) throws IOException {
         String[] commandParts = input.split("\\s+");
         String command = commandParts[0];
 
