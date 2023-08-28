@@ -6,6 +6,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import logic.Cell;
+import logic.Move;
+import logic.Player;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import gui.GUI;
 
 import io.deeplay.Application;
+import parsing.BoardParser;
 
 
 import javax.swing.*;
@@ -81,7 +85,7 @@ class ClientBot {
     public static void main(String[] args) {
         try {
             ClientBot client = new ClientBot("localhost", 6070);
-
+            System.out.println("enter bot name");
             Scanner scanner = new Scanner(System.in);
             String botName = scanner.nextLine();
 
@@ -95,6 +99,8 @@ class ClientBot {
             client.sendRequest(viewCreatedRoomsRequest);
 
             try {
+                client.bufferedReader.readLine();
+                client.bufferedReader.readLine();
                 String line = client.bufferedReader.readLine();
                 if (line != null) {
                     client.viewOnInComeMessage(client, line);
@@ -107,7 +113,6 @@ class ClientBot {
 
             client.getMessage();
             client.sendMessage();
-
 
 
             client.close();
@@ -133,12 +138,12 @@ class ClientBot {
             }
             case "VIEWROOMS" -> {
                 ViewCreatedRoomsResponse viewCreatedRoomsResponse = client.getResponse(ViewCreatedRoomsResponse.class, input);
-                if(viewCreatedRoomsResponse.status.equals("fail")){
+                if (viewCreatedRoomsResponse.status.equals("fail")) {
                     CreateRoomRequest createRoomRequest = new CreateRoomRequest();
                     client.sendRequest(createRoomRequest);
+
                     System.out.println("Room was created");
-                }
-                else{
+                } else {
                     ConnectToRoomRequest connectToRoomRequest = new ConnectToRoomRequest(1);
                     client.sendRequest(connectToRoomRequest);
                     System.out.println("Connected to room");
@@ -154,6 +159,11 @@ class ClientBot {
             }
             case "CONNECTTOROOM" -> {
                 ConnectToRoomResponse connectToRoomResponse = client.getResponse(ConnectToRoomResponse.class, input);
+                if (connectToRoomResponse.message.equals("White player connected")) {
+                    StartGameRequest startGameRequest = new StartGameRequest(client.roomId);
+                    client.sendRequest(startGameRequest);
+                    System.out.println("Room was created");
+                }
                 System.out.println("Connect to room response: " + connectToRoomResponse.message);
             }
             case "LEAVEROOM" -> {
@@ -163,34 +173,60 @@ class ClientBot {
             case "WHEREICANGORESPONSE" -> {
                 WhereIcanGoResponse whereIcanGoResponse = client.getResponse(WhereIcanGoResponse.class, input);
                 System.out.println(whereIcanGoResponse.board);
-                System.out.println("Your available moves " + whereIcanGoResponse.availableMoves);
+                System.out.println(whereIcanGoResponse.availableMoves);
+                if (whereIcanGoResponse.color.equals("black")) {
+                    Player.BotPlayer botPlayer = new Player.BotPlayer(Cell.BLACK);
+                    Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.board, 'B', 'W', '_'));
+                    int r = move.row + 1;
+                    int c = move.col + 1;
+                    System.out.println("r and c" + r + " " + c);
+                    MakeMoveRequest makeMoveRequest = new MakeMoveRequest(r, c);
+                    client.sendRequest(makeMoveRequest);
+                    break;
+                } else if(whereIcanGoResponse.color.equals("white")) {
+                    Player.BotPlayer botPlayer = new Player.BotPlayer(Cell.WHITE);
+                    Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.board, 'B', 'W', '_'));
+                    int r = move.row + 1;
+                    int c = move.col + 1;
+                    System.out.println("r and c" + r + " " + c);
+                    MakeMoveRequest makeMoveRequest = new MakeMoveRequest(r, c);
+                    client.sendRequest(makeMoveRequest);
+                    break;
+                }
+
             }
             case "GAMEOVER" -> {
                 GameoverResponse gameoverResponse = client.getResponse(GameoverResponse.class, input);
                 System.out.println("Game over response " + gameoverResponse.message);
+                this.socket.close();
             }
             case "MAKEMOVE" -> {
                 MakeMoveResponse makeMoveResponse = client.getResponse(MakeMoveResponse.class, input);
-                System.out.println("MakeMove response " + makeMoveResponse.getMessage());
+                System.out.println(makeMoveResponse.message);
+                if(makeMoveResponse.status.equals("fail")){
+                    WhereICanGoRequest whereICanGoRequest = new WhereICanGoRequest();
+                    client.sendRequest(whereICanGoRequest);
+                }
             }
             case "STARTGAME" -> {
                 StartGameResponse startGameResponse = client.getResponse(StartGameResponse.class, input);
                 System.out.println("StartGame response " + startGameResponse.message);
+
             }
             case "EXIT" -> {
                 client.close();
                 System.exit(0);
             }
-            case "SURRENDER"-> {
+            case "SURRENDER" -> {
                 SurrenderResponse surrenderResponse = client.getResponse(SurrenderResponse.class, input);
                 System.out.println(surrenderResponse.message);
             }
-            case "GUI"-> {
+            case "GUI" -> {
                 GUIResponse guiResponse = client.getResponse(GUIResponse.class, input);
                 System.out.println(guiResponse.message);
                 SwingUtilities.invokeLater(() -> Application.startGUIInterface());
             }
-            default-> {
+            default -> {
                 System.out.println("Unknown command: " + commandName);
             }
         }
@@ -272,11 +308,11 @@ class ClientBot {
                 SurrenderRequest surrenderRequest = new SurrenderRequest();
                 client.sendRequest(surrenderRequest);
             }
-            case "GUI"-> {
+            case "GUI" -> {
                 GUIRequest guiRequest = new GUIRequest();
                 client.sendRequest(guiRequest);
             }
-            case "EXIT"-> {
+            case "EXIT" -> {
                 client.close();
                 System.exit(0);
             }

@@ -74,6 +74,26 @@ class Server {
                 }
             }));
 
+            commands.add(Command.newCommand("VIEWROOMS", (jsonRequest, uuid) -> {
+                int roomId = jsonRequest.get("roomId").getAsInt();
+                Room room = roomList.stream()
+                        .filter(r -> r.getId() == roomId)
+                        .findFirst()
+                        .orElse(null);
+
+                if (room != null) {
+                    if (room.hasNoPlayers()) {
+                        return new ViewCreatedRoomsResponse("success", "Room with ID " + roomId + " exists and has no players", roomId);
+                    } else if (!room.isFull()) {
+                        return new ViewCreatedRoomsResponse("success", "Room with ID " + roomId + " exists but is not full", roomId);
+                    } else {
+                        return new ViewCreatedRoomsResponse("fail", "Room with ID " + roomId + " is already occupied", roomId);
+                    }
+                } else {
+                    return new ViewCreatedRoomsResponse("fail", "Room with ID " + roomId + " not found", roomId);
+                }
+            }));
+
             commands.add(Command.newCommand("CREATEROOM", (jsonRequest, uuid) -> {
                 if (onlineUsers.containsKey(uuid)) {
                     Room room = new Room();
@@ -97,10 +117,16 @@ class Server {
                     if (room != null && room.hasNoPlayers()) {
                         room.setBlackPlayerUUID(uuid);
                         room.BlackPlayer = onlineUsers.get(uuid);
+
                         return new ConnectToRoomResponse("success", "Connected to room as BlackPlayer");
                     } else if (room != null && !room.isFull()) {
                         room.setWhitePlayerUUID(uuid);
                         room.WhitePlayer = onlineUsers.get(uuid);
+                        UUID opponent = room.getOpponentUUID(uuid);
+                        ClientProcessor thisPlayer = Server.clients.get(opponent);
+
+                        thisPlayer.sendReply(new ConnectToRoomResponse("success", "White player connected"));
+
                         return new ConnectToRoomResponse("success", "Connected to room as WhitePlayer");
                     } else if (room == null) {
                         return new ConnectToRoomResponse("fail", "Room with ID " + roomId + " not found");
@@ -151,18 +177,28 @@ class Server {
                         break;
                     }
                 }
-                room.game = new Game();
-                ClientProcessor thisPlayer = Server.clients.get(uuid);
 
-                thisPlayer.sendReply(new StartGameResponse("success", "game started"));
+                UUID blackPlayerUUID = room.getBlackPlayerUUID();
+
+                ClientProcessor blackPlayer = Server.clients.get(blackPlayerUUID);
+
+                room.game = new Game();
+                ClientProcessor whitePlayer = Server.clients.get(room.getWhitePlayerUUID());
+
 
                 List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.BLACK);
 
                 String availableMovesString = availableMoves.toString();
                 String boardString = toStringBoard(room.board);
-
-                return new WhereIcanGoResponse(availableMovesString, boardString);
-
+                if (uuid == room.getBlackPlayerUUID()) {
+                    blackPlayer.sendReply(new StartGameResponse("success", "game started"));
+                    whitePlayer.sendReply(new StartGameResponse("success", "game started"));
+                    return new WhereIcanGoResponse(availableMovesString, boardString, "black");
+                } else {
+                    blackPlayer.sendReply(new StartGameResponse("success", "game started"));
+                    blackPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, "black"));
+                    return new StartGameResponse("success", "game started");
+                }
             }));
 
             commands.add(Command.newCommand("SURRENDER", (jsonRequest, uuid) -> {
@@ -213,22 +249,16 @@ class Server {
                         return new MakeMoveResponse("fail", "Wrong move");
                     }
 
-                    Board copyBoard = room.board.getBoardCopy();
-                    serverPlayer player = new serverPlayer(Cell.BLACK, row, col);
-                    try {
-                        room.moveNumber = makeMoveOnBoardWithOutLog(room.board, player, room.moveNumber, copyBoard);
+                    room.board.placePiece(row, col, Cell.BLACK);
 
-                        List<Move> opponentavailableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
-                        String availableMovesString = opponentavailableMoves.toString();
-                        String boardString = toStringBoard(room.board);
+                    List<Move> opponentAvailableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
+                    String availableMovesString = opponentAvailableMoves.toString();
+                    String boardString = toStringBoard(room.board);
 
-                        thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString));
+                    thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, "white"));
 
-                        if (!room.board.getAllAvailableMoves(Cell.WHITE).isEmpty()) {
-                            room.game.nextTurnOfPlayerColor = Cell.WHITE;
-                        }
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                    if (!opponentAvailableMoves.isEmpty()) {
+                        room.game.nextTurnOfPlayerColor = Cell.WHITE;
                     }
                 } else if (uuid == room.getWhitePlayerUUID()) {
                     if (room.game.nextTurnOfPlayerColor.equals(Cell.BLACK)) {
@@ -243,22 +273,16 @@ class Server {
                         return new MakeMoveResponse("fail", "Wrong move");
                     }
 
-                    Board copyBoard = room.board.getBoardCopy();
-                    serverPlayer player = new serverPlayer(Cell.WHITE, row, col);
-                    try {
-                        room.moveNumber = makeMoveOnBoardWithOutLog(room.board, player, room.moveNumber, copyBoard);
+                    room.board.placePiece(row, col, Cell.WHITE);
 
-                        List<Move> opponentavailableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
-                        String availableMovesString = opponentavailableMoves.toString();
-                        String boardString = toStringBoard(room.board);
+                    List<Move> opponentAvailableMoves = room.board.getAllAvailableMoves(Cell.BLACK);
+                    String availableMovesString = opponentAvailableMoves.toString();
+                    String boardString = toStringBoard(room.board);
 
-                        thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString));
+                    thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, "black"));
 
-                        if (!room.board.getAllAvailableMoves(Cell.BLACK).isEmpty()) {
-                            room.game.nextTurnOfPlayerColor = Cell.BLACK;
-                        }
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                    if (!opponentAvailableMoves.isEmpty()) {
+                        room.game.nextTurnOfPlayerColor = Cell.BLACK;
                     }
                 }
                 if (room.board.getAllAvailableMoves(Cell.BLACK).isEmpty() && room.board.getAllAvailableMoves(Cell.WHITE).isEmpty()) {

@@ -60,7 +60,15 @@ public class Room {
             BlackPlayer = "";
         }
     }
+    public void swapPlayers() {
+        UUID temp = whitePlayerUUID;
+        whitePlayerUUID = blackPlayerUUID;
+        blackPlayerUUID = temp;
 
+        String tempName = WhitePlayer;
+        WhitePlayer = BlackPlayer;
+        BlackPlayer = tempName;
+    }
     public UUID getWhitePlayerUUID() {
         return whitePlayerUUID;
     }

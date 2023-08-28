@@ -133,7 +133,7 @@ class Client {
             }
             case "MAKEMOVE" -> {
                 MakeMoveResponse makeMoveResponse = client.getResponse(MakeMoveResponse.class, input);
-                System.out.println("MakeMove response " + makeMoveResponse.getMessage());
+                System.out.println("MakeMove response " + makeMoveResponse.message);
             }
             case "STARTGAME" -> {
                 StartGameResponse startGameResponse = client.getResponse(StartGameResponse.class, input);
