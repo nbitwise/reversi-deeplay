@@ -233,99 +233,34 @@ class Client {
         String commandName = request.get("command").getAsString().toUpperCase();
 
         switch (commandName) {
-            case "REGISTRATION" -> {
-                RegistrationResponse registrationResponse = client.getResponse(RegistrationResponse.class, input);
-                System.out.println("Registration response: " + registrationResponse.message);
-            }
-            case "AUTHORIZATION" -> {
-                AuthorizationResponse authorizationResponse = client.getResponse(AuthorizationResponse.class, input);
-                System.out.println("Authorization response: " + authorizationResponse.message);
-            }
-            case "VIEWROOMS" -> {
-                ViewCreatedRoomsResponse viewCreatedRoomsResponse = client.getResponse(ViewCreatedRoomsResponse.class, input);
-                if (viewCreatedRoomsResponse.status.equals("fail")) {
-                    CreateRoomRequest createRoomRequest = new CreateRoomRequest();
-                    client.sendRequest(createRoomRequest);
 
-                    System.out.println("Room was created");
-                } else {
-                    ConnectToRoomRequest connectToRoomRequest = new ConnectToRoomRequest(1);
-                    client.sendRequest(connectToRoomRequest);
-                    System.out.println("Connected to room");
-                }
-            }
-            case "CREATEROOM" -> {
-                CreateRoomResponse createRoomResponse = client.getResponse(CreateRoomResponse.class, input);
-                if (createRoomResponse.status.equals("fail")) {
-                    System.out.println("Create room response: " + createRoomResponse.message);
-                }
-                roomId = createRoomResponse.getRoomId();
-                System.out.println("Create room response: " + createRoomResponse.message + ", Room ID: " + createRoomResponse.getRoomId());
-            }
-            case "CONNECTTOROOM" -> {
-                ConnectToRoomResponse connectToRoomResponse = client.getResponse(ConnectToRoomResponse.class, input);
-                if (connectToRoomResponse.message.equals("White player connected")) {
-                    StartGameRequest startGameRequest = new StartGameRequest(client.roomId);
-                    client.sendRequest(startGameRequest);
-                    System.out.println("Room was created");
-                }
-                System.out.println("Connect to room response: " + connectToRoomResponse.message);
-            }
-            case "LEAVEROOM" -> {
-                LeaveRoomResponse leaveRoomResponse = client.getResponse(LeaveRoomResponse.class, input);
-                System.out.println("Leave room response: " + leaveRoomResponse.message);
-            }
-            case "WHEREICANGORESPONSE" -> {
-                WhereIcanGoResponse whereIcanGoResponse = client.getResponse(WhereIcanGoResponse.class, input);
+            case "REGISTRATION" -> commandRegistrationBot(client, input);
 
-                System.out.println(whereIcanGoResponse.availableMoves);
-                if (whereIcanGoResponse.color.equals("black")) {
-                    Player.BotPlayer botPlayer = new Player.BotPlayer(Cell.BLACK);
-                    Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.boardStringWON, 'B', 'W', '-'));
+            case "AUTHORIZATION" -> commandAuthorizationBot(client, input);
 
-                    MakeMoveRequest makeMoveRequest = new MakeMoveRequest(move.row + 1, move.col + 1);
-                    client.sendRequest(makeMoveRequest);
-                } else {
-                    Player.BotPlayer botPlayer = new Player.BotPlayer(Cell.WHITE);
-                    Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.boardStringWON, 'B', 'W', '-'));
+            case "VIEWROOMS" -> commandViewRoomsBot(client, input);
 
-                    MakeMoveRequest makeMoveRequest = new MakeMoveRequest(move.row + 1, move.col + 1);
-                    client.sendRequest(makeMoveRequest);
-                }
-            }
-            case "GAMEOVER" -> {
-                GameoverResponse gameoverResponse = client.getResponse(GameoverResponse.class, input);
-                System.out.println("Game over response " + gameoverResponse.message);
-            }
-            case "MAKEMOVE" -> {
-                MakeMoveResponse makeMoveResponse = client.getResponse(MakeMoveResponse.class, input);
-                System.out.println(makeMoveResponse.message);
-                if (makeMoveResponse.status.equals("fail")) {
-                    WhereICanGoRequest whereICanGoRequest = new WhereICanGoRequest();
-                    client.sendRequest(whereICanGoRequest);
-                }
-            }
-            case "STARTGAME" -> {
-                StartGameResponse startGameResponse = client.getResponse(StartGameResponse.class, input);
-                System.out.println("StartGame response " + startGameResponse.message);
+            case "CREATEROOM" -> commandCreateRoomBot(client, input);
 
-            }
-            case "EXIT" -> {
-                client.close();
-                System.exit(0);
-            }
-            case "SURRENDER" -> {
-                SurrenderResponse surrenderResponse = client.getResponse(SurrenderResponse.class, input);
-                System.out.println(surrenderResponse.message);
-            }
-            case "GUI" -> {
-                GUIResponse guiResponse = client.getResponse(GUIResponse.class, input);
-                System.out.println(guiResponse.message);
-                SwingUtilities.invokeLater(() -> Application.startGUIInterface());
-            }
-            default -> {
-                System.out.println("Unknown command: " + commandName);
-            }
+            case "CONNECTTOROOM" -> commandConnectToRoomBot(client, input);
+
+            case "WHEREICANGORESPONSE" -> commandWhereICanGoGameBot(client, input);
+
+            case "LEAVEROOM" -> commandLeaveRoomBot(client, input);
+
+            case "GAMEOVER" -> commandGameOverBot(client, input);
+
+            case "MAKEMOVE" -> commandMakeMoveBot(client, input);
+
+            case "STARTGAME" -> commandStartGameBot(client, input);
+
+            case "EXIT" -> commandExitBot(client);
+
+            case "SURRENDER" -> commandSurrenderBot(client, input);
+
+            case "GUI" -> commandGuiBot(client, input);
+
+            default -> commandDefaultBot(commandName);
         }
     }
 
@@ -491,6 +426,113 @@ class Client {
     }
 
     private void commandDefault(String commandName) {
+        System.out.println("Unknown command: " + commandName);
+    }
+
+
+    private void commandRegistrationBot(Client client, String input) throws IOException {
+        RegistrationResponse registrationResponse = client.getResponse(RegistrationResponse.class, input);
+        System.out.println("Registration response: " + registrationResponse.message);
+    }
+
+    private void commandAuthorizationBot(Client client, String input) throws IOException {
+        AuthorizationResponse authorizationResponse = client.getResponse(AuthorizationResponse.class, input);
+        System.out.println("Authorization response: " + authorizationResponse.message);
+    }
+
+    private void commandViewRoomsBot(Client client, String input) throws IOException {
+        ViewCreatedRoomsResponse viewCreatedRoomsResponse = client.getResponse(ViewCreatedRoomsResponse.class, input);
+        if (viewCreatedRoomsResponse.status.equals("fail")) {
+            CreateRoomRequest createRoomRequest = new CreateRoomRequest();
+            client.sendRequest(createRoomRequest);
+
+            System.out.println("Room was created");
+        } else {
+            ConnectToRoomRequest connectToRoomRequest = new ConnectToRoomRequest(1);
+            client.sendRequest(connectToRoomRequest);
+            System.out.println("Connected to room");
+        }
+    }
+
+    private void commandCreateRoomBot(Client client, String input) throws IOException {
+        CreateRoomResponse createRoomResponse = client.getResponse(CreateRoomResponse.class, input);
+        if (createRoomResponse.status.equals("fail")) {
+            System.out.println("Create room response: " + createRoomResponse.message);
+        }
+        roomId = createRoomResponse.getRoomId();
+        System.out.println("Create room response: " + createRoomResponse.message + ", Room ID: " + createRoomResponse.getRoomId());
+    }
+
+    private void commandConnectToRoomBot(Client client, String input) throws IOException {
+        ConnectToRoomResponse connectToRoomResponse = client.getResponse(ConnectToRoomResponse.class, input);
+        if (connectToRoomResponse.message.equals("White player connected")) {
+            StartGameRequest startGameRequest = new StartGameRequest(client.roomId);
+            client.sendRequest(startGameRequest);
+            System.out.println("Room was created");
+        }
+        System.out.println("Connect to room response: " + connectToRoomResponse.message);
+    }
+
+    private void commandGameOverBot(Client client, String input) throws IOException {
+        GameoverResponse gameoverResponse = client.getResponse(GameoverResponse.class, input);
+        System.out.println("Game over response " + gameoverResponse.message);
+    }
+
+    private void commandLeaveRoomBot(Client client, String input) throws IOException {
+        LeaveRoomResponse leaveRoomResponse = client.getResponse(LeaveRoomResponse.class, input);
+        System.out.println("Leave room response: " + leaveRoomResponse.message);
+    }
+
+    private void commandStartGameBot(Client client, String input) throws IOException {
+        StartGameResponse startGameResponse = client.getResponse(StartGameResponse.class, input);
+        System.out.println("StartGame response " + startGameResponse.message);
+    }
+
+    private void commandWhereICanGoGameBot(Client client, String input) throws IOException {
+        WhereIcanGoResponse whereIcanGoResponse = client.getResponse(WhereIcanGoResponse.class, input);
+
+        System.out.println(whereIcanGoResponse.availableMoves);
+        if (whereIcanGoResponse.color.equals("black")) {
+            Player.BotPlayer botPlayer = new Player.BotPlayer(Cell.BLACK);
+            Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.boardStringWON, 'B', 'W', '-'));
+
+            MakeMoveRequest makeMoveRequest = new MakeMoveRequest(move.row + 1, move.col + 1);
+            client.sendRequest(makeMoveRequest);
+        } else {
+            Player.BotPlayer botPlayer = new Player.BotPlayer(Cell.WHITE);
+            Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.boardStringWON, 'B', 'W', '-'));
+
+            MakeMoveRequest makeMoveRequest = new MakeMoveRequest(move.row + 1, move.col + 1);
+            client.sendRequest(makeMoveRequest);
+        }
+    }
+
+    private void commandMakeMoveBot(Client client, String input) throws IOException {
+        MakeMoveResponse makeMoveResponse = client.getResponse(MakeMoveResponse.class, input);
+        System.out.println(makeMoveResponse.message);
+        if (makeMoveResponse.status.equals("fail")) {
+            WhereICanGoRequest whereICanGoRequest = new WhereICanGoRequest();
+            client.sendRequest(whereICanGoRequest);
+        }
+    }
+
+    private void commandSurrenderBot(Client client, String input) throws IOException {
+        SurrenderResponse surrenderResponse = client.getResponse(SurrenderResponse.class, input);
+        System.out.println(surrenderResponse.message);
+    }
+
+    private void commandGuiBot(Client client, String input) throws IOException {
+        GUIResponse guiResponse = client.getResponse(GUIResponse.class, input);
+        System.out.println(guiResponse.message);
+        SwingUtilities.invokeLater(() -> Application.startGUIInterface());
+    }
+
+    private void commandExitBot(Client client) throws IOException {
+        client.close();
+        System.exit(0);
+    }
+
+    private void commandDefaultBot(String commandName) {
         System.out.println("Unknown command: " + commandName);
     }
 }
