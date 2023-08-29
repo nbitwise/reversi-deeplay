@@ -25,17 +25,26 @@ import static io.deeplay.Game.displayResultOnClient;
 
 class Server {
 
-    private static final int PORT = 6070;
+
     private static ConcurrentMap<UUID, ClientProcessor> clients = new ConcurrentHashMap<>();
     private static ConcurrentMap<UUID, String> onlineUsers = new ConcurrentHashMap<>();
     private static ConcurrentMap<UUID, String> registratedUsers = new ConcurrentHashMap<>();
     private static LinkedList<ClientProcessor> serverList = new LinkedList<>();
 
+
     static List<Room> roomList = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
+        int port;
+        Properties appProps = new Properties();
+        File file = new File("server/file.properties");
 
-        try (ServerSocket server = new ServerSocket(PORT)) {
+        try (FileInputStream propertiesInput = new FileInputStream(file)) {
+            appProps.load(propertiesInput);
+            port = Integer.parseInt(appProps.getProperty("port"));
+        }
+
+        try (ServerSocket server = new ServerSocket(port)) {
 
             List<Command> commands = new ArrayList<>();
 
@@ -78,7 +87,7 @@ class Server {
             commands.add(Command.newCommand("VIEWROOMS", (jsonRequest, uuid) -> {
                 int roomId = jsonRequest.get("roomId").getAsInt();
                 Room room = roomList.stream()
-                        .filter(r -> r.getId() == roomId)
+                        .filter(r -> r.getRoomId() == roomId)
                         .findFirst()
                         .orElse(null);
 
@@ -100,9 +109,9 @@ class Server {
                     Room room = new Room();
 
                     room.setBlackPlayerUUID(uuid);
-                    room.BlackPlayer = onlineUsers.get(uuid);
+                    room.blackPlayer = onlineUsers.get(uuid);
                     roomList.add(room);
-                    return new CreateRoomResponse("success", "Room was successfully registered", room.getId());
+                    return new CreateRoomResponse("success", "Room was successfully registered", room.getRoomId());
                 }
                 return new CreateRoomResponse("fail", "you are not logged in", null);
             }));
@@ -111,18 +120,18 @@ class Server {
                 if (onlineUsers.containsKey(uuid)) {
                     int roomId = jsonRequest.get("roomId").getAsInt();
                     Room room = roomList.stream()
-                            .filter(r -> r.getId() == roomId)
+                            .filter(r -> r.getRoomId() == roomId)
                             .findFirst()
                             .orElse(null);
 
                     if (room != null && room.hasNoPlayers()) {
                         room.setBlackPlayerUUID(uuid);
-                        room.BlackPlayer = onlineUsers.get(uuid);
+                        room.blackPlayer = onlineUsers.get(uuid);
 
                         return new ConnectToRoomResponse("success", "Connected to room as BlackPlayer");
                     } else if (room != null && !room.isFull()) {
                         room.setWhitePlayerUUID(uuid);
-                        room.WhitePlayer = onlineUsers.get(uuid);
+                        room.whitePlayer = onlineUsers.get(uuid);
                         UUID opponent = room.getOpponentUUID(uuid);
                         ClientProcessor thisPlayer = Server.clients.get(opponent);
 
@@ -145,7 +154,7 @@ class Server {
                     if (roomIdElement != null && roomIdElement.isJsonPrimitive() && roomIdElement.getAsJsonPrimitive().isNumber()) {
                         int roomId = roomIdElement.getAsInt();
                         for (Room room : roomList) {
-                            if (room.getId() == roomId && room.hasPlayer(uuid)) {
+                            if (room.getRoomId() == roomId && room.hasPlayer(uuid)) {
                                 room.removePlayer(uuid);
                                 break;
                             }
@@ -173,7 +182,7 @@ class Server {
                 int roomId = jsonRequest.get("roomId").getAsInt();
                 Room room = new Room();
                 for (Room r : roomList) {
-                    if (r.id == roomId) {
+                    if (r.roomId == roomId) {
                         room = r;
                         break;
                     }
@@ -196,7 +205,7 @@ class Server {
                      FileWriter writerForBot = new FileWriter("systemFile", true)) {
                     final String nonStableId = new SimpleDateFormat("MMddHHmmss").format(Calendar.getInstance().getTime());
                     GameLogger.logStart(Integer.parseInt(nonStableId), writeForHuman, writerForBot);
-                }catch (IOException e){
+                } catch (IOException e) {
                     //log
                 }
 
@@ -204,7 +213,7 @@ class Server {
                 if (uuid == room.getBlackPlayerUUID()) {
                     blackPlayer.sendReply(new StartGameResponse("success", "game started"));
                     whitePlayer.sendReply(new StartGameResponse("success", "game started"));
-                    return new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON,"black");
+                    return new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON, "black");
                 } else {
                     blackPlayer.sendReply(new StartGameResponse("success", "game started"));
                     blackPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON, "black"));
@@ -269,7 +278,7 @@ class Server {
                          FileWriter writerForBot = new FileWriter("systemFile", true)) {
 
                         GameLogger.logMove(room.board, row, col, uuid, "BLACK", writeForHuman, writerForBot);
-                    }catch (IOException e){
+                    } catch (IOException e) {
                         //log
                     }
                     List<Move> opponentAvailableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
@@ -300,8 +309,8 @@ class Server {
                     try (FileWriter writeForHuman = new FileWriter("fileForHuman", true);
                          FileWriter writerForBot = new FileWriter("systemFile", true)) {
                         final String nonStableId = new SimpleDateFormat("MMddHHmmss").format(Calendar.getInstance().getTime());
-                        GameLogger.logMove(room.board, row, col,uuid, "WHITE", writeForHuman, writerForBot);
-                    }catch (IOException e){
+                        GameLogger.logMove(room.board, row, col, uuid, "WHITE", writeForHuman, writerForBot);
+                    } catch (IOException e) {
                         //log
                     }
 
@@ -310,7 +319,7 @@ class Server {
                     String boardString = Board.displayBoardOnClient(room.board);
                     String boardStringWON = Board.displayBoardOnClientWithoutNumbers(room.board);
 
-                    thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString,boardStringWON, "black"));
+                    thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON, "black"));
 
                     if (!opponentAvailableMoves.isEmpty()) {
                         room.game.nextTurnOfPlayerColor = Cell.BLACK;
@@ -324,7 +333,7 @@ class Server {
                          FileWriter writerForBot = new FileWriter("systemFile", true)) {
                         final String nonStableId = new SimpleDateFormat("MMddHHmmss").format(Calendar.getInstance().getTime());
                         GameLogger.logEnd(room.board, writeForHuman, writerForBot);
-                    }catch (IOException e){
+                    } catch (IOException e) {
                         //log
                     }
 
@@ -354,7 +363,7 @@ class Server {
                     String boardString = Board.displayBoardOnClient(room.board);
                     String boardStringWON = Board.displayBoardOnClientWithoutNumbers(room.board);
 
-                    return new WhereIcanGoResponse(availableMovesString, boardString,boardStringWON,  "black");
+                    return new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON, "black");
                 } else {
                     if (room.game.nextTurnOfPlayerColor.equals(Cell.BLACK)) {
                         return new MakeMoveResponse("fail", "It's not your turn");
@@ -364,7 +373,7 @@ class Server {
                     String boardString = Board.displayBoardOnClient(room.board);
                     String boardStringWON = Board.displayBoardOnClientWithoutNumbers(room.board);
 
-                    return new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON,"white");
+                    return new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON, "white");
                 }
 
             }));
@@ -373,60 +382,61 @@ class Server {
                 return new GUIResponse("success", "Run gui....");
             }));
 
-            try {
-                while (!server.isClosed()) {
-                    Socket socket = server.accept();
-                    try {
-                        ClientProcessor thisClient = new ClientProcessor(socket, commands);
-                        serverList.add(thisClient);
-                        clients.put(thisClient.uuid, thisClient);
-                    } catch (IOException e) {
 
-                        socket.close();
-                    }
+            while (!server.isClosed()) {
+                Socket socket = server.accept();
+                try {
+                    ClientProcessor thisClient = new ClientProcessor(socket, commands);
+                    serverList.add(thisClient);
+                    clients.put(thisClient.uuid, thisClient);
+                } catch (IOException e) {
+
+                    socket.close();
                 }
-            } finally {
-                server.close();
             }
+
+
         }
     }
+
+
 }
 
 class ClientProcessor extends Thread {
-    public final Map commands;
-    public final BufferedReader socketBufferedReader;
-    public final BufferedWriter socketBufferedWriter;
-    public final UUID uuid;
+    public Map commands;
+    public BufferedReader socketBufferedReader;
+    public BufferedWriter socketBufferedWriter;
+    public UUID uuid;
 
     ClientProcessor(Socket socket, List<Command> commands) throws IOException {
         this.commands = commands.stream().collect(Collectors.toMap(Command::getName, Function.identity()));
         this.uuid = UUID.randomUUID();
         this.socketBufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.socketBufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        this.start();
+        start();
     }
 
     @Override
     public void run() {
         try {
             while (true) {
-                String line = this.socketBufferedReader.readLine();
+                String line = socketBufferedReader.readLine();
                 if (line == null) {
                     return;
                 }
                 System.out.println(line);
                 JsonObject request = JsonParser.parseString(line).getAsJsonObject();
                 String commandName = request.get("command").getAsString().toUpperCase();
-                Command command = (Command) this.commands.get(commandName);
-                this.sendReply(command.process(request, this.uuid));
+                Command command = (Command) commands.get(commandName);
+                sendReply(command.process(request, uuid));
             }
-        } catch (IOException var5) {
-            var5.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     /**
-     * отправляет на клиент реплай в виде json строки.
+     * Отправляет на клиент реплай в виде json строки.
      *
      * @param response - строка.
      */
@@ -435,9 +445,9 @@ class ClientProcessor extends Thread {
             GsonBuilder builder = new GsonBuilder();
             Gson gson = builder.create();
             String jsonRequest = gson.toJson(response);
-            this.socketBufferedWriter.write(jsonRequest);
-            this.socketBufferedWriter.newLine();
-            this.socketBufferedWriter.flush();
+            socketBufferedWriter.write(jsonRequest);
+            socketBufferedWriter.newLine();
+            socketBufferedWriter.flush();
         } catch (IOException var5) {
             throw new IllegalStateException(var5);
         }

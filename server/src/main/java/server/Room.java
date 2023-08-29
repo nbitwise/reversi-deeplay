@@ -3,17 +3,14 @@ package server;
 import io.deeplay.Game;
 import logic.Board;
 
-import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static server.Server.roomList;
-
 public class Room {
 
-    int id;
-    String WhitePlayer = "";
-    String BlackPlayer = "";
+    int roomId;
+    String whitePlayer = "";
+    String blackPlayer = "";
     private UUID whitePlayerUUID;
     private UUID blackPlayerUUID;
 
@@ -23,41 +20,47 @@ public class Room {
 
     public int moveNumber = 1;
 
-    public UUID getOpponentUUID(UUID uuid){
-        if(uuid == whitePlayerUUID){
+    public Room() {
+        this.roomId = roomCounter.incrementAndGet();
+    }
+
+    public UUID getOpponentUUID(UUID uuid) {
+        if (uuid == whitePlayerUUID) {
             return blackPlayerUUID;
-        }
-        else {
+        } else {
             return whitePlayerUUID;
         }
     }
+
     /**
-     * проверяет наличие места в комнате.
+     * Проверяет наличие места в комнате.
+     *
      * @return возвращает true при наличии мест и false при отсутствии.
      */
-    public  boolean checkHavePlace() {
-        if ((WhitePlayer.isEmpty() && BlackPlayer.isEmpty()) || (WhitePlayer.isEmpty() || BlackPlayer.isEmpty())) {
+    public boolean checkHavePlace() {
+        if ((whitePlayer.isEmpty() && blackPlayer.isEmpty()) || (whitePlayer.isEmpty() || blackPlayer.isEmpty())) {
             return true;
         }
         return false;
     }
 
     /**
-     * проверяет наличие конкретного игрока в комнате.
+     * Проверяет наличие конкретного игрока в комнате.
+     *
      * @return возвращает true при наличии и false при отсутствии.
      */
     public boolean hasPlayer(UUID uuid) {
-        return WhitePlayer.equals(uuid) || BlackPlayer.equals(uuid);
+        return whitePlayer.equals(uuid) || blackPlayer.equals(uuid);
     }
 
     /**
-     * удаляет игрока из комнаты
+     * Удаляет игрока из комнаты.
      */
     public void removePlayer(UUID uuid) {
-        if (WhitePlayer.equals(uuid)) {
-            WhitePlayer = "";
-        } else if (BlackPlayer.equals(uuid)) {
-            BlackPlayer = "";
+        if (whitePlayer.equals(uuid)) {
+            whitePlayer = "";
+        } else if (blackPlayer.equals(uuid)) {
+            blackPlayer = "";
         }
     }
     public void swapPlayers() {
@@ -65,9 +68,9 @@ public class Room {
         whitePlayerUUID = blackPlayerUUID;
         blackPlayerUUID = temp;
 
-        String tempName = WhitePlayer;
-        WhitePlayer = BlackPlayer;
-        BlackPlayer = tempName;
+        String tempName = whitePlayer;
+        whitePlayer = blackPlayer;
+        blackPlayer = tempName;
     }
     public UUID getWhitePlayerUUID() {
         return whitePlayerUUID;
@@ -86,27 +89,27 @@ public class Room {
     }
 
     /**
-     * проверяет, пустая ли комната.
+     * Проверяет, пустая ли комната.
+     *
      * @return возвращает true, если пустая, и false, если кто-то есть.
      */
     public boolean hasNoPlayers() {
-        return WhitePlayer == null && BlackPlayer == null;
+        return whitePlayer == null && blackPlayer == null;
     }
 
     /**
-     * проверяет, полная ли комната
+     * Проверяет, полная ли комната
+     *
      * @return возвращает true если полная, и false если никого нет или игрок только один.
      */
     public boolean isFull() {
         return whitePlayerUUID != null && blackPlayerUUID != null;
     }
-    public Room() {
-        this.id = roomCounter.incrementAndGet();
+
+    public int getRoomId() {
+        return roomId;
     }
 
-    public int getId() {
-        return id;
-    }
     private static final AtomicInteger roomCounter = new AtomicInteger(0);
 
 
