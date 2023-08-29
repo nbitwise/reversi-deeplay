@@ -6,11 +6,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import logic.Cell;
+import logic.Move;
+import logic.Player;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import io.deeplay.Application;
+import parsing.BoardParser;
 
 
 import javax.swing.*;
@@ -44,13 +48,29 @@ class Client {
         bufferedWriter.flush();
     }
 
-    private void getMessage() {
+    private void getMessageHuman() {
         new Thread(() -> {
             while (socket.isConnected()) {
                 try {
                     String line = bufferedReader.readLine();
                     if (line != null) {
-                        viewOnInComeMessage(this, line);
+                        viewOnInComeMessageHuman(this, line);
+                    }
+                } catch (IOException e) {
+                    logger.log(Level.ERROR, "Обрыв канала чтения");
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void getMessageBot() {
+        new Thread(() -> {
+            while (socket.isConnected()) {
+                try {
+                    String line = bufferedReader.readLine();
+                    if (line != null) {
+                        viewOnInComeMessageBot(this, line);
                     }
                 } catch (IOException e) {
                     logger.log(Level.ERROR, "Обрыв канала чтения");
@@ -80,6 +100,7 @@ class Client {
     public static void main(String[] args) throws IOException {
         String host;
         int port;
+        String player;
         Properties appProps = new Properties();
         File file = new File("client/file.properties");
 
@@ -87,26 +108,63 @@ class Client {
             appProps.load(propertiesInput);
             host = appProps.getProperty("host");
             port = Integer.parseInt(appProps.getProperty("port"));
+            player = appProps.getProperty("player");
         } catch (IOException e) {
             logger.log(Level.ERROR, "Cannot read from file.properties");
             throw e;
         }
 
         try {
-            Client client = new Client(host, port);
+            switch (player) {
+                case "bot" -> {
+                    Client client = new Client("localhost", 6070);
+                    System.out.println("enter bot name");
+                    Scanner scanner = new Scanner(System.in);
+                    String botName = scanner.nextLine();
 
-            client.getMessage();
-            client.sendMessage();
+                    RegistrationRequest registrationRequest = new RegistrationRequest(botName);
+                    client.sendRequest(registrationRequest);
 
-            client.close();
+                    AuthorizationRequest authorizationRequest = new AuthorizationRequest(botName);
+                    client.sendRequest(authorizationRequest);
+
+                    ViewCreatedRoomsRequest viewCreatedRoomsRequest = new ViewCreatedRoomsRequest(1);
+                    client.sendRequest(viewCreatedRoomsRequest);
+
+                    try {
+                        client.bufferedReader.readLine();
+                        client.bufferedReader.readLine();
+                        String line = client.bufferedReader.readLine();
+                        if (line != null) {
+                            client.viewOnInComeMessageBot(client, line);
+                        }
+                    } catch (IOException e) {
+                        logger.log(Level.ERROR, "Обрыв канала чтения");
+                        e.printStackTrace();
+                    }
+
+
+                    client.getMessageBot();
+                    client.sendMessage();
+                    client.close();
+                }
+                case "human" -> {
+                    Client client = new Client(host, port);
+
+                    client.getMessageHuman();
+                    client.sendMessage();
+
+                    client.close();
+
+                }
+            }
         } catch (IOException e) {
             logger.log(Level.ERROR, "Работа клиента была прервана");
             throw e;
         }
-
     }
 
-    private void viewOnInComeMessage(Client client, String input) throws IOException {
+    private void viewOnInComeMessageHuman(Client client, String input) throws IOException {
 
         JsonObject request = JsonParser.parseString(input).getAsJsonObject();
         String commandName = request.get("command").getAsString().toUpperCase();
@@ -166,6 +224,108 @@ class Client {
             case "EXIT" -> commandExit(client);
 
             default -> commandDefault(command);
+        }
+    }
+
+    private void viewOnInComeMessageBot(Client client, String input) throws IOException {
+
+        JsonObject request = JsonParser.parseString(input).getAsJsonObject();
+        String commandName = request.get("command").getAsString().toUpperCase();
+
+        switch (commandName) {
+            case "REGISTRATION" -> {
+                RegistrationResponse registrationResponse = client.getResponse(RegistrationResponse.class, input);
+                System.out.println("Registration response: " + registrationResponse.message);
+            }
+            case "AUTHORIZATION" -> {
+                AuthorizationResponse authorizationResponse = client.getResponse(AuthorizationResponse.class, input);
+                System.out.println("Authorization response: " + authorizationResponse.message);
+            }
+            case "VIEWROOMS" -> {
+                ViewCreatedRoomsResponse viewCreatedRoomsResponse = client.getResponse(ViewCreatedRoomsResponse.class, input);
+                if (viewCreatedRoomsResponse.status.equals("fail")) {
+                    CreateRoomRequest createRoomRequest = new CreateRoomRequest();
+                    client.sendRequest(createRoomRequest);
+
+                    System.out.println("Room was created");
+                } else {
+                    ConnectToRoomRequest connectToRoomRequest = new ConnectToRoomRequest(1);
+                    client.sendRequest(connectToRoomRequest);
+                    System.out.println("Connected to room");
+                }
+            }
+            case "CREATEROOM" -> {
+                CreateRoomResponse createRoomResponse = client.getResponse(CreateRoomResponse.class, input);
+                if (createRoomResponse.status.equals("fail")) {
+                    System.out.println("Create room response: " + createRoomResponse.message);
+                }
+                roomId = createRoomResponse.getRoomId();
+                System.out.println("Create room response: " + createRoomResponse.message + ", Room ID: " + createRoomResponse.getRoomId());
+            }
+            case "CONNECTTOROOM" -> {
+                ConnectToRoomResponse connectToRoomResponse = client.getResponse(ConnectToRoomResponse.class, input);
+                if (connectToRoomResponse.message.equals("White player connected")) {
+                    StartGameRequest startGameRequest = new StartGameRequest(client.roomId);
+                    client.sendRequest(startGameRequest);
+                    System.out.println("Room was created");
+                }
+                System.out.println("Connect to room response: " + connectToRoomResponse.message);
+            }
+            case "LEAVEROOM" -> {
+                LeaveRoomResponse leaveRoomResponse = client.getResponse(LeaveRoomResponse.class, input);
+                System.out.println("Leave room response: " + leaveRoomResponse.message);
+            }
+            case "WHEREICANGORESPONSE" -> {
+                WhereIcanGoResponse whereIcanGoResponse = client.getResponse(WhereIcanGoResponse.class, input);
+
+                System.out.println(whereIcanGoResponse.availableMoves);
+                if (whereIcanGoResponse.color.equals("black")) {
+                    Player.BotPlayer botPlayer = new Player.BotPlayer(Cell.BLACK);
+                    Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.boardStringWON, 'B', 'W', '-'));
+
+                    MakeMoveRequest makeMoveRequest = new MakeMoveRequest(move.row + 1, move.col + 1);
+                    client.sendRequest(makeMoveRequest);
+                } else {
+                    Player.BotPlayer botPlayer = new Player.BotPlayer(Cell.WHITE);
+                    Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.boardStringWON, 'B', 'W', '-'));
+
+                    MakeMoveRequest makeMoveRequest = new MakeMoveRequest(move.row + 1, move.col + 1);
+                    client.sendRequest(makeMoveRequest);
+                }
+            }
+            case "GAMEOVER" -> {
+                GameoverResponse gameoverResponse = client.getResponse(GameoverResponse.class, input);
+                System.out.println("Game over response " + gameoverResponse.message);
+            }
+            case "MAKEMOVE" -> {
+                MakeMoveResponse makeMoveResponse = client.getResponse(MakeMoveResponse.class, input);
+                System.out.println(makeMoveResponse.message);
+                if (makeMoveResponse.status.equals("fail")) {
+                    WhereICanGoRequest whereICanGoRequest = new WhereICanGoRequest();
+                    client.sendRequest(whereICanGoRequest);
+                }
+            }
+            case "STARTGAME" -> {
+                StartGameResponse startGameResponse = client.getResponse(StartGameResponse.class, input);
+                System.out.println("StartGame response " + startGameResponse.message);
+
+            }
+            case "EXIT" -> {
+                client.close();
+                System.exit(0);
+            }
+            case "SURRENDER" -> {
+                SurrenderResponse surrenderResponse = client.getResponse(SurrenderResponse.class, input);
+                System.out.println(surrenderResponse.message);
+            }
+            case "GUI" -> {
+                GUIResponse guiResponse = client.getResponse(GUIResponse.class, input);
+                System.out.println(guiResponse.message);
+                SwingUtilities.invokeLater(() -> Application.startGUIInterface());
+            }
+            default -> {
+                System.out.println("Unknown command: " + commandName);
+            }
         }
     }
 
