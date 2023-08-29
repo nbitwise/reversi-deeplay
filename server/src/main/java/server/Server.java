@@ -1,6 +1,7 @@
 package server;
 
 import com.google.gson.*;
+import gamelogging.GameLogger;
 import io.deeplay.Game;
 import logic.Board;
 import logic.Cell;
@@ -11,6 +12,7 @@ import serverresponses.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -19,8 +21,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static io.deeplay.Game.displayResultOnClient;
-import static io.deeplay.Game.makeMoveOnBoardWithOutLog;
-import static logic.Board.toStringBoard;
+
 
 class Server {
 
@@ -189,14 +190,24 @@ class Server {
                 List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.BLACK);
 
                 String availableMovesString = availableMoves.toString();
-                String boardString = toStringBoard(room.board);
+                String boardString = Board.displayBoardOnClient(room.board);
+                String boardStringWON = Board.displayBoardOnClientWithoutNumbers(room.board);
+                try (FileWriter writeForHuman = new FileWriter("fileForHuman", true);
+                     FileWriter writerForBot = new FileWriter("systemFile", true)) {
+                    final String nonStableId = new SimpleDateFormat("MMddHHmmss").format(Calendar.getInstance().getTime());
+                    GameLogger.logStart(Integer.parseInt(nonStableId), writeForHuman, writerForBot);
+                }catch (IOException e){
+                    //log
+                }
+
+
                 if (uuid == room.getBlackPlayerUUID()) {
                     blackPlayer.sendReply(new StartGameResponse("success", "game started"));
                     whitePlayer.sendReply(new StartGameResponse("success", "game started"));
-                    return new WhereIcanGoResponse(availableMovesString, boardString, "black");
+                    return new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON,"black");
                 } else {
                     blackPlayer.sendReply(new StartGameResponse("success", "game started"));
-                    blackPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, "black"));
+                    blackPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON, "black"));
                     return new StartGameResponse("success", "game started");
                 }
             }));
@@ -235,11 +246,14 @@ class Server {
                         break;
                     }
                 }
+
                 UUID opponent;
+
                 if (uuid == room.getBlackPlayerUUID()) {
                     if (room.game.nextTurnOfPlayerColor.equals(Cell.WHITE)) {
                         return new MakeMoveResponse("fail", "It's not your turn");
                     }
+
 
                     opponent = room.getOpponentUUID(uuid);
                     ClientProcessor thisPlayer = Server.clients.get(opponent);
@@ -251,11 +265,19 @@ class Server {
 
                     room.board.placePiece(row, col, Cell.BLACK);
 
+                    try (FileWriter writeForHuman = new FileWriter("fileForHuman", true);
+                         FileWriter writerForBot = new FileWriter("systemFile", true)) {
+
+                        GameLogger.logMove(room.board, row, col, uuid, "BLACK", writeForHuman, writerForBot);
+                    }catch (IOException e){
+                        //log
+                    }
                     List<Move> opponentAvailableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
                     String availableMovesString = opponentAvailableMoves.toString();
-                    String boardString = toStringBoard(room.board);
+                    String boardString = Board.displayBoardOnClient(room.board);
+                    String boardStringWON = Board.displayBoardOnClientWithoutNumbers(room.board);
 
-                    thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, "white"));
+                    thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON, "white"));
 
                     if (!opponentAvailableMoves.isEmpty()) {
                         room.game.nextTurnOfPlayerColor = Cell.WHITE;
@@ -275,11 +297,20 @@ class Server {
 
                     room.board.placePiece(row, col, Cell.WHITE);
 
+                    try (FileWriter writeForHuman = new FileWriter("fileForHuman", true);
+                         FileWriter writerForBot = new FileWriter("systemFile", true)) {
+                        final String nonStableId = new SimpleDateFormat("MMddHHmmss").format(Calendar.getInstance().getTime());
+                        GameLogger.logMove(room.board, row, col,uuid, "WHITE", writeForHuman, writerForBot);
+                    }catch (IOException e){
+                        //log
+                    }
+
                     List<Move> opponentAvailableMoves = room.board.getAllAvailableMoves(Cell.BLACK);
                     String availableMovesString = opponentAvailableMoves.toString();
-                    String boardString = toStringBoard(room.board);
+                    String boardString = Board.displayBoardOnClient(room.board);
+                    String boardStringWON = Board.displayBoardOnClientWithoutNumbers(room.board);
 
-                    thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, "black"));
+                    thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString,boardStringWON, "black"));
 
                     if (!opponentAvailableMoves.isEmpty()) {
                         room.game.nextTurnOfPlayerColor = Cell.BLACK;
@@ -288,9 +319,54 @@ class Server {
                 if (room.board.getAllAvailableMoves(Cell.BLACK).isEmpty() && room.board.getAllAvailableMoves(Cell.WHITE).isEmpty()) {
                     String gameOverMsg = displayResultOnClient(room.board);
                     Server.clients.get(room.getOpponentUUID(uuid)).sendReply(new GameoverResponse("success", gameOverMsg));
+
+                    try (FileWriter writeForHuman = new FileWriter("fileForHuman", true);
+                         FileWriter writerForBot = new FileWriter("systemFile", true)) {
+                        final String nonStableId = new SimpleDateFormat("MMddHHmmss").format(Calendar.getInstance().getTime());
+                        GameLogger.logEnd(room.board, writeForHuman, writerForBot);
+                    }catch (IOException e){
+                        //log
+                    }
+
                     return new GameoverResponse("success", gameOverMsg);
+
                 }
                 return new MakeMoveResponse("success", "You did your turn.");
+            }));
+
+            commands.add(Command.newCommand("WHEREICANGORESPONSE", (jsonRequest, uuid) -> {
+
+                Room room = new Room();
+                for (Room r : roomList) {
+                    if (r.getBlackPlayerUUID() == uuid || r.getWhitePlayerUUID() == uuid) {
+                        room = r;
+                        break;
+                    }
+                }
+                UUID opponent;
+                if (uuid == room.getBlackPlayerUUID()) {
+                    if (room.game.nextTurnOfPlayerColor.equals(Cell.WHITE)) {
+                        return new MakeMoveResponse("fail", "It's not your turn");
+                    }
+
+                    List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.BLACK);
+                    String availableMovesString = availableMoves.toString();
+                    String boardString = Board.displayBoardOnClient(room.board);
+                    String boardStringWON = Board.displayBoardOnClientWithoutNumbers(room.board);
+
+                    return new WhereIcanGoResponse(availableMovesString, boardString,boardStringWON,  "black");
+                } else {
+                    if (room.game.nextTurnOfPlayerColor.equals(Cell.BLACK)) {
+                        return new MakeMoveResponse("fail", "It's not your turn");
+                    }
+                    List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
+                    String availableMovesString = availableMoves.toString();
+                    String boardString = Board.displayBoardOnClient(room.board);
+                    String boardStringWON = Board.displayBoardOnClientWithoutNumbers(room.board);
+
+                    return new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON,"white");
+                }
+
             }));
 
             commands.add(Command.newCommand("GUI", (jsonRequest, uuid) -> {

@@ -269,8 +269,19 @@ public class Board {
         }
     }
 
-    public static String toStringBoard(Board board) {
-        return displayBoardOnClient(board);
+    public static String displayBoardOnClientWithoutNumbers(final Board board) {
+        final int size = board.getSize();
+
+        String boardInSrting = "";
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                final Cell cell = board.get(row, col);
+                final String cellSymbol = cell == Cell.BLACK ? "B" : cell == Cell.WHITE ? "W" : "-";
+                boardInSrting += cellSymbol + " ";
+            }
+            boardInSrting += "\n";
+        }
+        return boardInSrting;
     }
     public static String displayBoardOnClient(final Board board) {
         final int size = board.getSize();
