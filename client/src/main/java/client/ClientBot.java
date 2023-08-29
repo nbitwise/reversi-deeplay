@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import logic.Board;
 import logic.Cell;
 import logic.Move;
 import logic.Player;
@@ -172,33 +173,25 @@ class ClientBot {
             }
             case "WHEREICANGORESPONSE" -> {
                 WhereIcanGoResponse whereIcanGoResponse = client.getResponse(WhereIcanGoResponse.class, input);
-                System.out.println(whereIcanGoResponse.board);
+
                 System.out.println(whereIcanGoResponse.availableMoves);
                 if (whereIcanGoResponse.color.equals("black")) {
                     Player.BotPlayer botPlayer = new Player.BotPlayer(Cell.BLACK);
-                    Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.board, 'B', 'W', '_'));
-                    int r = move.row + 1;
-                    int c = move.col + 1;
-                    System.out.println("r and c" + r + " " + c);
-                    MakeMoveRequest makeMoveRequest = new MakeMoveRequest(r, c);
-                    client.sendRequest(makeMoveRequest);
-                    break;
-                } else if(whereIcanGoResponse.color.equals("white")) {
-                    Player.BotPlayer botPlayer = new Player.BotPlayer(Cell.WHITE);
-                    Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.board, 'B', 'W', '_'));
-                    int r = move.row + 1;
-                    int c = move.col + 1;
-                    System.out.println("r and c" + r + " " + c);
-                    MakeMoveRequest makeMoveRequest = new MakeMoveRequest(r, c);
-                    client.sendRequest(makeMoveRequest);
-                    break;
-                }
+                    Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.boardStringWON, 'B', 'W', '-'));
 
+                    MakeMoveRequest makeMoveRequest = new MakeMoveRequest(move.row + 1, move.col + 1);
+                    client.sendRequest(makeMoveRequest);
+                } else {
+                    Player.BotPlayer botPlayer = new Player.BotPlayer(Cell.WHITE);
+                    Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.boardStringWON, 'B', 'W', '-'));
+
+                    MakeMoveRequest makeMoveRequest = new MakeMoveRequest(move.row + 1, move.col + 1);
+                    client.sendRequest(makeMoveRequest);
+                }
             }
             case "GAMEOVER" -> {
                 GameoverResponse gameoverResponse = client.getResponse(GameoverResponse.class, input);
                 System.out.println("Game over response " + gameoverResponse.message);
-                this.socket.close();
             }
             case "MAKEMOVE" -> {
                 MakeMoveResponse makeMoveResponse = client.getResponse(MakeMoveResponse.class, input);

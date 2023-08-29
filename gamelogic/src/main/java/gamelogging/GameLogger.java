@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Класс Logging дает возможность записывть ход игры.
@@ -48,6 +49,28 @@ public class GameLogger {
         }
     }
 
+    public static void logMove(final Board board, final int row, final int col, UUID uuid, String color,
+                               final FileWriter writeForHuman, final FileWriter writerForBot) {
+        try {
+            String textForHuman;
+            String textForSystem = "";
+            textForHuman = constructStringForLogMove(color, uuid, row + 1, col + 1);
+            for (int i = 0; i < board.getSize(); i++) {
+                for (int j = 0; j < board.getSize(); j++) {
+                    textForHuman += board.get(i, j).toString() + " ";
+                }
+                textForHuman += "\n";
+            }
+            writerForBot.write(textForSystem);
+            writeForHuman.write(textForHuman);
+            writerForBot.flush();
+            writeForHuman.flush();
+        } catch (IOException ex) {
+            Logger logger = LogManager.getLogger(GameLogger.class);
+            logger.log(Level.ERROR, "Ошибка в логировании хода.");
+        }
+    }
+
     /**
      * Метод constructStringForLogMove создает строку для записи хода игрока
      *
@@ -64,6 +87,16 @@ public class GameLogger {
             line = String.format("PlayerId: %d BLACK placed his piece on %d %d and spent on it %d%n", playerId, row, col, timeOnMove);
         } else {
             line = String.format("PlayerId: %d WHITE placed his piece on %d %d and spent on it %d%n", playerId, row, col, timeOnMove);
+        }
+        return line;
+    }
+
+    public static String constructStringForLogMove(String color, final UUID playerId, final int row, final int col) {
+        final String line;
+        if (color.equals("BLACK")) {
+            line = String.format("PlayerId: %s BLACK placed his piece on %d %d%n", playerId.toString(), row, col);
+        } else {
+            line = String.format("PlayerId: %s WHITE placed his piece on %d %d%n", playerId.toString(), row, col);
         }
         return line;
     }

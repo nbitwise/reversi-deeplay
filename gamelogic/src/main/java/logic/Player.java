@@ -115,7 +115,6 @@ public abstract class Player {
         @Override
         public Move makeMove(Board board) {
             List<Move> availableMoves = board.getAllAvailableMoves(playerCell);
-            System.out.println(availableMoves);
             Move move = availableMoves.get(random.nextInt(availableMoves.size()));
             board.placePiece(move.row, move.col, playerCell);
             return move;

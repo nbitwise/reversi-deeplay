@@ -13,10 +13,12 @@ public class WhereIcanGoResponse implements Response {
     public String availableMoves;
     public String board;
     public String color;
+    public String boardStringWON;
 
-    public WhereIcanGoResponse(String availableMoves, String board, String color) {
+    public WhereIcanGoResponse(String availableMoves, String board, String boardStringWON,  String color) {
         this.availableMoves = availableMoves;
         this.color = color;
         this.board = board;
+        this.boardStringWON = boardStringWON;
     }
 }
