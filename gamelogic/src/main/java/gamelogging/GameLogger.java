@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.UUID;
 
 /**
@@ -21,18 +23,17 @@ public class GameLogger {
      * @param row           строка.
      * @param col           колонка.
      * @param player        игркок.
-     * @param timeOnMove    Время потравченное игроком на ход
      * @param writeForHuman FileWriter файла человекочитаемых записей
      * @param writerForBot  FileWriter фалйа для логов
      */
 
 
     public static void logMove(final Board board, final int row, final int col, Player player,
-                               long timeOnMove, final FileWriter writeForHuman, final FileWriter writerForBot) {
+                                final FileWriter writeForHuman, final FileWriter writerForBot) {
         try {
             String textForHuman;
             String textForSystem = "";
-            textForHuman = constructStringForLogMove(player, player.playerId, row + 1, col + 1, timeOnMove);
+            textForHuman = constructStringForLogMove(player, player.playerId, row + 1, col + 1);
             for (int i = 0; i < board.getSize(); i++) {
                 for (int j = 0; j < board.getSize(); j++) {
                     textForHuman += board.get(i, j).toString() + " ";
@@ -50,8 +51,9 @@ public class GameLogger {
     }
 
     public static void logMove(final Board board, final int row, final int col, UUID uuid, String color,
-                               final FileWriter writeForHuman, final FileWriter writerForBot) {
-        try {
+                               final String fileForHuman, final String fileForSystem) {
+        try (FileWriter writeForHuman = new FileWriter(fileForHuman, true);
+             FileWriter writerForBot = new FileWriter(fileForSystem, true)) {
             String textForHuman;
             String textForSystem = "";
             textForHuman = constructStringForLogMove(color, uuid, row + 1, col + 1);
@@ -78,15 +80,14 @@ public class GameLogger {
      * @param playerId   id игрока.
      * @param row        строка игры.
      * @param col        колонка.
-     * @param timeOnMove время на ход.
+
      */
-    public static String constructStringForLogMove(final Player player, final int playerId, final int row, final int col,
-                                                   final long timeOnMove) {
+    public static String constructStringForLogMove(final Player player, final int playerId, final int row, final int col) {
         final String line;
         if (player.playerCell.equals(Cell.BLACK)) {
-            line = String.format("PlayerId: %d BLACK placed his piece on %d %d and spent on it %d%n", playerId, row, col, timeOnMove);
+            line = String.format("PlayerId: %d BLACK placed his piece on %d %d%n", playerId, row, col);
         } else {
-            line = String.format("PlayerId: %d WHITE placed his piece on %d %d and spent on it %d%n", playerId, row, col, timeOnMove);
+            line = String.format("PlayerId: %d WHITE placed his piece on %d %d%n", playerId, row, col);
         }
         return line;
     }
@@ -106,13 +107,14 @@ public class GameLogger {
      *
      * @param gameId id игры.
      */
-    public static void logStart(final int gameId, final FileWriter writeForHuman, final FileWriter writeForSystem) {
-        try {
+    public static void logStart(final int gameId, final String fileForHuman, final String fileForSystem) {
+        try (FileWriter writeForHuman = new FileWriter(fileForHuman, true);
+             FileWriter writerForBot = new FileWriter(fileForSystem, true)) {
             final String text = "Game id " + gameId + " \n";
             writeForHuman.write(text);
-            writeForSystem.write(text);
+            writerForBot.write(text);
             writeForHuman.flush();
-            writeForSystem.flush();
+            writerForBot.flush();
         } catch (IOException ex) {
             Logger logger = LogManager.getLogger(GameLogger.class);
             logger.log(Level.ERROR, "ошибка в начале логирования, gameID: " + gameId);
@@ -124,10 +126,11 @@ public class GameLogger {
      *
      * @param board         доска.
      * @param writeForHuman FileWriter файла человекочитаемых записей
-     * @param writeForBot   FileWriter фалйа для логов
+     * @param writerForBot   FileWriter фалйа для логов
      */
-    public static void logEnd(final Board board, final FileWriter writeForHuman, final FileWriter writeForBot) {
-        try {
+    public static void logEnd(final Board board, final String fileForHuman, final String fileForSystem) {
+        try (FileWriter writeForHuman = new FileWriter(fileForHuman, true);
+             FileWriter writerForBot = new FileWriter(fileForSystem, true)) {
             final int blackCount = board.getQuantityOfBlack();
             final int whiteCount = board.getQuantityOfWhite();
             String textForHuman = String.format("Number of Black pieces: %d%nNumber of white pieces: %d.%nWinner: ", blackCount, whiteCount);
@@ -142,9 +145,9 @@ public class GameLogger {
                 textForHuman += "It's tie\n";
                 textForBot = "T\n";
             }
-            writeForBot.write(textForBot);
+            writerForBot.write(textForBot);
             writeForHuman.write(textForHuman);
-            writeForBot.flush();
+            writerForBot.flush();
             writeForHuman.flush();
         } catch (IOException ex) {
             Logger logger = LogManager.getLogger(GameLogger.class);
