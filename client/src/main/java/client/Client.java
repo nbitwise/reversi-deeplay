@@ -113,11 +113,11 @@ class Client {
             logger.log(Level.ERROR, "Cannot read from file.properties");
             throw e;
         }
-
+        Client client = new Client(host, port);
         try {
             switch (player) {
                 case "bot" -> {
-                    Client client = new Client("localhost", 6070);
+
                     System.out.println("enter bot name");
                     Scanner scanner = new Scanner(System.in);
                     String botName = scanner.nextLine();
@@ -149,8 +149,6 @@ class Client {
                     client.close();
                 }
                 case "human" -> {
-                    Client client = new Client(host, port);
-
                     client.getMessageHuman();
                     client.sendMessage();
 

@@ -32,14 +32,15 @@ public class Game {
                           final String sessionPlayerFile, final String sessionSystemFile) {
         try (FileWriter writeForHuman = new FileWriter(sessionPlayerFile, true);
              FileWriter writerForBot = new FileWriter(sessionSystemFile, true)) {
-            GameLogger.logStart(gameId, writeForHuman, writerForBot);
+            GameLogger.logStart(gameId, sessionPlayerFile, sessionSystemFile);
             int moveNumber = 1;
             while (!board.getAllAvailableMoves(black.playerCell).isEmpty() || !board.getAllAvailableMoves(white.playerCell).isEmpty()) {
                 Board copyBoard = board.getBoardCopy();
                 moveNumber = makeMoveOnBoard(board, black, moveNumber, copyBoard, writeForHuman, writerForBot);
+                copyBoard = board.getBoardCopy();
                 moveNumber = makeMoveOnBoard(board, white, moveNumber, copyBoard, writeForHuman, writerForBot);
             }
-            GameLogger.logEnd(board, writeForHuman, writerForBot);
+            GameLogger.logEnd(board, sessionPlayerFile, sessionSystemFile);
             displayResult(board);
         } catch (IOException ex) {
             logger.log(Level.ERROR, "Ошибка в работе с файлами в методе startGame.");
@@ -72,7 +73,7 @@ public class Game {
         if (!board.getAllAvailableMoves(player.playerCell).isEmpty()) {
             final Move blackMove = player.makeMove(copyBoard);
             board.placePiece(blackMove.row, blackMove.col, player.playerCell);
-            GameLogger.logMove(board, blackMove.row, blackMove.col, player, blackMove.getTimeOnMove(), writeForHuman, writerForBot);
+            GameLogger.logMove(board, blackMove.row, blackMove.col, player, writeForHuman, writerForBot);
             UI.displayMove(moveNumber, board, player, blackMove);
             moveNumber++;
         }

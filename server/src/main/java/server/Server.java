@@ -201,15 +201,8 @@ class Server {
                 String availableMovesString = availableMoves.toString();
                 String boardString = Board.displayBoardOnClient(room.board);
                 String boardStringWON = Board.displayBoardOnClientWithoutNumbers(room.board);
-                try (FileWriter writeForHuman = new FileWriter("fileForHuman", true);
-                     FileWriter writerForBot = new FileWriter("systemFile", true)) {
-                    final String nonStableId = new SimpleDateFormat("MMddHHmmss").format(Calendar.getInstance().getTime());
-                    GameLogger.logStart(Integer.parseInt(nonStableId), writeForHuman, writerForBot);
-                } catch (IOException e) {
-                    //log
-                }
-
-
+                final String nonStableId = new SimpleDateFormat("MMddHHmmss").format(Calendar.getInstance().getTime());
+                GameLogger.logStart(Integer.parseInt(nonStableId), "fileForHuman", "systemFile");
                 if (uuid == room.getBlackPlayerUUID()) {
                     blackPlayer.sendReply(new StartGameResponse("success", "game started"));
                     whitePlayer.sendReply(new StartGameResponse("success", "game started"));
@@ -245,7 +238,6 @@ class Server {
             }));
 
             commands.add(Command.newCommand("MAKEMOVE", (jsonRequest, uuid) -> {
-
                 int row = jsonRequest.get("row").getAsInt() - 1;
                 int col = jsonRequest.get("col").getAsInt() - 1;
                 Room room = new Room();
@@ -255,18 +247,15 @@ class Server {
                         break;
                     }
                 }
-
                 UUID opponent;
 
                 if (uuid == room.getBlackPlayerUUID()) {
                     if (room.game.nextTurnOfPlayerColor.equals(Cell.WHITE)) {
                         return new MakeMoveResponse("fail", "It's not your turn");
                     }
-
-
                     opponent = room.getOpponentUUID(uuid);
-                    ClientProcessor thisPlayer = Server.clients.get(opponent);
-                    List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.BLACK);
+                    final ClientProcessor thisPlayer = Server.clients.get(opponent);
+                    final List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.BLACK);
 
                     if (!availableMoves.contains(new Move(row, col))) {
                         return new MakeMoveResponse("fail", "Wrong move");
@@ -274,71 +263,60 @@ class Server {
 
                     room.board.placePiece(row, col, Cell.BLACK);
 
-                    try (FileWriter writeForHuman = new FileWriter("fileForHuman", true);
-                         FileWriter writerForBot = new FileWriter("systemFile", true)) {
 
-                        GameLogger.logMove(room.board, row, col, uuid, "BLACK", writeForHuman, writerForBot);
-                    } catch (IOException e) {
-                        //log
+                    GameLogger.logMove(room.board, row, col, uuid, "BLACK", "fileForHuman", "systemFile");
+
+                    final List<Move> opponentAvailableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
+                    final String availableMovesString = opponentAvailableMoves.toString();
+                    final String boardString = Board.displayBoardOnClient(room.board);
+                    final String boardStringWON = Board.displayBoardOnClientWithoutNumbers(room.board);
+
+                    if (room.board.getAllAvailableMoves(Cell.BLACK).isEmpty() && room.board.getAllAvailableMoves(Cell.WHITE).isEmpty()) {
+                        final String gameOverMsg = displayResultOnClient(room.board);
+                        Server.clients.get(room.getOpponentUUID(uuid)).sendReply(new GameoverResponse("success", gameOverMsg));
+                        GameLogger.logEnd(room.board, "fileForHuman", "systemFile");
+                        return new GameoverResponse("success", gameOverMsg);
                     }
-                    List<Move> opponentAvailableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
-                    String availableMovesString = opponentAvailableMoves.toString();
-                    String boardString = Board.displayBoardOnClient(room.board);
-                    String boardStringWON = Board.displayBoardOnClientWithoutNumbers(room.board);
-
-                    thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON, "white"));
-
                     if (!opponentAvailableMoves.isEmpty()) {
                         room.game.nextTurnOfPlayerColor = Cell.WHITE;
+                        thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON, "white"));
+                    } else {
+                        return new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON, "black");
                     }
+
                 } else if (uuid == room.getWhitePlayerUUID()) {
                     if (room.game.nextTurnOfPlayerColor.equals(Cell.BLACK)) {
                         return new MakeMoveResponse("fail", "It's not your turn");
                     }
 
                     opponent = room.getOpponentUUID(uuid);
-                    ClientProcessor thisPlayer = Server.clients.get(opponent);
-                    List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
+                    final ClientProcessor thisPlayer = Server.clients.get(opponent);
+                    final List<Move> availableMoves = room.board.getAllAvailableMoves(Cell.WHITE);
 
                     if (!availableMoves.contains(new Move(row, col))) {
                         return new MakeMoveResponse("fail", "Wrong move");
                     }
-
                     room.board.placePiece(row, col, Cell.WHITE);
+                    GameLogger.logMove(room.board, row, col, uuid, "WHITE", "fileForHuman", "systemFile");
 
-                    try (FileWriter writeForHuman = new FileWriter("fileForHuman", true);
-                         FileWriter writerForBot = new FileWriter("systemFile", true)) {
-                        final String nonStableId = new SimpleDateFormat("MMddHHmmss").format(Calendar.getInstance().getTime());
-                        GameLogger.logMove(room.board, row, col, uuid, "WHITE", writeForHuman, writerForBot);
-                    } catch (IOException e) {
-                        //log
+                    final List<Move> opponentAvailableMoves = room.board.getAllAvailableMoves(Cell.BLACK);
+                    final String availableMovesString = opponentAvailableMoves.toString();
+                    final String boardString = Board.displayBoardOnClient(room.board);
+                    final String boardStringWON = Board.displayBoardOnClientWithoutNumbers(room.board);
+
+                    if (room.board.getAllAvailableMoves(Cell.BLACK).isEmpty() && room.board.getAllAvailableMoves(Cell.WHITE).isEmpty()) {
+                        final String gameOverMsg = displayResultOnClient(room.board);
+                        Server.clients.get(room.getOpponentUUID(uuid)).sendReply(new GameoverResponse("success", gameOverMsg));
+                        GameLogger.logEnd(room.board, "fileForHuman", "systemFile");
+                        return new GameoverResponse("success", gameOverMsg);
                     }
-
-                    List<Move> opponentAvailableMoves = room.board.getAllAvailableMoves(Cell.BLACK);
-                    String availableMovesString = opponentAvailableMoves.toString();
-                    String boardString = Board.displayBoardOnClient(room.board);
-                    String boardStringWON = Board.displayBoardOnClientWithoutNumbers(room.board);
-
-                    thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON, "black"));
 
                     if (!opponentAvailableMoves.isEmpty()) {
                         room.game.nextTurnOfPlayerColor = Cell.BLACK;
+                        thisPlayer.sendReply(new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON, "black"));
+                    } else {
+                        return new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON, "white");
                     }
-                }
-                if (room.board.getAllAvailableMoves(Cell.BLACK).isEmpty() && room.board.getAllAvailableMoves(Cell.WHITE).isEmpty()) {
-                    String gameOverMsg = displayResultOnClient(room.board);
-                    Server.clients.get(room.getOpponentUUID(uuid)).sendReply(new GameoverResponse("success", gameOverMsg));
-
-                    try (FileWriter writeForHuman = new FileWriter("fileForHuman", true);
-                         FileWriter writerForBot = new FileWriter("systemFile", true)) {
-                        final String nonStableId = new SimpleDateFormat("MMddHHmmss").format(Calendar.getInstance().getTime());
-                        GameLogger.logEnd(room.board, writeForHuman, writerForBot);
-                    } catch (IOException e) {
-                        //log
-                    }
-
-                    return new GameoverResponse("success", gameOverMsg);
-
                 }
                 return new MakeMoveResponse("success", "You did your turn.");
             }));
