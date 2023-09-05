@@ -31,7 +31,13 @@ class Client {
     private final Gson gson;
     private int roomId = 0;
 
+    private static int countGame = 0;
+
     private static final Logger logger = LogManager.getLogger(Client.class);
+
+    static int winnerW = 0;
+    static int winnerB = 0;
+    static int winnerT = 0;
 
 
     private Client(String host, int port) throws IOException {
@@ -128,6 +134,7 @@ class Client {
                     AuthorizationRequest authorizationRequest = new AuthorizationRequest(botName);
                     client.sendRequest(authorizationRequest);
 
+
                     ViewCreatedRoomsRequest viewCreatedRoomsRequest = new ViewCreatedRoomsRequest(1);
                     client.sendRequest(viewCreatedRoomsRequest);
 
@@ -135,14 +142,21 @@ class Client {
                         client.bufferedReader.readLine();
                         client.bufferedReader.readLine();
                         String line = client.bufferedReader.readLine();
+
                         if (line != null) {
                             client.viewOnInComeMessageBot(client, line);
+                            System.out.println(line);
+                            if (line.contains("GAMEOVER")) {
+                                System.out.println("soderzhit gameover");
+                                client.sendRequest(viewCreatedRoomsRequest);
+                            }
                         }
                     } catch (IOException e) {
                         logger.log(Level.ERROR, "Обрыв канала чтения");
                         e.printStackTrace();
                     }
 
+                    //       }
 
                     client.getMessageBot();
                     client.sendMessage();
@@ -474,7 +488,23 @@ class Client {
     private void commandGameOverBot(Client client, String input) throws IOException {
         GameoverResponse gameoverResponse = client.getResponse(GameoverResponse.class, input);
         System.out.println("Game over response " + gameoverResponse.message);
+        countGame++;
+        System.out.println("game "+ (countGame-1)  +" end");
+        if (gameoverResponse.roomCreator && countGame < gameoverResponse.quantityOfGame) {
+            StartGameRequest startGameRequest = new StartGameRequest(1);//ПОМЕНЯТЬ ХАРДКОД
+            client.sendRequest(startGameRequest);
+        }
+            if (gameoverResponse.message.contains("Winner: Black")) {
+                winnerB++;
+            }
+            if (gameoverResponse.message.contains("Winner: White")) {
+                winnerW++;
+            }
+            if (countGame == gameoverResponse.quantityOfGame) {
+                System.out.println("B: " + winnerB + "  W: " + winnerW );
+            }
     }
+
 
     private void commandLeaveRoomBot(Client client, String input) throws IOException {
         LeaveRoomResponse leaveRoomResponse = client.getResponse(LeaveRoomResponse.class, input);
