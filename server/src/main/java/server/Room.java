@@ -112,5 +112,13 @@ public class Room {
 
     private static final AtomicInteger roomCounter = new AtomicInteger(0);
 
+    public void changeColor() {
+        String whitePlayerSave = whitePlayer;
+        UUID whitePlayerUUIDSave = whitePlayerUUID;
+        whitePlayer = blackPlayer;
+        blackPlayer = whitePlayerSave;
+        whitePlayerUUID = blackPlayerUUID;
+        blackPlayerUUID = whitePlayerUUIDSave;
+    }
 
 }
