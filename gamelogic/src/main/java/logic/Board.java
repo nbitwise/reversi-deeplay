@@ -17,6 +17,14 @@ public class Board {
     private final Logger logger = LogManager.getLogger(Board.class);
 
 
+    public void setQuantityOfWhite(int quantityOfWhite) {
+        this.quantityOfWhite = quantityOfWhite;
+    }
+
+    public void setQuantityOfBlack(int quantityOfBlack) {
+        this.quantityOfBlack = quantityOfBlack;
+    }
+
     /**
      * Создает доску и четыре фишки по центру карты.
      */
@@ -46,18 +54,21 @@ public class Board {
     public void set(int row, int col, Cell cell) {
         checkArgument(row, col);
 
-        if (board[row][col] == Cell.BLACK) {
-            quantityOfWhite++;
-            quantityOfBlack--;
+        if (!board[row][col].equals(cell)) {
+            if (board[row][col] == Cell.BLACK) {
+                quantityOfWhite++;
+                quantityOfBlack--;
+            }
+            if (board[row][col] == Cell.WHITE) {
+                quantityOfWhite--;
+                quantityOfBlack++;
+            }
+            if (board[row][col] == Cell.EMPTY) {
+                if (cell == Cell.WHITE) quantityOfWhite++;
+                if (cell == Cell.BLACK) quantityOfBlack++;
+            }
         }
-        if (board[row][col] == Cell.WHITE) {
-            quantityOfWhite--;
-            quantityOfBlack++;
-        }
-        if (board[row][col] == Cell.EMPTY) {
-            if (cell == Cell.WHITE) quantityOfWhite++;
-            if (cell == Cell.BLACK) quantityOfBlack++;
-        }
+
         board[row][col] = cell;
 
     }
@@ -184,6 +195,8 @@ public class Board {
         for (int i = 0; i < BOARD_SIZE; i++) {
             System.arraycopy(this.board[i], 0, copy.board[i], 0, BOARD_SIZE);
         }
+        copy.setQuantityOfBlack(this.getQuantityOfBlack());
+        copy.setQuantityOfWhite(this.getQuantityOfWhite());
         return copy;
     }
 
@@ -303,7 +316,13 @@ public class Board {
         }
         return boardInSrting;
     }
+
+    public Cell[][] getBoard() {
+        return board;
+    }
 }
+
+
 
 
 

@@ -37,6 +37,7 @@ javafx {
 dependencies {
 
     implementation project(path: ':UI')
+    implementation project(path: ':botFarm')
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")

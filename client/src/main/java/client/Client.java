@@ -6,15 +6,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import logic.Cell;
 import logic.Move;
-import logic.Player;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import io.deeplay.Application;
-import parsing.BoardParser;
 
 
 import javax.swing.*;
@@ -28,24 +25,45 @@ class Client {
     private final Socket socket;
     private final BufferedReader bufferedReader;
     private final BufferedWriter bufferedWriter;
+
+    private final Socket socketBot;
+    private final BufferedReader bufferedReaderBot;
+    private final BufferedWriter bufferedWriterBot;
     private final Gson gson;
     private int roomId = 0;
 
+    private static int countGame = 0;
+
     private static final Logger logger = LogManager.getLogger(Client.class);
+
+    static int winnerW = 0;
+    static int winnerB = 0;
+    static int winnerT = 0;
 
 
     private Client(String host, int port) throws IOException {
-        socket = new Socket(host, port);
+        socket = new Socket(host, 6070);
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+        socketBot = new Socket(host, 6071);
+        bufferedReaderBot = new BufferedReader(new InputStreamReader(socketBot.getInputStream()));
+        bufferedWriterBot = new BufferedWriter(new OutputStreamWriter(socketBot.getOutputStream()));
         gson = new Gson();
     }
 
-    private void sendRequest(Request request) throws IOException {
+    private void sendRequestGameServer(Request request) throws IOException {
         String jsonRequest = gson.toJson(request);
         bufferedWriter.write(jsonRequest);
         bufferedWriter.newLine();
         bufferedWriter.flush();
+    }
+
+    private void sendRequestBotServer(Request request) throws IOException {
+        String jsonRequest = gson.toJson(request);
+        bufferedWriterBot.write(jsonRequest);
+        bufferedWriterBot.newLine();
+        bufferedWriterBot.flush();
     }
 
     private void getMessageHuman() {
@@ -64,7 +82,7 @@ class Client {
         }).start();
     }
 
-    private void getMessageBot() {
+    private void getMessageBotGameServer() {
         new Thread(() -> {
             while (socket.isConnected()) {
                 try {
@@ -80,7 +98,23 @@ class Client {
         }).start();
     }
 
-    private void sendMessage() throws IOException {
+    private void getMessageBotBotServer() {
+        new Thread(() -> {
+            while (socketBot.isConnected()) {
+                try {
+                    String line = bufferedReaderBot.readLine();
+                    if (line != null) {
+                        viewOnInComeMessageBot(this, line);
+                    }
+                } catch (IOException e) {
+                    logger.log(Level.ERROR, "Обрыв канала чтения");
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void sendMessageGameServer() throws IOException {
         Scanner scanner = new Scanner(System.in);
         while (socket.isConnected()) {
             String msg = scanner.nextLine();
@@ -88,12 +122,21 @@ class Client {
         }
     }
 
-    private <T extends Response> T getResponse(Class<T> responseType, String jsonResponse) throws IOException {
+    private void sendMessageBotServer() throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        while (socketBot.isConnected()) {
+            String msg = scanner.nextLine();
+            createJsonAndSendCommand(this, msg);
+        }
+    }
+
+    private <T extends Response> T getResponse(Class<T> responseType, String jsonResponse) {
         return gson.fromJson(jsonResponse, responseType);
     }
 
     public void close() throws IOException {
         socket.close();
+        socketBot.close();
     }
 
 
@@ -101,6 +144,7 @@ class Client {
         String host;
         int port;
         String player;
+        String botPlayerName;
         Properties appProps = new Properties();
         File file = new File("client/file.properties");
 
@@ -109,6 +153,8 @@ class Client {
             host = appProps.getProperty("host");
             port = Integer.parseInt(appProps.getProperty("port"));
             player = appProps.getProperty("player");
+            botPlayerName = appProps.getProperty("botName");
+
         } catch (IOException e) {
             logger.log(Level.ERROR, "Cannot read from file.properties");
             throw e;
@@ -123,34 +169,47 @@ class Client {
                     String botName = scanner.nextLine();
 
                     RegistrationRequest registrationRequest = new RegistrationRequest(botName);
-                    client.sendRequest(registrationRequest);
+                    client.sendRequestGameServer(registrationRequest);
 
                     AuthorizationRequest authorizationRequest = new AuthorizationRequest(botName);
-                    client.sendRequest(authorizationRequest);
+                    client.sendRequestGameServer(authorizationRequest);
 
                     ViewCreatedRoomsRequest viewCreatedRoomsRequest = new ViewCreatedRoomsRequest(1);
-                    client.sendRequest(viewCreatedRoomsRequest);
+                    client.sendRequestGameServer(viewCreatedRoomsRequest);
+
+                    RegistrationBotFarmRequest registrationRequestBot = new RegistrationBotFarmRequest(botPlayerName);
+                    client.sendRequestBotServer(registrationRequestBot);
 
                     try {
                         client.bufferedReader.readLine();
                         client.bufferedReader.readLine();
                         String line = client.bufferedReader.readLine();
+                        String line2 = client.bufferedReaderBot.readLine();
+                        System.out.println(line2);
+
                         if (line != null) {
                             client.viewOnInComeMessageBot(client, line);
+                            System.out.println(line);
+                            if (line.contains("GAMEOVER")) {
+                                System.out.println("soderzhit gameover");
+                                client.sendRequestGameServer(viewCreatedRoomsRequest);
+                            }
                         }
                     } catch (IOException e) {
                         logger.log(Level.ERROR, "Обрыв канала чтения");
                         e.printStackTrace();
                     }
 
+                    //       }
 
-                    client.getMessageBot();
-                    client.sendMessage();
+                    client.getMessageBotGameServer();
+                    client.getMessageBotBotServer();
+                    client.sendMessageGameServer();
                     client.close();
                 }
                 case "human" -> {
                     client.getMessageHuman();
-                    client.sendMessage();
+                    client.sendMessageGameServer();
 
                     client.close();
 
@@ -168,7 +227,7 @@ class Client {
         String commandName = request.get("command").getAsString().toUpperCase();
 
         switch (commandName) {
-            case "REGISTRATION" -> viewRegistration(client, input);
+            case "REGISTRATION" -> viewRegistration(client, input); //А ПОЧЕМУ ЕНУМ НЕ СТАВИТСЯ
 
             case "AUTHORIZATION" -> viewAuthorization(client, input);
 
@@ -185,6 +244,8 @@ class Client {
             case "MAKEMOVE" -> viewMakeMove(client, input);
 
             case "STARTGAME" -> viewStartGame(client, input);
+
+            case "REGISTRATION_BOT_FARM" -> viewRegistrationBotFarm(client, input);
 
             case "EXIT" -> viewExit(client);
 
@@ -232,48 +293,50 @@ class Client {
 
         switch (commandName) {
 
-            case "REGISTRATION" -> commandRegistrationBot(client, input);
+            case "REGISTRATION" -> viewRegistrationBot(client, input);
 
-            case "AUTHORIZATION" -> commandAuthorizationBot(client, input);
+            case "AUTHORIZATION" -> viewAuthorizationBot(client, input);
 
-            case "VIEWROOMS" -> commandViewRoomsBot(client, input);
+            case "VIEWROOMS" -> viewViewRoomsBot(client, input);
 
-            case "CREATEROOM" -> commandCreateRoomBot(client, input);
+            case "CREATEROOM" -> viewCreateRoomBot(client, input);
 
-            case "CONNECTTOROOM" -> commandConnectToRoomBot(client, input);
+            case "CONNECTTOROOM" -> viewConnectToRoomBot(client, input);
 
-            case "WHEREICANGORESPONSE" -> commandWhereICanGoGameBot(client, input);
+            case "WHEREICANGORESPONSE" -> viewWhereICanGoGameBot(client, input);
 
-            case "LEAVEROOM" -> commandLeaveRoomBot(client, input);
+            case "SEND_MOVE_TO_SERVER_BOT" -> viewSendMoveToGameServer(client, input);
 
-            case "GAMEOVER" -> commandGameOverBot(client, input);
+            case "LEAVEROOM" -> viewLeaveRoomBot(client, input);
 
-            case "MAKEMOVE" -> commandMakeMoveBot(client, input);
+            case "GAMEOVER" -> viewGameOverBot(client, input);
 
-            case "STARTGAME" -> commandStartGameBot(client, input);
+            case "MAKEMOVE" -> viewMakeMoveBot(client, input);
 
-            case "EXIT" -> commandExitBot(client);
+            case "STARTGAME" -> viewStartGameBot(client, input);
 
-            case "SURRENDER" -> commandSurrenderBot(client, input);
+            case "EXIT" -> viewExitBot(client);
 
-            case "GUI" -> commandGuiBot(client, input);
+            case "SURRENDER" -> viewSurrenderBot(client, input);
 
-            default -> commandDefaultBot(commandName);
+            case "GUI" -> viewGuiBot(client, input);
+
+            default -> viewDefaultBot(commandName);
         }
     }
 
-    private void viewRegistration(Client client, String input) throws IOException {
+    private void viewRegistration(Client client, String input) {
         RegistrationResponse registrationResponse = client.getResponse(RegistrationResponse.class, input);
         System.out.println("Registration response: " + registrationResponse.message);
 
     }
 
-    private void viewAuthorization(Client client, String input) throws IOException {
+    private void viewAuthorization(Client client, String input) {
         AuthorizationResponse authorizationResponse = client.getResponse(AuthorizationResponse.class, input);
         System.out.println("Authorization response: " + authorizationResponse.message);
     }
 
-    private void viewCreateRoom(Client client, String input) throws IOException {
+    private void viewCreateRoom(Client client, String input) {
         CreateRoomResponse createRoomResponse = client.getResponse(CreateRoomResponse.class, input);
         if (createRoomResponse.status.equals("fail")) {
             System.out.println("Create room response: " + createRoomResponse.message);
@@ -283,46 +346,51 @@ class Client {
 
     }
 
-    private void viewConnectToRoom(Client client, String input) throws IOException {
+    private void viewConnectToRoom(Client client, String input) {
         ConnectToRoomResponse connectToRoomResponse = client.getResponse(ConnectToRoomResponse.class, input);
         System.out.println("Connect to room response: " + connectToRoomResponse.message);
     }
 
-    private void viewLeaveRoom(Client client, String input) throws IOException {
+    private void viewLeaveRoom(Client client, String input) {
         LeaveRoomResponse leaveRoomResponse = client.getResponse(LeaveRoomResponse.class, input);
         System.out.println("Leave room response: " + leaveRoomResponse.message);
     }
 
-    private void viewWhereICanGo(Client client, String input) throws IOException {
+    private void viewWhereICanGo(Client client, String input) {
         WhereIcanGoResponse whereIcanGoResponse = client.getResponse(WhereIcanGoResponse.class, input);
         System.out.println(whereIcanGoResponse.board);
         System.out.println("Your available moves " + whereIcanGoResponse.availableMoves);
     }
 
-    private void viewGameOver(Client client, String input) throws IOException {
+    private void viewGameOver(Client client, String input) {
         GameoverResponse gameoverResponse = client.getResponse(GameoverResponse.class, input);
         System.out.println("Game over response " + gameoverResponse.message);
     }
 
-    private void viewMakeMove(Client client, String input) throws IOException {
+    private void viewMakeMove(Client client, String input) {
         MakeMoveResponse makeMoveResponse = client.getResponse(MakeMoveResponse.class, input);
         System.out.println("MakeMove response " + makeMoveResponse.message);
     }
 
-    private void viewStartGame(Client client, String input) throws IOException {
+    private void viewStartGame(Client client, String input) {
         StartGameResponse startGameResponse = client.getResponse(StartGameResponse.class, input);
         System.out.println("StartGame response " + startGameResponse.message);
     }
 
-    private void viewSurrender(Client client, String input) throws IOException {
+    private void viewRegistrationBotFarm(Client client, String input) {
+        StartGameResponse startGameResponse = client.getResponse(StartGameResponse.class, input);
+        System.out.println("Bot prisoedenen " + startGameResponse.message);
+    }
+
+    private void viewSurrender(Client client, String input) {
         SurrenderResponse surrenderResponse = client.getResponse(SurrenderResponse.class, input);
         System.out.println(surrenderResponse.message);
     }
 
-    private void viewGui(Client client, String input) throws IOException {
+    private void viewGui(Client client, String input) {
         GUIResponse guiResponse = client.getResponse(GUIResponse.class, input);
         System.out.println(guiResponse.message);
-        SwingUtilities.invokeLater(() -> Application.startGUIInterface());
+        SwingUtilities.invokeLater(Application::startGUIInterface);
     }
 
     private void viewExit(Client client) throws IOException {
@@ -330,7 +398,7 @@ class Client {
         System.exit(0);
     }
 
-    private void viewDefault(String commandName) throws IOException {
+    private void viewDefault(String commandName) {
         System.out.println("Unknown command: " + commandName);
     }
 
@@ -339,7 +407,7 @@ class Client {
         if (commandParts.length > 1) {
             String nickname = commandParts[1];
             RegistrationRequest registrationRequest = new RegistrationRequest(nickname);
-            client.sendRequest(registrationRequest);
+            client.sendRequestGameServer(registrationRequest);
         } else {
             System.out.println("Usage: register <nickname>");
         }
@@ -349,7 +417,7 @@ class Client {
         if (commandParts.length > 1) {
             String nickname = commandParts[1];
             AuthorizationRequest authorizationRequest = new AuthorizationRequest(nickname);
-            client.sendRequest(authorizationRequest);
+            client.sendRequestGameServer(authorizationRequest);
         } else {
             System.out.println("Usage: login <nickname>");
         }
@@ -360,7 +428,7 @@ class Client {
             System.out.println("You can't create another room because you are already in room.");
         } else {
             CreateRoomRequest createRoomRequest = new CreateRoomRequest();
-            client.sendRequest(createRoomRequest);
+            client.sendRequestGameServer(createRoomRequest);
         }
     }
 
@@ -371,7 +439,7 @@ class Client {
         if (commandParts.length > 1) {
             int roomId = Integer.parseInt(commandParts[1]);
             ConnectToRoomRequest connectToRoomRequest = new ConnectToRoomRequest(roomId);
-            client.sendRequest(connectToRoomRequest);
+            client.sendRequestGameServer(connectToRoomRequest);
             this.roomId = roomId;
         } else {
             System.out.println("Usage: connect to room <room_id>.");
@@ -383,7 +451,7 @@ class Client {
             System.out.println("You can't leave room because you are not in room.");
         } else {
             LeaveRoomRequest leaveRoomRequest = new LeaveRoomRequest();
-            client.sendRequest(leaveRoomRequest);
+            client.sendRequestGameServer(leaveRoomRequest);
             roomId = 0;
         }
     }
@@ -393,7 +461,7 @@ class Client {
             System.out.println("You can't start game because you are not in room.");
         } else {
             StartGameRequest startGameRequest = new StartGameRequest(roomId);
-            client.sendRequest(startGameRequest);
+            client.sendRequestGameServer(startGameRequest);
         }
     }
 
@@ -402,7 +470,7 @@ class Client {
             int row = Integer.parseInt(commandParts[1]);
             int col = Integer.parseInt(commandParts[2]);
             MakeMoveRequest makeMoveRequest = new MakeMoveRequest(row, col);
-            client.sendRequest(makeMoveRequest);
+            client.sendRequestGameServer(makeMoveRequest);
         } else {
             System.out.println("wrong coordinates");
         }
@@ -410,12 +478,12 @@ class Client {
 
     private void commandSurrender(Client client) throws IOException {
         SurrenderRequest surrenderRequest = new SurrenderRequest();
-        client.sendRequest(surrenderRequest);
+        client.sendRequestGameServer(surrenderRequest);
     }
 
     private void commandGui(Client client) throws IOException {
         GUIRequest guiRequest = new GUIRequest();
-        client.sendRequest(guiRequest);
+        client.sendRequestGameServer(guiRequest);
     }
 
     private void commandExit(Client client) throws IOException {
@@ -428,31 +496,31 @@ class Client {
     }
 
 
-    private void commandRegistrationBot(Client client, String input) throws IOException {
+    private void viewRegistrationBot(Client client, String input) {
         RegistrationResponse registrationResponse = client.getResponse(RegistrationResponse.class, input);
         System.out.println("Registration response: " + registrationResponse.message);
     }
 
-    private void commandAuthorizationBot(Client client, String input) throws IOException {
+    private void viewAuthorizationBot(Client client, String input) {
         AuthorizationResponse authorizationResponse = client.getResponse(AuthorizationResponse.class, input);
         System.out.println("Authorization response: " + authorizationResponse.message);
     }
 
-    private void commandViewRoomsBot(Client client, String input) throws IOException {
+    private void viewViewRoomsBot(Client client, String input) throws IOException {
         ViewCreatedRoomsResponse viewCreatedRoomsResponse = client.getResponse(ViewCreatedRoomsResponse.class, input);
         if (viewCreatedRoomsResponse.status.equals("fail")) {
             CreateRoomRequest createRoomRequest = new CreateRoomRequest();
-            client.sendRequest(createRoomRequest);
+            client.sendRequestGameServer(createRoomRequest);
 
             System.out.println("Room was created");
         } else {
             ConnectToRoomRequest connectToRoomRequest = new ConnectToRoomRequest(1);
-            client.sendRequest(connectToRoomRequest);
+            client.sendRequestGameServer(connectToRoomRequest);
             System.out.println("Connected to room");
         }
     }
 
-    private void commandCreateRoomBot(Client client, String input) throws IOException {
+    private void viewCreateRoomBot(Client client, String input) {
         CreateRoomResponse createRoomResponse = client.getResponse(CreateRoomResponse.class, input);
         if (createRoomResponse.status.equals("fail")) {
             System.out.println("Create room response: " + createRoomResponse.message);
@@ -461,76 +529,96 @@ class Client {
         System.out.println("Create room response: " + createRoomResponse.message + ", Room ID: " + createRoomResponse.getRoomId());
     }
 
-    private void commandConnectToRoomBot(Client client, String input) throws IOException {
+    private void viewConnectToRoomBot(Client client, String input) throws IOException {
         ConnectToRoomResponse connectToRoomResponse = client.getResponse(ConnectToRoomResponse.class, input);
         if (connectToRoomResponse.message.equals("White player connected")) {
             StartGameRequest startGameRequest = new StartGameRequest(client.roomId);
-            client.sendRequest(startGameRequest);
+            client.sendRequestGameServer(startGameRequest);
             System.out.println("Room was created");
         }
         System.out.println("Connect to room response: " + connectToRoomResponse.message);
     }
 
-    private void commandGameOverBot(Client client, String input) throws IOException {
+    private void viewGameOverBot(Client client, String input) throws IOException {
         GameoverResponse gameoverResponse = client.getResponse(GameoverResponse.class, input);
         System.out.println("Game over response " + gameoverResponse.message);
+        countGame++;
+        System.out.println("game " + (countGame - 1) + " end");
+        if (gameoverResponse.roomCreator && countGame < gameoverResponse.quantityOfGame) {
+            StartGameRequest startGameRequest = new StartGameRequest(1);//ПОМЕНЯТЬ ХАРДКОД
+            client.sendRequestGameServer(startGameRequest);
+        }
+        if (gameoverResponse.message.contains("Winner: Black")) {
+            winnerB++;
+            }
+            if (gameoverResponse.message.contains("Winner: White")) {
+                winnerW++;
+            }
+            if (countGame == gameoverResponse.quantityOfGame) {
+                System.out.println("B: " + winnerB + "  W: " + winnerW );
+            }
     }
 
-    private void commandLeaveRoomBot(Client client, String input) throws IOException {
+
+    private void viewLeaveRoomBot(Client client, String input) {
         LeaveRoomResponse leaveRoomResponse = client.getResponse(LeaveRoomResponse.class, input);
         System.out.println("Leave room response: " + leaveRoomResponse.message);
     }
 
-    private void commandStartGameBot(Client client, String input) throws IOException {
+    private void viewStartGameBot(Client client, String input) {
         StartGameResponse startGameResponse = client.getResponse(StartGameResponse.class, input);
         System.out.println("StartGame response " + startGameResponse.message);
     }
 
-    private void commandWhereICanGoGameBot(Client client, String input) throws IOException {
+    private void viewWhereICanGoGameBot(Client client, String input) throws IOException {
         WhereIcanGoResponse whereIcanGoResponse = client.getResponse(WhereIcanGoResponse.class, input);
+        WhereICanGoBotFarmRequest whereICanGoBotFarmRequest = new WhereICanGoBotFarmRequest(whereIcanGoResponse.boardStringWON);
 
         System.out.println(whereIcanGoResponse.availableMoves);
-        if (whereIcanGoResponse.color.equals("black")) {
-            Player.BotPlayer botPlayer = new Player.BotPlayer(Cell.BLACK);
-            Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.boardStringWON, 'B', 'W', '-'));
 
-            MakeMoveRequest makeMoveRequest = new MakeMoveRequest(move.row + 1, move.col + 1);
-            client.sendRequest(makeMoveRequest);
-        } else {
-            Player.BotPlayer botPlayer = new Player.BotPlayer(Cell.WHITE);
-            Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.boardStringWON, 'B', 'W', '-'));
+        client.sendRequestBotServer(whereICanGoBotFarmRequest);
 
-            MakeMoveRequest makeMoveRequest = new MakeMoveRequest(move.row + 1, move.col + 1);
-            client.sendRequest(makeMoveRequest);
-        }
+        //  move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.boardStringWON, 'B', 'W', '-'));
+        // MakeMoveRequest makeMoveRequest = new MakeMoveRequest(move.row + 1, move.col + 1);
+        //   client.sendRequestGameServer(makeMoveRequest);
+
     }
 
-    private void commandMakeMoveBot(Client client, String input) throws IOException {
+    private void viewSendMoveToGameServer(Client client, String input) throws IOException {
+        JsonObject request = JsonParser.parseString(input).getAsJsonObject();
+        int coordinates = request.get("move").getAsInt();
+
+        Move move = new Move(coordinates / 10, coordinates % 10);
+        MakeMoveRequest makeMoveRequest = new MakeMoveRequest(move.row + 1, move.col + 1);
+        client.sendRequestGameServer(makeMoveRequest);
+    }
+
+    private void viewMakeMoveBot(Client client, String input) throws IOException {
         MakeMoveResponse makeMoveResponse = client.getResponse(MakeMoveResponse.class, input);
         System.out.println(makeMoveResponse.message);
         if (makeMoveResponse.status.equals("fail")) {
             WhereICanGoRequest whereICanGoRequest = new WhereICanGoRequest();
-            client.sendRequest(whereICanGoRequest);
+            client.sendRequestGameServer(whereICanGoRequest);
         }
     }
 
-    private void commandSurrenderBot(Client client, String input) throws IOException {
+    private void viewSurrenderBot(Client client, String input) {
         SurrenderResponse surrenderResponse = client.getResponse(SurrenderResponse.class, input);
         System.out.println(surrenderResponse.message);
     }
 
-    private void commandGuiBot(Client client, String input) throws IOException {
+    private void viewGuiBot(Client client, String input) {
         GUIResponse guiResponse = client.getResponse(GUIResponse.class, input);
         System.out.println(guiResponse.message);
-        SwingUtilities.invokeLater(() -> Application.startGUIInterface());
+        SwingUtilities.invokeLater(Application::startGUIInterface);
     }
 
-    private void commandExitBot(Client client) throws IOException {
+    private void viewExitBot(Client client) throws IOException {
         client.close();
         System.exit(0);
     }
 
-    private void commandDefaultBot(String commandName) {
+    private void viewDefaultBot(String commandName) {
         System.out.println("Unknown command: " + commandName);
     }
 }

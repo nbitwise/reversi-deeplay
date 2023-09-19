@@ -169,13 +169,13 @@ class Server {
                 if (onlineUsers.containsKey(uuid)) {
                     for (Room room : roomList) {
                         if (room.getBlackPlayerUUID().equals(uuid) || room.getWhitePlayerUUID().equals(uuid)) {
-                            roomList.remove(room);
+
                             break;
                         }
                     }
-                    return new GameoverResponse("success", "game is over. You are not in room anymore");
+                    return new GameoverResponse("success", "game is over. You are not in room anymore", 1, true);
                 }
-                return new GameoverResponse("fail", "you are not logged in");
+                return new GameoverResponse("fail", "you are not logged in", 1, true);
             }));
 
             commands.add(Command.newCommand("STARTGAME", (jsonRequest, uuid) -> {
@@ -191,7 +191,7 @@ class Server {
                 UUID blackPlayerUUID = room.getBlackPlayerUUID();
 
                 ClientProcessor blackPlayer = Server.clients.get(blackPlayerUUID);
-
+                room.board = new Board();
                 room.game = new Game();
                 ClientProcessor whitePlayer = Server.clients.get(room.getWhitePlayerUUID());
 
@@ -273,9 +273,10 @@ class Server {
 
                     if (room.board.getAllAvailableMoves(Cell.BLACK).isEmpty() && room.board.getAllAvailableMoves(Cell.WHITE).isEmpty()) {
                         final String gameOverMsg = displayResultOnClient(room.board);
-                        Server.clients.get(room.getOpponentUUID(uuid)).sendReply(new GameoverResponse("success", gameOverMsg));
+                        Server.clients.get(room.getOpponentUUID(uuid)).sendReply(new GameoverResponse("success", gameOverMsg, 1, false));
                         GameLogger.logEnd(room.board, "fileForHuman", "systemFile");
-                        return new GameoverResponse("success", gameOverMsg);
+                        room.changeColor();
+                        return new GameoverResponse("success", gameOverMsg, 1, true);
                     }
                     if (!opponentAvailableMoves.isEmpty()) {
                         room.game.nextTurnOfPlayerColor = Cell.WHITE;
@@ -306,9 +307,10 @@ class Server {
 
                     if (room.board.getAllAvailableMoves(Cell.BLACK).isEmpty() && room.board.getAllAvailableMoves(Cell.WHITE).isEmpty()) {
                         final String gameOverMsg = displayResultOnClient(room.board);
-                        Server.clients.get(room.getOpponentUUID(uuid)).sendReply(new GameoverResponse("success", gameOverMsg));
+                        Server.clients.get(room.getOpponentUUID(uuid)).sendReply(new GameoverResponse("success", gameOverMsg, 1, false));
                         GameLogger.logEnd(room.board, "fileForHuman", "systemFile");
-                        return new GameoverResponse("success", gameOverMsg);
+                        room.changeColor();
+                        return new GameoverResponse("success", gameOverMsg, 1, true);
                     }
 
                     if (!opponentAvailableMoves.isEmpty()) {
