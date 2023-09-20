@@ -2,6 +2,7 @@ package parsing;
 
 import logic.Board;
 import logic.Cell;
+import org.jetbrains.annotations.NotNull;
 
 public class BoardParser {
 
@@ -20,10 +21,13 @@ public class BoardParser {
      *                      "_ _ _ _ _ _ _ _ \n" +
      *                      "_ _ _ _ _ _ _ _ \n" +
      *                      "_ _ _ _ _ _ _ _ \n"
+     * @param black - черная фишка, отображаемая на доске
+     * @param white - белая фишка, отображаемая на доске
+     * @param empty - пустая фишка, отображаемая на доске
      * @return возвращает доску.
      */
-    public static Board parse(final String boardAsString, final char black, final char white, final char empty) {
-        Board board = new Board();
+    public static Board parse(@NotNull final String boardAsString, final char black, final char white, final char empty) {
+        final Board board = new Board();
 
         if (boardAsString.length() < (board.getSize() * 2 + 1) * board.getSize() - 2) {
             throw new IllegalArgumentException();
