@@ -27,7 +27,7 @@ public class GameTest {
                 "w b w b b b w w \n" +
                 "w w w w w b w w \n" +
                 "w w w b b b b b ", 'b', 'w','_');
-        new Game().startGame(preFinalBoard, new Player.BotPlayer(Cell.BLACK), new Player.BotPlayer(Cell.WHITE), 1 ,"f1", "f2");
+        new Game().startGame(preFinalBoard, new Player.BotPlayer(Cell.BLACK), new Player.BotPlayer(Cell.WHITE), 1 ,"f1");
         assertEquals(finalBoard, preFinalBoard);
     }
 }

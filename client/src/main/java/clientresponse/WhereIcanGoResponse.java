@@ -1,21 +1,17 @@
 package clientresponse;
 
-import logic.Board;
-import logic.Cell;
-import logic.Move;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class WhereIcanGoResponse implements Response {
 
-    public String command = "WHEREICANGORESPONSE";
-    public String availableMoves;
-    public String board;
-    public String color;
-    public String boardStringWON;
+    public final String command = "WHEREICANGORESPONSE";
+    public final String availableMoves;
+    public final String board;
+    public final String color;
+    public final String boardStringWON;
 
-    public WhereIcanGoResponse(String availableMoves, String board, String boardStringWON,  String color) {
+    public WhereIcanGoResponse(@NotNull final String availableMoves, @NotNull final String board,
+                               @NotNull final String boardStringWON, @NotNull final String color) {
         this.availableMoves = availableMoves;
         this.color = color;
         this.board = board;

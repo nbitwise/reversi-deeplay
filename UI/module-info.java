@@ -4,4 +4,7 @@ module reversi.deeplay.UI.main {
     requires org.apache.pdfbox;
     exports gui;
     exports ui;
+    requires com.example.client;
+    requires com.google.gson;
+    requires org.apache.logging.log4j;
 }

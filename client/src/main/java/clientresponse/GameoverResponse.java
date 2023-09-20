@@ -1,17 +1,14 @@
 package clientresponse;
 
-public class GameoverResponse implements Response {
-    protected final String command = "GAMEOVER";
-    public String status;
-    public String message;
+import org.jetbrains.annotations.NotNull;
 
-    public GameoverResponse(String status, String message) {
+public class GameOverResponse implements Response {
+    public final String command = "GAMEOVER";
+    public final String status;
+    public final String message;
+
+    public GameOverResponse(@NotNull final String status, @NotNull final String message) {
         this.status = status;
         this.message = message;
-    }
-
-    public String getStatus() {
-
-        return status;
     }
 }

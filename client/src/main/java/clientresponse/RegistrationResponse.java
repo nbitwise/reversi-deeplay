@@ -1,11 +1,13 @@
 package clientresponse;
 
+import org.jetbrains.annotations.NotNull;
+
 public class RegistrationResponse implements Response {
     public final String command = "REGISTRATION";
-    public String status;
-    public String message;
+    public final String status;
+    public final String message;
 
-    public RegistrationResponse(String status, String message) {
+    public RegistrationResponse(@NotNull final String status, @NotNull final String message) {
         this.status = status;
         this.message = message;
     }

@@ -1,20 +1,15 @@
 package clientresponse;
 
 
-public class StartGameResponse implements Response{
+import org.jetbrains.annotations.NotNull;
+
+public class StartGameResponse implements Response {
     public final String command = "STARTGAME";
+    public final String status;
+    public final String message;
 
-    public String status;
-    public String message;
-
-    public StartGameResponse(String status, String message) {
+    public StartGameResponse(@NotNull final String status, @NotNull final String message) {
         this.message = message;
         this.status = status;
     }
-
-    public String getStatus() {
-
-        return status;
-    }
-
 }

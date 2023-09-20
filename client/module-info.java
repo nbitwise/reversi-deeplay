@@ -4,7 +4,6 @@ module com.example.client {
     requires com.google.gson;
     requires org.jline;
     requires reversi.deeplay.gamelogic.main;
-    requires reversi.deeplay.UI.main;
     requires org.apache.logging.log4j;
     requires reversi.deeplay.localGame.main;
     requires java.desktop;

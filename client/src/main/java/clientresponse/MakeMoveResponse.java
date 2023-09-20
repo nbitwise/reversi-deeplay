@@ -1,15 +1,14 @@
 package clientresponse;
 
+import org.jetbrains.annotations.NotNull;
+
 public class MakeMoveResponse implements Response {
-    public String command = "MAKEMOVE";
+    public final String command = "MAKEMOVE";
+    public final String status;
+    public final String message;
 
-    public String status;
-    public String message;
-
-    public MakeMoveResponse(String status, String message) {
+    public MakeMoveResponse(@NotNull final String status, @NotNull final String message) {
         this.message = message;
         this.status = status;
     }
-
-
 }

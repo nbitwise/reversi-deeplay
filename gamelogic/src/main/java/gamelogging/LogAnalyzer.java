@@ -22,7 +22,10 @@ import java.util.stream.Stream;
  */
 public class LogAnalyzer {
 
-    private final static Logger logger = LogManager.getLogger(LogAnalyzer.class);
+    private LogAnalyzer() {
+    }
+
+    private static final Logger logger = LogManager.getLogger(LogAnalyzer.class);
 
     /**
      * Метод parseLog записывает статистику по каждой игре в файле с логами игры.
@@ -70,7 +73,7 @@ public class LogAnalyzer {
      * @param line  строка.
      * @param color цвет.
      */
-    private static int calculatePlayerId(String line, char color) {
+    private static int calculatePlayerId(final String line, final char color) {
         return Integer.parseInt(line.substring(10, line.indexOf(color) - 1));
     }
 

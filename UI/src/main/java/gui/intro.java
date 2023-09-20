@@ -20,7 +20,7 @@ public class intro {
 
             JPanel mainPanel = new JPanel(new BorderLayout());
 
-            String pdfFilePath = "C:\\job\\deeplay\\groupprogect\\game\\reversi-deeplay\\UI\\src\\main\\java\\gui\\Reversi.pdf";
+            String pdfFilePath = "resources/Reversi.pdf";
 
             try {
                 PDDocument document = PDDocument.load(new File(pdfFilePath));
