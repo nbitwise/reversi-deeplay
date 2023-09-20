@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 import static io.deeplay.Game.displayResultOnClient;
 
-
 class Server {
 
 

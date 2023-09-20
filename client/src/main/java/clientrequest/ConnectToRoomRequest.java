@@ -1,13 +1,16 @@
 package clientrequest;
 
 public class ConnectToRoomRequest implements Request {
-    public String command = "CONNECTTOROOM";
-    public int roomId;
+    /**
+     * Название запроса
+     */
+    public final String command = "CONNECTTOROOM";
 
-    public ConnectToRoomRequest(int roomId) {
-
+    /**
+     * Id комнаты
+     */
+    public final int roomId;
+    public ConnectToRoomRequest(final int roomId) {
         this.roomId = roomId;
-
     }
-
 }
