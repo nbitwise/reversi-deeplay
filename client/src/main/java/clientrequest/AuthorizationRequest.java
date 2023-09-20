@@ -1,9 +1,12 @@
 package clientrequest;
 
+import org.jetbrains.annotations.NotNull;
+
 public class AuthorizationRequest implements Request {
     public final String command = "AUTHORIZATION";
-    public String nickname;
-    public AuthorizationRequest(String nickname) {
+
+    public final String nickname;
+    public AuthorizationRequest( @NotNull final String nickname) {
         this.nickname = nickname;
     }
 }

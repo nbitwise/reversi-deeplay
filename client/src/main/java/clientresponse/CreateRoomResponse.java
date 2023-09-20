@@ -1,23 +1,19 @@
 package clientresponse;
 
+import org.jetbrains.annotations.NotNull;
+
 public class CreateRoomResponse implements Response {
 
-    public String command = "CREATEROOM";
-    public String message;
-    public String status;
-    public Integer roomId;
+    public final String command = "CREATEROOM";
+    public final String message;
+    public final String status;
+    public final int roomId;
 
-    public CreateRoomResponse(String status, Integer roomId) {
+    public CreateRoomResponse(@NotNull final String message, @NotNull final String status, int roomId) {
+        this.message = message;
         this.status = status;
         this.roomId = roomId;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public int getRoomId() {
-        return roomId;
-    }
 
 }

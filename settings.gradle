@@ -1,8 +1,9 @@
 rootProject.name = 'reversi-deeplay'
 
-include 'GameLogic'
-include 'LocalGame'
 include 'server'
 include 'client'
 include 'UI'
+include 'database'
+include 'gamelogic'
+include 'localgame'
 

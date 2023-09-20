@@ -1,13 +1,12 @@
 package clientrequest;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ConnectToRoomRequest implements Request {
-    public String command = "CONNECTTOROOM";
-    public int roomId;
+    public final String command = "CONNECTTOROOM";
 
-    public ConnectToRoomRequest(int roomId) {
-
+    public final int roomId;
+    public ConnectToRoomRequest(final int roomId) {
         this.roomId = roomId;
-
     }
-
 }

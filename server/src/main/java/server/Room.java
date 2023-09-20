@@ -1,30 +1,37 @@
 package server;
 
+
+import logic.*;
 import io.deeplay.Game;
-import logic.Board;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Room {
 
-    int roomId;
-    String whitePlayer = "";
-    String blackPlayer = "";
+    public int roomId = 0;
+    public String whitePlayer = "";
+    public String blackPlayer = "";
+
+    public int whitePlayerId;
+
+    public int blackPlayerId;
     private UUID whitePlayerUUID;
     private UUID blackPlayerUUID;
 
-    Board board = new Board();
+    public Board board = new Board();
 
-    Game game = new Game();
-
-    public int moveNumber = 1;
-
-    public Room() {
-        this.roomId = roomCounter.incrementAndGet();
+    public Game game = new Game();
+    public int gameId;
+    public Cell getCell(@NotNull final UUID uuid) {
+        if(uuid.equals(whitePlayerUUID)){
+            return Cell.WHITE;
+        }
+        return Cell.BLACK;
     }
 
-    public UUID getOpponentUUID(UUID uuid) {
+    public UUID getOpponentUUID(@NotNull final UUID uuid) {
         if (uuid == whitePlayerUUID) {
             return blackPlayerUUID;
         } else {
@@ -43,34 +50,37 @@ public class Room {
         }
         return false;
     }
-
+    /**
+     * Меняет в комнате игроков цветами
+     */
+    public void changeColor() {
+        final String whitePlayerSave = whitePlayer;
+        final UUID whitePlayerUUIDSave = whitePlayerUUID;
+        whitePlayer = blackPlayer;
+        blackPlayer = whitePlayerSave;
+        whitePlayerUUID = blackPlayerUUID;
+        blackPlayerUUID = whitePlayerUUIDSave;
+    }
     /**
      * Проверяет наличие конкретного игрока в комнате.
      *
      * @return возвращает true при наличии и false при отсутствии.
      */
     public boolean hasPlayer(UUID uuid) {
-        return whitePlayer.equals(uuid) || blackPlayer.equals(uuid);
+        return whitePlayerUUID.equals(uuid) || blackPlayerUUID.equals(uuid);
     }
 
     /**
      * Удаляет игрока из комнаты.
      */
-    public void removePlayer(UUID uuid) {
-        if (whitePlayer.equals(uuid)) {
+    public void removePlayer(@NotNull final UUID uuid) {
+        if (whitePlayerUUID.equals(uuid)) {
             whitePlayer = "";
-        } else if (blackPlayer.equals(uuid)) {
+            whitePlayerUUID = null;
+        } else if (blackPlayerUUID.equals(uuid)) {
             blackPlayer = "";
+            blackPlayerUUID = null;
         }
-    }
-    public void swapPlayers() {
-        UUID temp = whitePlayerUUID;
-        whitePlayerUUID = blackPlayerUUID;
-        blackPlayerUUID = temp;
-
-        String tempName = whitePlayer;
-        whitePlayer = blackPlayer;
-        blackPlayer = tempName;
     }
     public UUID getWhitePlayerUUID() {
         return whitePlayerUUID;
@@ -105,12 +115,6 @@ public class Room {
     public boolean isFull() {
         return whitePlayerUUID != null && blackPlayerUUID != null;
     }
-
-    public int getRoomId() {
-        return roomId;
-    }
-
-    private static final AtomicInteger roomCounter = new AtomicInteger(0);
 
 
 }

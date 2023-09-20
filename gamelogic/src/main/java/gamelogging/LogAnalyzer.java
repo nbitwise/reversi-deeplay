@@ -1,5 +1,9 @@
 package gamelogging;
 
+import database.Database;
+import database.models.Boards;
+import database.models.Game;
+import database.models.Moves;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +26,10 @@ import java.util.stream.Stream;
  */
 public class LogAnalyzer {
 
-    private final static Logger logger = LogManager.getLogger(LogAnalyzer.class);
+    private LogAnalyzer() {
+    }
+
+    private static final Logger logger = LogManager.getLogger(LogAnalyzer.class);
 
     /**
      * Метод parseLog записывает статистику по каждой игре в файле с логами игры.
@@ -70,7 +77,7 @@ public class LogAnalyzer {
      * @param line  строка.
      * @param color цвет.
      */
-    private static int calculatePlayerId(String line, char color) {
+    private static int calculatePlayerId(final String line, final char color) {
         return Integer.parseInt(line.substring(10, line.indexOf(color) - 1));
     }
 
@@ -139,4 +146,104 @@ public class LogAnalyzer {
         final int parseId = (Integer.parseInt(line.substring(38, line.indexOf("times") - 1)) + 1);
         return String.format("PlayerId %d win vs PlayerId %d by %s %d times", playerId, opponentId, color, parseId);
     }
+
+    /**
+     * Метод parseLoginToBd подробные записи игр в базе данных, создает записи с ходами и досками.
+     *
+     * @param fileNameReadLog файл для анализа и последующего парсинга для записи в базу данных.
+     */
+    public static void parseLoginToBd(final String fileNameReadLog) {
+        try (final FileReader file = new FileReader(fileNameReadLog)) {
+            final Database db = new Database();
+            final BufferedReader reader = new BufferedReader(file);
+            int currentNumberOfLine = 0;
+            int idBlackPlayer = 0;
+            int idWhitePlayer = 0;
+            int gameId = 0;
+            int block = -1;
+            int nom = 0;
+            String line = reader.readLine();
+            StringBuilder board = new StringBuilder();
+
+            while (line != null) {
+                if (line.startsWith("Number of")) {
+                    line = reader.readLine();
+                    continue;
+                }
+                if (line.startsWith("Winner")) {
+                    final String winnerColor = line.substring(8, 13);
+                    db.setWinnerInGameWithId(idBlackPlayer, idWhitePlayer, gameId, winnerColor);
+                    block = -1;
+                    currentNumberOfLine = 0;
+                    line = reader.readLine();
+                    continue;
+                }
+                if(line.startsWith("It's"))
+                {
+                    db.setWinnerInGameWithId(idBlackPlayer,idWhitePlayer,gameId,"tie");
+                    block = -1;
+                    currentNumberOfLine = 0;
+                    line = reader.readLine();
+                    continue;
+                }
+                if (currentNumberOfLine == 0) {
+                    gameId = Integer.parseInt(line.substring(8));
+                    Game game = new Game(0, 0, ' ', gameId);
+
+                    db.addGame(game);
+                }
+                if (block == 0) {
+                    Moves move = createMove(line, gameId);
+                    nom = move.numberOfMove;
+                    db.addMoves(move);
+                }
+                if (currentNumberOfLine == 1) {
+                    idBlackPlayer = calculatePlayerId(line, 'B');
+                }
+                if (currentNumberOfLine == 10) {
+                    idWhitePlayer = calculatePlayerId(line, 'W');
+                }
+                if (block > 0) {
+                    board.append(line).append("\n");
+                }
+                if (block == 8) {
+                    db.addBoards(createBoard(board.toString(), gameId, nom));
+                    block = -1;
+                    board = new StringBuilder();
+                }
+                currentNumberOfLine++;
+                block++;
+                line = reader.readLine();
+            }
+        } catch (IOException ex) {
+            logger.log(Level.ERROR, "Ошибка при попытке парсирования логов.");
+        }
+    }
+
+    /**
+     * Метод createMove создает объект moves(хода) для записи его в бд.
+     *
+     * @param line   линия для создания хода.
+     * @param gameId id игры.
+     */
+    private static Moves createMove(final String line, final int gameId) {
+        final int row = Integer.parseInt(line.substring(line.indexOf("on") + 3, line.indexOf("on") + 4));
+        final int col = Integer.parseInt(line.substring(line.indexOf("on") + 5, line.indexOf("on") + 6));
+        final int nom = Integer.parseInt(line.substring(line.indexOf("turn") + 8));
+        final char color = line.startsWith("BLACK", 12) ? 'b' : 'w';
+        return new Moves(row, col, nom, color, gameId);
+
+    }
+
+    /**
+     * Метод createBoard создает объект Boards(доски после хода) для записи его в бд.
+     *
+     * @param line   линия для создания доски.
+     * @param gameId id игры.
+     * @param nom id номер хода.
+     */
+    private static Boards createBoard(final String line, final int gameId, final int nom) {
+        return new Boards(line, nom, gameId);
+    }
+
 }

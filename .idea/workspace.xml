@@ -4,36 +4,88 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-
-    <list default="true" id="a829ddee-ce1e-48e6-87b8-2bfca6fc2167" name="Changes" comment="fix: пофикшены баги с использованием парсера и логики завершения игры" />
+    <list default="true" id="9bde379f-24a8-4263-a28f-fcba2616f0d6" name="Changes" comment="Fix&amp;feat: отрефакторил модули client, gamelogic, localgame, server переписано гуи(модуль UI). добавлена возможность игра в гуи(клиент серверная часть приложения)">
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/a/4a2b30259a1a434c1e8ff9fa56c423be2f80a1da" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/7/0/704d8acc01255821a36783e117e58d993626c8d4" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/7/0/704d8acc01255821a36783e117e58d993626c8d4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/7/b7aced319dc629e174487f6f0a6b727ec50ccd0c" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/7/b7aced319dc629e174487f6f0a6b727ec50ccd0c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/b/cbee37e14f85dde07b545a4bbf33bff956c260bc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/3/e34a101a27e1256692677be1246bc541cd760bea" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/9/e9c46bf1f7c2380a4bb446e7f3b9f5f23635c3fa" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/9/e9c46bf1f7c2380a4bb446e7f3b9f5f23635c3fa" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/4/a/4a2b30259a1a434c1e8ff9fa56c423be2f80a1da" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/c/b/cbee37e14f85dde07b545a4bbf33bff956c260bc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/e/3/e34a101a27e1256692677be1246bc541cd760bea" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/request/AuthorizationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/request/AuthorizationRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/request/ChooseColorRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/request/ChooseColorRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/request/ChooseDifficultyRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/request/ChooseDifficultyRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/request/GameMoveRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/request/GameMoveRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/request/GameVsHumanConnectToRoomRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/request/GameVsHumanConnectToRoomRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/request/GameVsHumanCreateRoomRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/request/GameVsHumanCreateRoomRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/request/GameVsHumanFindRoomRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/request/GameVsHumanFindRoomRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/AuthorizationResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/AuthorizationResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/ChooseColorResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/ChooseColorResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/ChooseDifficultyResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/ChooseDifficultyResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/ConnectForViewResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/ConnectForViewResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/GameMoveResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/GameMoveResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/GameOverDoYouWantReMatchResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/GameOverDoYouWantReMatchResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/GameOverWantReMatchResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/GameOverWantReMatchResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/GameVsHumanConnectToRoomResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/GameVsHumanConnectToRoomResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/GameVsHumanCreateRoomResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/GameVsHumanCreateRoomResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/GameVsHumanFindRoomResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/GameVsHumanFindRoomResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/PlayVsBotResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/PlayVsBotResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/ViewAvailableRoomsResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/ViewAvailableRoomsResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/response/ViewStartedGamesResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/response/ViewStartedGamesResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/test/java/client/ClientTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/test/java/client/ClientTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Analysis" beforeDir="false" afterPath="$PROJECT_DIR$/Analysis" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FileForHumanTest" beforeDir="false" afterPath="$PROJECT_DIR$/FileForHumanTest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/UI/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/main/java/gui/Black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/main/java/gui/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/main/java/gui/GUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/main/java/gui/Reversi.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/main/java/gui/White.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/main/java/gui/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/main/java/gui/intro.java" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/main/java/gui/intro.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/src/main/java/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/client/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/file.properties" beforeDir="false" afterPath="$PROJECT_DIR$/client/file.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/AuthorizationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/AuthorizationRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/ConnectToRoomRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/ConnectToRoomRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/CreateRoomRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/CreateRoomRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/GUIRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/GameoverRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/GameoverRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/LeaveRoomRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/LeaveRoomRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/MakeMoveRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/MakeMoveRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/RegistrationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/RegistrationRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/Request.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/StartGameRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/StartGameRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/SurrenderRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/SurrenderRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/ViewCreatedRoomsRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/ViewCreatedRoomsRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/WhereICanGoRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/WhereICanGoRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/AuthorizationResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/AuthorizationResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/ConnectToRoomResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/ConnectToRoomResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/CreateRoomResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/CreateRoomResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/GUIResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/GameoverResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/GameoverResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/LeaveRoomResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/LeaveRoomResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/MakeMoveResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/MakeMoveResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/RegistrationResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/RegistrationResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/Response.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/StartGameResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/StartGameResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/SurrenderResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/SurrenderResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/ViewCreatedRoomsResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/ViewCreatedRoomsResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/WhereIcanGoResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/WhereIcanGoResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/test/java/client/ClientTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/fileForHuman" beforeDir="false" afterPath="$PROJECT_DIR$/fileForHuman" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamelogic/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/gamelogging/GameLogger.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/gamelogging/GameLogger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/gamelogging/LogAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/gamelogging/LogAnalyzer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Cell.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Cell.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Move.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/parsing/BoardParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/parsing/BoardParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamelogic/src/test/java/test/LoggingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/test/java/test/LoggingTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamelogic/src/test/java/test/PlayerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/test/java/test/PlayerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamelogic/src/test/java/test/UITest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/localgame/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/localgame/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/localgame/src/main/java/io/deeplay/Application.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/localgame/src/main/java/io/deeplay/Game.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/localgame/src/main/java/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/localgame/src/test/java/test/GameTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/localgame/src/test/java/test/GameTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/server/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/server/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/server/Room.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/serverrequest/GUIRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/serverrequest/LeaveRoomRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/serverrequest/LeaveRoomRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/serverrequest/StartGameRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/serverrequest/StartGameRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/serverresponses/GUIResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/serverresponses/GameoverResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/serverresponses/GameoverResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/systemFile" beforeDir="false" afterPath="$PROJECT_DIR$/systemFile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,12 +108,7 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="client" type="f1a62948:ProjectNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -72,52 +119,97 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
-
         <option value="module-info" />
-
-
-
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;true&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2VX7bMHEOuKW9Ozzbd0R2gHxWiF" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-17&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/job/deeplay/groupprogect/game/deeplay-reversi-othello/reversi-deeplay&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/job/deeplay/groupprogect/game/reversiAI/UI&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15917969&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;
-  },
-  &quot;keyToStringList&quot;: {
-    &quot;ChangesTree.GroupingKeys&quot;: [
-    ]
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
 }</component>
   <component name="RecentsManager">
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="test" />
-      <recent name="ui" />
-      <recent name="GameLogging" />
-      <recent name="io.deeplay" />
-      <recent name="logic" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\job\deeplay\groupprogect\game\reversiAI\UI" />
+      <recent name="C:\job\deeplay\groupprogect\game\reversiAI\UI\src\main\java\guiClient" />
+      <recent name="C:\job\deeplay\groupprogect\game\reversiAI\resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\job\deeplay\groupprogect\game\reversiAI\localgame" />
+      <recent name="C:\job\deeplay\groupprogect\game\reversiAI\gamelogic" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="server" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.ClientTest (3)">
-    <configuration name="BoardTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Application.guiClient.clientGui">
+    <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="corretto-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="server.Server" />
+      <module name="reversi-deeplay.server.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="client.Client" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="client.Client" />
+      <module name="reversiAI.client.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="guiClient.clientGui" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="corretto-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="guiClient.clientGui" />
+      <module name="reversi-deeplay.UI.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="guiClient.clientGui" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GameTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -128,9 +220,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":test" />
+            <option value=":LocalGame:test" />
             <option value="--tests" />
-            <option value="&quot;io.deeplay.BoardTest&quot;" />
+            <option value="&quot;test.GameTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -140,10 +232,10 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="ClientTest (3)" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="PlayerTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/client" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
         <option name="scriptParameters" value="" />
         <option name="taskDescriptions">
@@ -151,9 +243,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":test" />
+            <option value=":GameLogic:test" />
             <option value="--tests" />
-            <option value="&quot;client.ClientTest&quot;" />
+            <option value="&quot;test.PlayerTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -163,208 +255,67 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="ClientTest.testConnectForViewResponseParsing" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/client" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;client.ClientTest.testConnectForViewResponseParsing&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="reversiAI.client" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <configuration name="ClientTest.testRegistrationRequest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/client" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;client.ClientTest.testRegistrationRequest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>true</ForceTestExec>
-      <method v="2" />
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="reversiAI.client" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <configuration name="ClientTest.testRegistrationResponseParsing" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/client" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;client.ClientTest.testRegistrationResponseParsing&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
+    <list>
+      <item itemvalue="Application.Server" />
+      <item itemvalue="Application.guiClient.clientGui" />
+      <item itemvalue="Application.client.Client" />
+      <item itemvalue="Gradle.GameTest" />
+      <item itemvalue="Gradle.PlayerTest" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.ClientTest (3)" />
-        <item itemvalue="Gradle.BoardTest" />
-        <item itemvalue="Gradle.ClientTest.testConnectForViewResponseParsing" />
-        <item itemvalue="Gradle.ClientTest.testRegistrationResponseParsing" />
-        <item itemvalue="Gradle.ClientTest.testRegistrationRequest" />
+        <item itemvalue="Application.guiClient.clientGui" />
+        <item itemvalue="Application.Server" />
+        <item itemvalue="Application.client.Client" />
+        <item itemvalue="Gradle.GameTest" />
+        <item itemvalue="Gradle.PlayerTest" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="a829ddee-ce1e-48e6-87b8-2bfca6fc2167" name="Changes" comment="" />
-      <created>1690442870816</created>
+      <changelist id="284d9900-35fb-4c25-a17f-e7b34a78ed92" name="Changes" comment="" />
+      <created>1694925511081</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1690442870816</updated>
-      <workItem from="1690536391858" duration="6110000" />
-      <workItem from="1690775991121" duration="8378000" />
-      <workItem from="1691668234711" duration="2906000" />
-      <workItem from="1691671932106" duration="3325000" />
-      <workItem from="1691729189512" duration="5490000" />
+      <updated>1694925511081</updated>
+      <workItem from="1694925517479" duration="10214000" />
+      <workItem from="1694970669736" duration="2827000" />
+      <workItem from="1694975969376" duration="889000" />
+      <workItem from="1695005071717" duration="36171000" />
+      <workItem from="1695096631521" duration="36338000" />
+      <workItem from="1695177526360" duration="12051000" />
+      <workItem from="1695194573660" duration="2783000" />
     </task>
-    <task id="LOCAL-00001" summary="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest.">
-      <created>1690538996230</created>
+    <task id="LOCAL-00001" summary="Fix&amp;feat: отрефакторил модули client, databse, gamelogic, localgame. написал тесты для модуля database, минимакс алгоритма и минимакс бота, функции оценки доски. переписано гуи. добавлена возможность игра в гуи(клиент серверная часть приложения)">
+      <created>1695124154096</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1690538996230</updated>
+      <updated>1695124154096</updated>
     </task>
-    <task id="LOCAL-00002" summary="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest.">
-      <created>1690780300019</created>
+    <task id="LOCAL-00002" summary="Fix&amp;feat: отрефакторил модули client, databse, gamelogic, localgame. написал тесты для модуля database, минимакс алгоритма и минимакс бота, функции оценки доски. переписано гуи. добавлена возможность игра в гуи(клиент серверная часть приложения)">
+      <created>1695125654372</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1690780300019</updated>
+      <updated>1695125654372</updated>
     </task>
-    <task id="LOCAL-00003" summary="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest.">
-      <created>1690783709903</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1690783709904</updated>
-    </task>
-    <task id="LOCAL-00004" summary="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest.">
-      <created>1690786740569</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1690786740569</updated>
-    </task>
-    <task id="LOCAL-00005" summary="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest.">
-      <created>1690786806471</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1690786806471</updated>
-    </task>
-    <task id="LOCAL-00006" summary="feat: добавлены тесты к isValidMove">
-      <option name="closed" value="true" />
-      <created>1690878300159</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1690878300159</updated>
-    </task>
-    <task id="LOCAL-00007" summary="fix: пофикшены баги с использованием парсера и логики завершения игры">
-      <option name="closed" value="true" />
-      <created>1690954204647</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1690954204647</updated>
-    </task>
-    <task id="LOCAL-00008" summary="fix: пофикшены баги с использованием парсера и логики завершения игры">
-      <option name="closed" value="true" />
-      <created>1690954554582</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1690954554582</updated>
-    </task>
-    <task id="LOCAL-00009" summary="fix: пофикшены баги с использованием парсера и логики завершения игры">
-      <option name="closed" value="true" />
-      <created>1690954763272</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1690954763272</updated>
-    </task>
-    <task id="LOCAL-00010" summary="feat: Добоавлены пакеты с логикой, локальным запуском игры.&#10; Вынесена в отдельный модуль логика игры, к которому будут подключаться в модуле клиента и в модуле сервера.">
-      <created>1691732766050</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1691732766050</updated>
-    </task>
-    <option name="localTasksCounter" value="11" />
-    <task id="LOCAL-00010" summary="GUI START">
-      <option name="closed" value="true" />
-      <created>1691647532407</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1691647532407</updated>
-    </task>
-    <task id="LOCAL-00011" summary="TEST">
-      <option name="closed" value="true" />
-      <created>1691674773759</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1691674773759</updated>
-    </task>
-    <task id="LOCAL-00012" summary="TESTER">
-      <option name="closed" value="true" />
-      <created>1691737457983</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1691737457983</updated>
-    </task>
-    <task id="LOCAL-00013" summary="feat: Добавлен класс client и mockserver, реализованы методы request и response, написаны тесты проверки работы клиента и сервера заглушки.">
-      <option name="closed" value="true" />
-      <created>1691994318382</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1691994318382</updated>
-    </task>
-    <option name="localTasksCounter" value="14" />
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -382,27 +333,9 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="feat: добавлен класс Parser&#10;Добавлен основной метод parser, который конвертирует достку из строкового формата в объект Board.&#10;Добавлен тест для написанного метода parser в класс BoardTest." />
-    <MESSAGE value="feat: добавлены тесты к isValidMove" />
-    <MESSAGE value="fix: пофикшены баги с использованием парсера и логики завершения игры" />
-
-    <MESSAGE value="feat: Добоавлены пакеты с логикой, локальным запуском игры.&#10; Вынесена в отдельный модуль логика игры, к которому будут подключаться в модуле клиента и в модуле сервера" />
-    <MESSAGE value="feat: Добоавлены пакеты с логикой, локальным запуском игры.&#10; Вынесена в отдельный модуль логика игры, к которому будут подключаться в модуле клиента и в модуле сервера." />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: Добоавлены пакеты с логикой, локальным запуском игры.&#10; Вынесена в отдельный модуль логика игры, к которому будут подключаться в модуле клиента и в модуле сервера." />
-
-    <MESSAGE value="GUI START" />
-    <MESSAGE value="TEST" />
-    <MESSAGE value="TESTER" />
-    <MESSAGE value="feat: Добавлен класс client и mockserver, реализованы методы request и response, написаны тесты проверки работы клиента и сервера заглушки." />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: Добавлен класс client и mockserver, реализованы методы request и response, написаны тесты проверки работы клиента и сервера заглушки." />
-
-  </component>
-  <component name="XDebuggerManager">
-    <pin-to-top-manager>
-      <pinned-members>
-        <PinnedItemInfo parentTag="io.deeplay.Board" memberName="board" />
-      </pinned-members>
-    </pin-to-top-manager>
+    <MESSAGE value="Fix&amp;fit: отрефакторил модули client, databse, gamelogic, localgame. написал тесты для модуля database, минимакс алгоритма и минимакс бота, функции оценки доски" />
+    <MESSAGE value="Fix&amp;feat: отрефакторил модули client, databse, gamelogic, localgame. написал тесты для модуля database, минимакс алгоритма и минимакс бота, функции оценки доски. переписано гуи. добавлена возможность игра в гуи(клиент серверная часть приложения)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix&amp;feat: отрефакторил модули client, databse, gamelogic, localgame. написал тесты для модуля database, минимакс алгоритма и минимакс бота, функции оценки доски. переписано гуи. добавлена возможность игра в гуи(клиент серверная часть приложения)" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

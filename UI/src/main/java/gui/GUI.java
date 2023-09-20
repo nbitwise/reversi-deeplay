@@ -15,7 +15,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -87,10 +86,10 @@ public class GUI extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        blackIcon = new ImageIcon("D:\\Java\\reversi-deeplay\\UI\\src\\main\\java\\gui\\Black.png");
-        whiteIcon = new ImageIcon("D:\\Java\\reversi-deeplay\\UI\\src\\main\\java\\gui\\White.png");
+        blackIcon = new ImageIcon("resources/Black.png");
+        whiteIcon = new ImageIcon("resources/White.png");
 
-        ImageIcon icon = new ImageIcon("D:\\Java\\reversi-deeplay\\UI\\src\\main\\java\\gui\\icon.png");
+        ImageIcon icon = new ImageIcon("resources/icon.png");
         setIconImage(icon.getImage());
 
         board = new Board();
@@ -470,7 +469,7 @@ public class GUI extends JFrame {
                 board.placePiece(row, col, currentPlayer.playerCell);
                 updateBoardGUI();
 
-                if (!board.isGameOver()) {
+                if (board.isGameOver()) {
                     currentPlayer = player2;
                     appendGameInfo(currentMoveNumber + " move Human player moved to: " + (row + 1) + ", " + (col + 1));
                     currentMoveNumber++;
@@ -487,7 +486,7 @@ public class GUI extends JFrame {
             @Override
             public void run() {
                 int moveNumber = 1;
-                while (!board.isGameOver()) {
+                while (board.isGameOver()) {
                     if (currentPlayer instanceof Player.HumanPlayer) {
                         synchronized (board) {
                             try {
@@ -533,7 +532,7 @@ public class GUI extends JFrame {
             board.placePiece(move.row, move.col, currentPlayer.playerCell);
             updateBoardGUI();
 
-            if (!board.isGameOver()) {
+            if (board.isGameOver()) {
                 currentPlayer = player1;
                 appendGameInfo(currentMoveNumber + " move Bot player moved to: " + (move.row + 1) + ", " + (move.col + 1));
                 currentMoveNumber++;
@@ -547,7 +546,7 @@ public class GUI extends JFrame {
             @Override
             public void run() {
                 int moveNumber = 1;
-                while (!board.isGameOver()) {
+                while (board.isGameOver()) {
                     if (currentPlayer instanceof Player.BotPlayer) {
                         Move move = currentPlayer.makeMove(board);
                         board.placePiece(move.row, move.col, currentPlayer.playerCell);
