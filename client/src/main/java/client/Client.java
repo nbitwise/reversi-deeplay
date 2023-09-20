@@ -42,7 +42,7 @@ class Client {
 
 
     private Client(String host, int port) throws IOException {
-        socket = new Socket(host, 6070);
+        socket = new Socket(host, port);
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
@@ -227,7 +227,7 @@ class Client {
         String commandName = request.get("command").getAsString().toUpperCase();
 
         switch (commandName) {
-            case "REGISTRATION" -> viewRegistration(client, input); //А ПОЧЕМУ ЕНУМ НЕ СТАВИТСЯ
+            case "REGISTRATION" -> viewRegistration(client, input);
 
             case "AUTHORIZATION" -> viewAuthorization(client, input);
 
