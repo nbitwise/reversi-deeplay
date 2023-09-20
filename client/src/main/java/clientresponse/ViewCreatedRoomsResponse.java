@@ -1,18 +1,31 @@
 package clientresponse;
 
 
+import org.jetbrains.annotations.NotNull;
+
 public class ViewCreatedRoomsResponse implements Response {
-        public final String command = "VIEWROOMS";
+    /**
+     * Название ответа
+     */
+    public final String command = "VIEWROOMS";
 
-        public int roomId;
+    /**
+     * Id комнаты
+     */
+    public final int roomId;
 
-        public String status;
+    /**
+     * Статус
+     */
+    public final String status;
+    /**
+     * Сообщение
+     */
+    public final String message;
 
-        public String message;
-
-        public ViewCreatedRoomsResponse(String status, String message, int roomId) {
-                this.message = message;
-                this.roomId = roomId;
-                this.status = status;
-        }
+    public ViewCreatedRoomsResponse(@NotNull final String status, @NotNull final String message, int roomId) {
+        this.message = message;
+        this.roomId = roomId;
+        this.status = status;
+    }
 }

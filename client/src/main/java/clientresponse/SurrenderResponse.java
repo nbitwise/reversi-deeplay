@@ -1,11 +1,23 @@
 package clientresponse;
 
-public class SurrenderResponse implements Response {
-    public String command = "SURRENDER";
-    private final String status = "success";
-    public String message;
+import org.jetbrains.annotations.NotNull;
 
-    public SurrenderResponse(String message) {
+public class SurrenderResponse implements Response {
+    /**
+     * Название ответа
+     */
+    public final String command = "SURRENDER";
+    /**
+     * Статус
+     */
+    public final String status;
+    /**
+     * Сообщение
+     */
+    public final String message;
+
+    public SurrenderResponse(@NotNull final String status, @NotNull final String message) {
+        this.status = status;
         this.message = message;
     }
 }

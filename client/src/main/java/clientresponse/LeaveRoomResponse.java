@@ -1,17 +1,23 @@
 package clientresponse;
 
+import org.jetbrains.annotations.NotNull;
+
 public class LeaveRoomResponse implements Response {
-    public String command = "LEAVEROOM";
-    public String message;
-    public String status;
+    /**
+     * Название ответа
+     */
+    public final String command = "LEAVEROOM";
+    /**
+     * Сообщение
+     */
+    public final String message;
+    /**
+     * Статус
+     */
+    public final String status;
 
-    public LeaveRoomResponse(String status) {
-
+    public LeaveRoomResponse(@NotNull final String message, @NotNull final String status) {
+        this.message = message;
         this.status = status;
     }
-
-    public String getStatus() {
-        return status;
-    }
-
 }
