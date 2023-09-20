@@ -1,9 +1,10 @@
 package test;
 
-import parsing.BoardParser;
-import logic.*;
+import logic.Board;
+import logic.Cell;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import parsing.BoardParser;
 
 import static org.junit.jupiter.api.Assertions.*;
 
