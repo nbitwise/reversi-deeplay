@@ -1,6 +1,9 @@
 package ui;
 
-import logic.*;
+import logic.Board;
+import logic.Cell;
+import logic.Move;
+import logic.Player;
 
 /**
  * Класс UI отвечает за вывод в консоль текущего состояния доски и положения фишек после каждого хода игрока.

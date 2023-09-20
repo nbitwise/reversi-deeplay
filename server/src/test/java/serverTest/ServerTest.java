@@ -30,7 +30,6 @@ class ServerTest {
 
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-
     }
 
     @AfterAll
@@ -107,8 +106,8 @@ class ServerTest {
 
         final ConnectToRoomResponse response = gson.fromJson(serverWord, ConnectToRoomResponse.class);
 
-        Assertions.assertEquals("success", response.getStatus());
-        Assertions.assertEquals("Connected to room as WhitePlayer", response.getMessage());
+        Assertions.assertEquals("success", response.status);
+        Assertions.assertEquals("Connected to room as WhitePlayer", response.message);
     }
 
     @Test
@@ -118,8 +117,8 @@ class ServerTest {
         final String serverWord = writeAndRead(request);
         final ConnectToRoomResponse response = gson.fromJson(serverWord, ConnectToRoomResponse.class);
 
-        Assertions.assertEquals("fail", response.getStatus());
-        Assertions.assertEquals("you are not logged in", response.getMessage());
+        Assertions.assertEquals("fail", response.status);
+        Assertions.assertEquals("you are not logged in", response.message);
     }
 
 
@@ -140,7 +139,7 @@ class ServerTest {
 
         final LeaveRoomResponse response = gson.fromJson(serverWord, LeaveRoomResponse.class);
 
-        Assertions.assertEquals("success", response.getStatus());
+        Assertions.assertEquals("success", response.status);
     }
 
     @Test
