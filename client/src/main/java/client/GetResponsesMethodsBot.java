@@ -4,7 +4,7 @@ import clientrequest.*;
 import clientresponse.*;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import logic.AIBot;
+import logic.AIBotIlya;
 import logic.Cell;
 import logic.Move;
 import logic.Player;
@@ -143,12 +143,12 @@ public class GetResponsesMethodsBot {
     private static void commandWhereICanGoGameBot(@NotNull final Client client, @NotNull final String input) {
         final WhereIcanGoResponse whereIcanGoResponse = getResponse(WhereIcanGoResponse.class, input, client);
         if (whereIcanGoResponse.color.equals("black")) {
-            final Player botPlayer = new AIBot(Cell.BLACK, 8);
+            final Player botPlayer = new AIBotIlya(Cell.BLACK, 8);
             final Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.boardStringWON, 'B', 'W', '-'));
             final MakeMoveRequest makeMoveRequest = new MakeMoveRequest(move.row + 1, move.col + 1);
             SendMethods.sendRequest(makeMoveRequest, client);
         } else {
-            final Player botPlayer = new AIBot(Cell.WHITE, 8);
+            final Player botPlayer = new AIBotIlya(Cell.WHITE, 8);
             final Move move = botPlayer.makeMove(BoardParser.parse(whereIcanGoResponse.boardStringWON, 'B', 'W', '-'));
             final MakeMoveRequest makeMoveRequest = new MakeMoveRequest(move.row + 1, move.col + 1);
             SendMethods.sendRequest(makeMoveRequest, client);

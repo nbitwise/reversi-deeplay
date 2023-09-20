@@ -3,4 +3,6 @@ module reversi.deeplay.gamelogic.main {
     exports logic;
     exports gamelogging;
     exports parsing;
+    requires java.naming;
+    requires reversiAI.database.main;
 }
