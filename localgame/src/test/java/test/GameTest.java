@@ -1,9 +1,11 @@
 package test;
 
-import parsing.BoardParser;
-import io.deeplay.Game;
-import logic.*;
+import deeplay.Game;
+import logic.Board;
+import logic.Cell;
+import logic.Player;
 import org.junit.jupiter.api.Test;
+import parsing.BoardParser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,7 +29,7 @@ public class GameTest {
                 "w b w b b b w w \n" +
                 "w w w w w b w w \n" +
                 "w w w b b b b b ", 'b', 'w','_');
-        new Game().startGame(preFinalBoard, new Player.BotPlayer(Cell.BLACK), new Player.BotPlayer(Cell.WHITE), 1 ,"f1", "f2");
+        new Game().startGame(preFinalBoard, new Player.BotPlayer(Cell.BLACK), new Player.BotPlayer(Cell.WHITE), 1 ,"f1");
         assertEquals(finalBoard, preFinalBoard);
     }
 }
