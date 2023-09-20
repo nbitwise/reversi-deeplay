@@ -1,7 +1,9 @@
 package clientresponse;
 
 import org.jetbrains.annotations.NotNull;
-
+/**
+ * Класс ответа на запрос регистрации
+ */
 public class RegistrationResponse implements Response {
     /**
      * Название ответа

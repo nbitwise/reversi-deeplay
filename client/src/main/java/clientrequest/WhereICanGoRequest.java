@@ -1,5 +1,9 @@
 package clientrequest;
-public class WhereICanGoRequest implements Request{
+
+/**
+ * Класс запроса для получения возможных ходов
+ */
+public class WhereICanGoRequest implements Request {
     /**
      * Название запроса
      */

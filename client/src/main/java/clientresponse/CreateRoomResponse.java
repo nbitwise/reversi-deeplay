@@ -1,7 +1,9 @@
 package clientresponse;
 
 import org.jetbrains.annotations.NotNull;
-
+/**
+ * Класс ответа на запрос создания команты
+ */
 public class CreateRoomResponse implements Response {
     /**
      * Название ответа

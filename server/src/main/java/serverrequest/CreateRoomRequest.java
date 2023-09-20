@@ -1,6 +1,11 @@
 package serverrequest;
 
+/**
+ * Класс запроса на создание комнаты
+ */
 public class CreateRoomRequest implements Request {
-    protected final String command = "CREATEROOM";
-
+    /**
+     * Название запроса
+     */
+    public final String command = "CREATEROOM";
 }

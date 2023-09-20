@@ -1,7 +1,9 @@
 package clientrequest;
 
 import org.jetbrains.annotations.NotNull;
-
+/**
+ * Класс запроса на авторизацию
+ */
 public class AuthorizationRequest implements Request {
     /**
      * Название запроса

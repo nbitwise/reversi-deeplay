@@ -2,13 +2,13 @@ package serverresponses;
 
 import org.jetbrains.annotations.NotNull;
 /**
- * Класс ответа на запрос сдачи
+ * Класс ответа на запрос конца игры
  */
-public class SurrenderResponse implements Response {
+public class GameOverResponse implements Response {
     /**
      * Название ответа
      */
-    public final String command = "SURRENDER";
+    public final String command = "GAMEOVER";
     /**
      * Статус
      */
@@ -18,7 +18,7 @@ public class SurrenderResponse implements Response {
      */
     public final String message;
 
-    public SurrenderResponse(@NotNull final String status, @NotNull final String message) {
+    public GameOverResponse(@NotNull final String status, @NotNull final String message) {
         this.status = status;
         this.message = message;
     }

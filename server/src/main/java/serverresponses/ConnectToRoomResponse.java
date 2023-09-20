@@ -1,22 +1,25 @@
 package serverresponses;
 
+import org.jetbrains.annotations.NotNull;
+/**
+ * Класс ответа на запрос подключения к комнате
+ */
 public class ConnectToRoomResponse implements Response {
-    protected final String command = "CONNECTTOROOM";
-    private String status;
-    private String message;
+    /**
+     * Название ответа
+     */
+    public final String command = "CONNECTTOROOM";
+    /**
+     * Сообщение
+     */
+    public final String message;
+    /**
+     * Статус овета
+     */
+    public final String status;
 
-    public ConnectToRoomResponse(String status, String message) {
-
+    public ConnectToRoomResponse(@NotNull final String status, @NotNull final String message) {
         this.status = status;
         this.message = message;
-    }
-
-    public String getStatus() {
-
-        return status;
-    }
-    public String getMessage() {
-
-        return message;
     }
 }

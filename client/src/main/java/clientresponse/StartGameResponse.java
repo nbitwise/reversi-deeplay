@@ -2,7 +2,9 @@ package clientresponse;
 
 
 import org.jetbrains.annotations.NotNull;
-
+/**
+ * Класс ответа на запрос старта игры
+ */
 public class StartGameResponse implements Response {
     /**
      * Название ответа

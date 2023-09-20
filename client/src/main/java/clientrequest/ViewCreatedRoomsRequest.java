@@ -1,5 +1,8 @@
 package clientrequest;
 
+/**
+ * Класс запроса на просмотр созданной комнаты
+ */
 public class ViewCreatedRoomsRequest implements Request {
     /**
      * Название запроса

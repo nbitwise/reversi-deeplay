@@ -1,5 +1,8 @@
 package clientrequest;
 
+/**
+ * Класс запроса на начало игры
+ */
 public class StartGameRequest implements Request {
     /**
      * Название запроса

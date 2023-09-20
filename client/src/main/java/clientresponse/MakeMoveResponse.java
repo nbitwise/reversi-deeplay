@@ -1,7 +1,9 @@
 package clientresponse;
 
 import org.jetbrains.annotations.NotNull;
-
+/**
+ * Класс ответа на запрос хода
+ */
 public class MakeMoveResponse implements Response {
     /**
      * Название ответа
