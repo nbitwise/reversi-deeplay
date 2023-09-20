@@ -9,15 +9,6 @@ import java.util.Objects;
 public final class Move {
     public final int row;
     public final int col;
-    public long timeOnMove;
-
-    public long getTimeOnMove() {
-        return timeOnMove;
-    }
-
-    public void setTimeOnMove(long timeOnMove) {
-        this.timeOnMove = timeOnMove;
-    }
 
     /**
      * Конструктор создает объект хода с указанными координатами строки и столбца.
@@ -25,7 +16,7 @@ public final class Move {
      * @param row строка на доске.
      * @param col столбец на доске.
      */
-    public Move(int row, int col) {
+    public Move(final int row, final int col) {
         this.row = row;
         this.col = col;
     }

@@ -3,17 +3,19 @@ package logic;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Класс доски, и всей связанной с ней логикой.
+ */
 public class Board {
     private final Cell[][] board;
     private static final int BOARD_SIZE = 8;
-    private int quantityOfWhite = 2;
-    private int quantityOfBlack = 2;
     private final Logger logger = LogManager.getLogger(Board.class);
 
 
@@ -43,23 +45,9 @@ public class Board {
      * @param col  - колонка.
      * @param cell - клетка, который нужно поставить в поле.
      */
-    public void set(int row, int col, Cell cell) {
+    public void set(final int row, final int col, @NotNull final Cell cell) {
         checkArgument(row, col);
-
-        if (board[row][col] == Cell.BLACK) {
-            quantityOfWhite++;
-            quantityOfBlack--;
-        }
-        if (board[row][col] == Cell.WHITE) {
-            quantityOfWhite--;
-            quantityOfBlack++;
-        }
-        if (board[row][col] == Cell.EMPTY) {
-            if (cell == Cell.WHITE) quantityOfWhite++;
-            if (cell == Cell.BLACK) quantityOfBlack++;
-        }
         board[row][col] = cell;
-
     }
 
     /**
@@ -69,12 +57,19 @@ public class Board {
      * @param col - колонка.
      * @return возвращает клетку.
      */
-    public Cell get(int row, int col) {
+    public Cell get(final int row, final int col) {
         checkArgument(row, col);
         return board[row][col];
     }
 
-    public boolean isValidMove(int row, int col, Cell cell) {
+    /**
+     * метод проверки на возможность хода
+     *
+     * @param row - строка.
+     * @param col - колонка.
+     * @return true если ход возможен.
+     */
+    public boolean isValidMove(final int row, final int col, @NotNull final Cell cell) {
 
         checkArgument(row, col);
         if (board[row][col] != Cell.EMPTY) {
@@ -112,8 +107,8 @@ public class Board {
      * @param cell тип фишки (цвет), для которой нужно получить доступные ходы.
      * @return список ходов типа List<Move>, представляющий все доступные ходы для указанной фишки.
      */
-    public List<Move> getAllAvailableMoves(Cell cell) {
-        List<Move> moves = new ArrayList<>();
+    public List<Move> getAllAvailableMoves(@NotNull final Cell cell) {
+        final List<Move> moves = new ArrayList<>();
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 if (isValidMove(i, j, cell)) {
@@ -129,24 +124,66 @@ public class Board {
      * Возвращает количество белых клеток.
      */
     public int getQuantityOfWhite() {
-        return quantityOfWhite;
+        int sum = 0;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (this.board[i][j] == Cell.WHITE) {
+                    sum++;
+                }
+            }
+        }
+        return sum;
+
     }
 
     /**
      * Возвращает количество черных клеток.
      */
     public int getQuantityOfBlack() {
-        return quantityOfBlack;
+        int sum = 0;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (this.board[i][j] == Cell.BLACK) {
+                    sum++;
+                }
+            }
+        }
+        return sum;
+    }
+
+    /**
+     * Возвращает количество клеток цыета cell.
+     *
+     * @param cell - цвет клетки
+     */
+    public int getQuantityOfYourStones(@NotNull final Cell cell) {
+        int sum = 0;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (this.board[i][j] == cell) {
+                    sum++;
+                }
+            }
+        }
+        return sum;
     }
 
     /**
      * Возвращает количество пустых клеток.
      */
     public int getQuantityOfEmpty() {
-        return BOARD_SIZE * BOARD_SIZE - quantityOfBlack - quantityOfWhite;
+        int sum = 64;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (this.board[i][j] != Cell.EMPTY) {
+                    sum--;
+                }
+            }
+        }
+        return sum;
     }
 
-    private void checkArgument(int row, int col) {
+    private void checkArgument(final int row, final int col) {
         if (row >= BOARD_SIZE || row < 0 || col >= BOARD_SIZE || col < 0) {
             logger.log(Level.ERROR, "Ошибка в передачи координат на доску.");
             throw new IllegalArgumentException();
@@ -190,10 +227,11 @@ public class Board {
     /**
      * Устанавливает фишку в указанное место, переворачивая другие фишки в соответсвии с логикой игры.
      *
-     * @param row - строка.
-     * @param col - колонна.
+     * @param row        - строка.
+     * @param col        - колонна.
+     * @param playerCell - цвет игрока.
      */
-    public void placePiece(int row, int col, Cell playerCell) {
+    public void placePiece(final int row, final int col, @NotNull final Cell playerCell) {
         set(row, col, playerCell);
 
         for (int dr = -1; dr <= 1; dr++) {
@@ -233,19 +271,25 @@ public class Board {
      * @param playerCell - клетка цвета игрока, осуществляющего ход.
      * @return возвращает копию доски после хода.
      */
-    public Board placePieceAndGetCopy(int row, int col, Cell playerCell) {
-        Board copy = getBoardCopy();
+    public Board placePieceAndGetCopy(final int row, final int col, @NotNull final Cell playerCell) {
+        final Board copy = getBoardCopy();
         copy.placePiece(row, col, playerCell);
         return copy;
     }
 
+    /**
+     * Метод проверяющий конец игры
+     */
     public boolean isGameOver() {
-        List<Move> blackMoves = getAllAvailableMoves(Cell.BLACK);
-        List<Move> whiteMoves = getAllAvailableMoves(Cell.WHITE);
+        final List<Move> blackMoves = getAllAvailableMoves(Cell.BLACK);
+        final List<Move> whiteMoves = getAllAvailableMoves(Cell.WHITE);
 
-        return blackMoves.isEmpty() && whiteMoves.isEmpty();
+        return !blackMoves.isEmpty() || !whiteMoves.isEmpty();
     }
 
+    /**
+     * Метод выявляющий победителя
+     */
     public Cell getWinner() {
         int blackCount = 0;
         int whiteCount = 0;
@@ -269,39 +313,49 @@ public class Board {
         }
     }
 
-    public static String displayBoardOnClientWithoutNumbers(final Board board) {
+    /**
+     * Метод превращает доску в string, без чисел ряда и колонки
+     *
+     * @param board - доска
+     */
+    public static String displayBoardOnClientWithoutNumbers(@NotNull final Board board) {
         final int size = board.getSize();
 
-        String boardInSrting = "";
+        StringBuilder boardInString = new StringBuilder();
         for (int row = 0; row < size; row++) {
-            for (int col = 0; col < size; col++) {
-                final Cell cell = board.get(row, col);
-                final String cellSymbol = cell == Cell.BLACK ? "B" : cell == Cell.WHITE ? "W" : "-";
-                boardInSrting += cellSymbol + " ";
-            }
-            boardInSrting += "\n";
+            getBoardString(board, size, boardInString, row);
         }
-        return boardInSrting;
+        return boardInString.toString();
     }
-    public static String displayBoardOnClient(final Board board) {
+
+    /**
+     * Метод превращает доску в string с числами ряда и колонки
+     *
+     * @param board - доска
+     */
+    public static String displayBoardOnClient(@NotNull final Board board) {
         final int size = board.getSize();
 
-        String boardInSrting = "  ";
+        StringBuilder boardInSrting = new StringBuilder("  ");
         for (int i = 0; i < size; i++) {
-            boardInSrting += (i + 1) + " ";
+            boardInSrting.append(i + 1).append(" ");
         }
-        boardInSrting += "\n";
+        boardInSrting.append("\n");
 
         for (int row = 0; row < size; row++) {
-            boardInSrting += (row + 1) + " ";
-            for (int col = 0; col < size; col++) {
-                final Cell cell = board.get(row, col);
-                final String cellSymbol = cell == Cell.BLACK ? "B" : cell == Cell.WHITE ? "W" : "-";
-                boardInSrting += cellSymbol + " ";
-            }
-            boardInSrting += "\n";
+            boardInSrting.append(row + 1).append(" ");
+            getBoardString(board, size, boardInSrting, row);
         }
-        return boardInSrting;
+        return boardInSrting.toString();
+    }
+
+    private static void getBoardString(@NotNull final Board board, final int size, @NotNull StringBuilder boardInSrting, final int row) {
+        for (int col = 0; col < size; col++) {
+            final Cell cell = board.get(row, col);
+            final String cellSymbol = cell == Cell.BLACK ? "B" : cell == Cell.WHITE ? "W" : "-";
+            boardInSrting.append(cellSymbol).append(" ");
+        }
+        boardInSrting.append("\n");
     }
 }
 
