@@ -1,7 +1,10 @@
 package serverrequest;
-
+/**
+ * Класс запроса на выход с комнаты
+ */
 public class LeaveRoomRequest implements Request {
-    protected final String command = "LEAVEROOM";
-
-
+    /**
+     * Название запроса
+     */
+    public final String command = "LEAVEROOM";
 }

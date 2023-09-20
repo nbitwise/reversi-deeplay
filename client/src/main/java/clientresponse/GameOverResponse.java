@@ -1,7 +1,9 @@
 package clientresponse;
 
 import org.jetbrains.annotations.NotNull;
-
+/**
+ * Класс ответа на запрос конца игры
+ */
 public class GameOverResponse implements Response {
     /**
      * Название ответа
