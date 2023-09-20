@@ -1,5 +1,6 @@
 package botresponses;
 
+//возвращает клиенту ответ о статусе регистрации на ботФерме
 public class ResponseBotFarmRegistration implements Response {
     public final String command = "REGISTRATION_BOT_FARM";
     public String status;

@@ -20,7 +20,7 @@ public abstract class Player {
     public final int playerId;
     public final Cell playerCell;
 
-    public abstract String getPlayerID();
+
 
     /**
      * Конструктор создает объект игрока с указанным типом фишки (клетки) и присваивает
@@ -93,11 +93,6 @@ public abstract class Player {
             }
         }
 
-        @Override
-        public String getPlayerID() {
-            // Возвращаем идентификатор игрока (например, имя)
-            return "1"; // Замените на нужное имя игрока
-        }
     }
 
 
@@ -120,9 +115,5 @@ public abstract class Player {
             return move;
         }
 
-        public String getPlayerID() {
-            // Возвращаем идентификатор бота (например, его уникальный номер)
-            return "Bot1"; // Замените на нужный уникальный номер
-        }
     }
 }

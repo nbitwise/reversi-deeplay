@@ -1,6 +1,8 @@
 package botfarm;
 
 import bot.BotPlayerMinMaxRuslan;
+import bot.RandomBot;
+import botrequests.RequestRegistrationBotFarm;
 import botrequests.RequestWhereICanGoBotFarm;
 import botresponses.*;
 import com.google.gson.*;
@@ -21,21 +23,24 @@ import java.util.stream.Collectors;
 
 class BotFarm {
 
-
     private static ConcurrentMap<UUID, Integer> clients = new ConcurrentHashMap<>();
 
-
     public static void main(String[] args) throws IOException {
-        int port;
-        Properties appProps = new Properties();
-        File file = new File("botfarm/file.properties");
+        final int port;
+        final Properties appProps = new Properties();
+        final File file = new File("botfarm/file.properties");
 
-        final Player botPlayer = new BotPlayerMinMaxRuslan(Cell.BLACK); //цвет настроить
+        final Player ruslanBotMinMaxBlack = new BotPlayerMinMaxRuslan(Cell.BLACK);
+        final Player randomBotBlack = new RandomBot(Cell.BLACK);
+        final Player ruslanBotMinMaxWhite = new BotPlayerMinMaxRuslan(Cell.WHITE);
+        final Player randomBotWhite = new RandomBot(Cell.WHITE);
 
         Map<Integer, Player> botList = new HashMap<>();
 
-        botList.put(1, botPlayer);
-
+        botList.put(1, ruslanBotMinMaxBlack);
+        botList.put(2, randomBotBlack);
+        botList.put(3, ruslanBotMinMaxWhite);
+        botList.put(4, randomBotWhite);
 
         try (FileInputStream propertiesInput = new FileInputStream(file)) {
             appProps.load(propertiesInput);
@@ -47,9 +52,20 @@ class BotFarm {
             List<Command> commands = new ArrayList<>();
 
             commands.add(Command.newCommand("REGISTRATION_BOT_FARM", (jsonRequest, uuid) -> {
-                String botName = jsonRequest.get("botName").getAsString().toUpperCase();
-                if (botName.equals("BotPlayerMinMaxRuslan")) {
+                final Gson gson = new Gson();
+                final RequestRegistrationBotFarm registrationBotFarm = gson.fromJson(jsonRequest, RequestRegistrationBotFarm.class);
+                final String botName = registrationBotFarm.botName;
+                if (botName.equals("ruslanBotMinMaxBlack")) {
                     clients.put(uuid, 1);
+                }
+                if (botName.equals("randomBotBlack")) {
+                    clients.put(uuid, 2);
+                }
+                if (botName.equals("ruslanBotMinMaxWhite")) {
+                    clients.put(uuid, 3);
+                }
+                if (botName.equals("randomBotWhite")) {
+                    clients.put(uuid, 4);
                 }
 
 
@@ -58,11 +74,11 @@ class BotFarm {
 
 
             commands.add(Command.newCommand("WHERE_I_CAN_GO_REQUEST", (jsonRequest, uuid) -> {
-                Gson gson = new Gson();
-                RequestWhereICanGoBotFarm requestMakeMoveBot = gson.fromJson(jsonRequest, RequestWhereICanGoBotFarm.class);
-                Player currentBot = botList.get(clients.get(uuid));
-                Move move = currentBot.makeMove(BoardParser.parse(requestMakeMoveBot.board, 'B', 'W', '-'));
-                String moveString = String.valueOf(move.row) + String.valueOf(move.col);
+                final Gson gson = new Gson();
+                final RequestWhereICanGoBotFarm requestMakeMoveBot = gson.fromJson(jsonRequest, RequestWhereICanGoBotFarm.class);
+                final Player currentBot = botList.get(clients.get(uuid));
+                final Move move = currentBot.makeMove(BoardParser.parse(requestMakeMoveBot.board, 'B', 'W', '-'));
+                final String moveString = String.valueOf(move.row) + String.valueOf(move.col);
                 return new ResponseMoveByBot("success", moveString);
             }));
 
@@ -70,7 +86,7 @@ class BotFarm {
             while (!server.isClosed()) {
                 Socket socket = server.accept();
                 try {
-                    ClientProcessor thisClient = new ClientProcessor(socket, commands);
+                    final ClientProcessor thisClient = new ClientProcessor(socket, commands);
                 } catch (IOException e) {
 
                     socket.close();
@@ -81,14 +97,13 @@ class BotFarm {
         }
     }
 
-
 }
 
 class ClientProcessor extends Thread {
     public Map commands;
-    public BufferedReader socketBufferedReader;
-    public BufferedWriter socketBufferedWriter;
-    public UUID uuid;
+    public final BufferedReader socketBufferedReader;
+    public final BufferedWriter socketBufferedWriter;
+    public final UUID uuid;
 
     ClientProcessor(Socket socket, List<Command> commands) throws IOException {
         this.commands = commands.stream().collect(Collectors.toMap(Command::getName, Function.identity()));
@@ -106,10 +121,9 @@ class ClientProcessor extends Thread {
                 if (line == null) {
                     return;
                 }
-                System.out.println(line);
-                JsonObject request = JsonParser.parseString(line).getAsJsonObject();
-                String commandName = request.get("command").getAsString().toUpperCase();
-                Command command = (Command) commands.get(commandName);
+                final JsonObject request = JsonParser.parseString(line).getAsJsonObject();
+                final String commandName = request.get("command").getAsString().toUpperCase();
+                final Command command = (Command) commands.get(commandName);
                 sendReply(command.process(request, uuid));
             }
         } catch (IOException e) {
@@ -124,9 +138,9 @@ class ClientProcessor extends Thread {
      */
     synchronized void sendReply(Response response) {
         try {
-            GsonBuilder builder = new GsonBuilder();
-            Gson gson = builder.create();
-            String jsonRequest = gson.toJson(response);
+            final GsonBuilder builder = new GsonBuilder();
+            final Gson gson = builder.create();
+            final String jsonRequest = gson.toJson(response);
             socketBufferedWriter.write(jsonRequest);
             socketBufferedWriter.newLine();
             socketBufferedWriter.flush();
