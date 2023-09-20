@@ -1,11 +1,22 @@
 package clientresponse;
 
-public class RegistrationResponse implements Response {
-    public final String command = "REGISTRATION";
-    public String status;
-    public String message;
+import org.jetbrains.annotations.NotNull;
 
-    public RegistrationResponse(String status, String message) {
+public class RegistrationResponse implements Response {
+    /**
+     * Название ответа
+     */
+    public final String command = "REGISTRATION";
+    /**
+     * Статус
+     */
+    public final String status;
+    /**
+     * Сообщение
+     */
+    public final String message;
+
+    public RegistrationResponse(@NotNull final String status, @NotNull final String message) {
         this.status = status;
         this.message = message;
     }

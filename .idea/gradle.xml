@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/LocalGame" />
             <option value="$PROJECT_DIR$/UI" />
             <option value="$PROJECT_DIR$/client" />
+            <option value="$PROJECT_DIR$/database" />
             <option value="$PROJECT_DIR$/server" />
           </set>
         </option>
@@ -26,6 +27,7 @@
             <option value="$PROJECT_DIR$/LocalGame" />
             <option value="$PROJECT_DIR$/UI" />
             <option value="$PROJECT_DIR$/client" />
+            <option value="$PROJECT_DIR$/database" />
             <option value="$PROJECT_DIR$/server" />
           </set>
         </option>

@@ -1,19 +1,23 @@
 package clientresponse;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ConnectToRoomResponse implements Response {
-    public String command = "CONNECTTOROOM";
-    public String message;
-    public String status;
+    /**
+     * Название ответа
+     */
+    public final String command = "CONNECTTOROOM";
+    /**
+     * Сообщение
+     */
+    public final String message;
+    /**
+     * Статус овета
+     */
+    public final String status;
 
-
-    public ConnectToRoomResponse(String status, String message) {
-
+    public ConnectToRoomResponse(@NotNull final String status, @NotNull final String message) {
         this.status = status;
         this.message = message;
-    }
-
-    public String getStatus() {
-
-        return status;
     }
 }
