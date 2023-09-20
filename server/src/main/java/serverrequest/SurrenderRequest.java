@@ -1,4 +1,4 @@
-package clientrequest;
+package serverrequest;
 /**
  * Класс запроса на сдачу
  */

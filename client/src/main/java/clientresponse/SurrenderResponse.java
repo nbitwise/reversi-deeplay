@@ -1,7 +1,9 @@
 package clientresponse;
 
 import org.jetbrains.annotations.NotNull;
-
+/**
+ * Класс ответа на запрос сдачи
+ */
 public class SurrenderResponse implements Response {
     /**
      * Название ответа

@@ -1,24 +1,32 @@
 package serverresponses;
 
+import org.jetbrains.annotations.NotNull;
+/**
+ * Класс ответа на запрос создания команты
+ */
 public class CreateRoomResponse implements Response {
-    protected final String command = "CREATEROOM";
-    private String status;
-    private Integer roomId;
-    private String message;
+    /**
+     * Название ответа
+     */
+    public final String command = "CREATEROOM";
+    /**
+     * Сообщение
+     */
+    public final String message;
+    /**
+     * Статус
+     */
+    public final String status;
+    /**
+     * Id комнаты
+     */
+    public final int roomId;
 
-    public CreateRoomResponse(String status, String message, Integer roomId) {
+    public CreateRoomResponse(@NotNull final String message, @NotNull final String status, int roomId) {
+        this.message = message;
         this.status = status;
         this.roomId = roomId;
-        this.message = message;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public int getRoomId() {
-        return roomId;
-    }
 
 }
-

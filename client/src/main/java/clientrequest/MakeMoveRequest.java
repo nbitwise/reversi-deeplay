@@ -1,5 +1,7 @@
 package clientrequest;
-
+/**
+ * Класс запроса на отправку хода
+ */
 public class MakeMoveRequest implements Request {
     /**
      * Название запроса

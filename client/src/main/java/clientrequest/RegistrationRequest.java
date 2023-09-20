@@ -1,4 +1,7 @@
 package clientrequest;
+/**
+ * Класс запроса на регистрацию
+ */
 public class RegistrationRequest implements Request {
     /**
      * Название запроса

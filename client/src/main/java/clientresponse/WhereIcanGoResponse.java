@@ -1,7 +1,9 @@
 package clientresponse;
 
 import org.jetbrains.annotations.NotNull;
-
+/**
+ * Класс ответа на запрос просмотра доступных ходов
+ */
 public class WhereIcanGoResponse implements Response {
     /**
      * Название ответа

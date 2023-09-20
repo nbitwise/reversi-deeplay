@@ -1,5 +1,8 @@
 package clientrequest;
 
+/**
+ * Класс запроса подключения к комнате
+ */
 public class ConnectToRoomRequest implements Request {
     /**
      * Название запроса

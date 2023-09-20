@@ -1,7 +1,9 @@
 package clientresponse;
 
 import org.jetbrains.annotations.NotNull;
-
+/**
+ * Класс ответа на запрос выхода из команты
+ */
 public class LeaveRoomResponse implements Response {
     /**
      * Название ответа

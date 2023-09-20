@@ -1,5 +1,10 @@
 package serverrequest;
-
+/**
+ * Класс запроса для получения возможных ходов
+ */
 public class WhereICanGoRequest implements Request{
-    public String command = "WHEREICANGORESPONSE";
+    /**
+     * Название запроса
+     */
+    public final String command = "WHEREICANGORESPONSE";
 }

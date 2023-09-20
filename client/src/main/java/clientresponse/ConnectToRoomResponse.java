@@ -1,7 +1,9 @@
 package clientresponse;
 
 import org.jetbrains.annotations.NotNull;
-
+/**
+ * Класс ответа на запрос подключения к комнате
+ */
 public class ConnectToRoomResponse implements Response {
     /**
      * Название ответа

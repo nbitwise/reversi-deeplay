@@ -2,7 +2,9 @@ package clientresponse;
 
 
 import org.jetbrains.annotations.NotNull;
-
+/**
+ * Класс ответа на запрос просмотра существующй комнаты
+ */
 public class ViewCreatedRoomsResponse implements Response {
     /**
      * Название ответа
