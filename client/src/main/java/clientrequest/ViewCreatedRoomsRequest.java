@@ -1,11 +1,16 @@
 package clientrequest;
 
-public class ViewCreatedRoomsRequest implements Request{
-        public final String command = "VIEWROOMS";
+public class ViewCreatedRoomsRequest implements Request {
+    /**
+     * Название запроса
+     */
+    public final String command = "VIEWROOMS";
+    /**
+     * Id комнаты
+     */
+    public final int roomId;
 
-        public int roomId;
-
-        public ViewCreatedRoomsRequest(int roomId) {
-                this.roomId = roomId;
-        }
+    public ViewCreatedRoomsRequest(final int roomId) {
+        this.roomId = roomId;
+    }
 }

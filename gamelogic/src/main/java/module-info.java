@@ -3,5 +3,4 @@ module reversi.deeplay.gamelogic.main {
     exports logic;
     exports gamelogging;
     exports parsing;
-
 }
