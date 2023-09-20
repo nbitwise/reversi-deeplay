@@ -28,6 +28,7 @@ public class Game {
      * @param gameId            id игры.
      * @param sessionPlayerFile файл в который будет записан лог игры.
      */
+
     public void startGame(@NotNull final Board board, @NotNull final Player black, @NotNull final Player white, final int gameId,
                           @NotNull final String sessionPlayerFile) {
         GameLogger.logStart(gameId, sessionPlayerFile);
@@ -56,6 +57,7 @@ public class Game {
         if (!board.getAllAvailableMoves(player.playerCell).isEmpty()) {
             final Move blackMove = player.makeMove(copyBoard);
             board.placePiece(blackMove.row, blackMove.col, player.playerCell);
+
             GameLogger.logMove(board, blackMove.row, blackMove.col, player.playerId, String.valueOf(player.playerCell), writeForHuman, moveNumber);
             moveNumber++;
         }

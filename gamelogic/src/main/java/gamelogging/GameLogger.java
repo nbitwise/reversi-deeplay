@@ -8,6 +8,12 @@ import org.apache.logging.log4j.Logger;
 import java.io.FileWriter;
 import java.io.IOException;
 
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.UUID;
+
+
 /**
  * Класс Logging дает возможность записывть ход игры.
  */
@@ -72,11 +78,13 @@ public class GameLogger {
      * @param gameId       id игры.
      * @param fileForHuman файл записи игр.
      */
+
     public static void logStart(final int gameId, final String fileForHuman) {
         try (FileWriter writeForHuman = new FileWriter(fileForHuman, true)) {
             final String text = "Game id " + gameId + " \n";
             writeForHuman.write(text);
             writeForHuman.flush();
+
         } catch (IOException ex) {
             logger.log(Level.ERROR, () -> "ошибка в начале логирования, gameID: " + gameId);
         }
@@ -85,6 +93,7 @@ public class GameLogger {
     /**
      * Метод logEnd записывает результат игры.
      *
+
      * @param board        доска.
      * @param fileForHuman файл записи игры
      */
