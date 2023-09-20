@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9bde379f-24a8-4263-a28f-fcba2616f0d6" name="Changes" comment="Fix&amp;feat: отрефакторил модули client, gamelogic, localgame, server переписано гуи(модуль UI). добавлена возможность игра в гуи(клиент серверная часть приложения)">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="9bde379f-24a8-4263-a28f-fcba2616f0d6" name="Changes" comment="проверим сбилдится ли проект, если да, удалю этот комит и разделю его на несколько частей">
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/7/b7aced319dc629e174487f6f0a6b727ec50ccd0c" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/7/b7aced319dc629e174487f6f0a6b727ec50ccd0c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/b/cbee37e14f85dde07b545a4bbf33bff956c260bc" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/3/e34a101a27e1256692677be1246bc541cd760bea" beforeDir="false" />
@@ -16,75 +14,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/e/3/e34a101a27e1256692677be1246bc541cd760bea" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Analysis" beforeDir="false" afterPath="$PROJECT_DIR$/Analysis" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FileForHumanTest" beforeDir="false" afterPath="$PROJECT_DIR$/FileForHumanTest" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/UI/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/src/main/java/gui/Black.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/main/java/gui/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/main/java/gui/GUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/src/main/java/gui/Reversi.pdf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/src/main/java/gui/White.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/UI/src/main/java/gui/icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/main/java/gui/intro.java" beforeDir="false" afterPath="$PROJECT_DIR$/UI/src/main/java/gui/intro.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/src/main/java/module-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/client/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/file.properties" beforeDir="false" afterPath="$PROJECT_DIR$/client/file.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/client/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/AuthorizationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/AuthorizationRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/ConnectToRoomRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/ConnectToRoomRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/CreateRoomRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/CreateRoomRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/GUIRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/GameoverRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/GameoverRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/LeaveRoomRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/LeaveRoomRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/MakeMoveRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/MakeMoveRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/RegistrationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/RegistrationRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/Request.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/StartGameRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/StartGameRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/SurrenderRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/SurrenderRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/ViewCreatedRoomsRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/ViewCreatedRoomsRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientrequest/WhereICanGoRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientrequest/WhereICanGoRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/AuthorizationResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/AuthorizationResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/ConnectToRoomResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/ConnectToRoomResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/CreateRoomResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/CreateRoomResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/GUIResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/GameoverResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/GameoverResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/LeaveRoomResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/LeaveRoomResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/MakeMoveResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/MakeMoveResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/RegistrationResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/RegistrationResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/Response.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/Response.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/StartGameResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/StartGameResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/SurrenderResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/SurrenderResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/ViewCreatedRoomsResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/ViewCreatedRoomsResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/clientresponse/WhereIcanGoResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/clientresponse/WhereIcanGoResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/module-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/test/java/client/ClientTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fileForHuman" beforeDir="false" afterPath="$PROJECT_DIR$/fileForHuman" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamelogic/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/gamelogging/GameLogger.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/gamelogging/GameLogger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/gamelogging/LogAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/gamelogging/LogAnalyzer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Cell.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Cell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Move.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/logic/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/module-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamelogic/src/main/java/parsing/BoardParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/main/java/parsing/BoardParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamelogic/src/test/java/test/LoggingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/test/java/test/LoggingTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamelogic/src/test/java/test/PlayerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/gamelogic/src/test/java/test/PlayerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamelogic/src/test/java/test/UITest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/localgame/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/localgame/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/localgame/src/main/java/io/deeplay/Application.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/localgame/src/main/java/io/deeplay/Game.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/localgame/src/main/java/module-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/localgame/src/test/java/test/GameTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/localgame/src/test/java/test/GameTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/server/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/server/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/server/Room.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/server/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/serverrequest/GUIRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/serverrequest/LeaveRoomRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/serverrequest/LeaveRoomRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/serverrequest/StartGameRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/serverrequest/StartGameRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/serverresponses/GUIResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/serverresponses/GameoverResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/serverresponses/GameoverResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/systemFile" beforeDir="false" afterPath="$PROJECT_DIR$/systemFile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -137,20 +70,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-17&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/job/deeplay/groupprogect/game/reversiAI/UI&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "extract.method.default.visibility": "private",
+    "jdk.selected.JAVA_MODULE": "corretto-17",
+    "last_opened_file_path": "C:/job/deeplay/groupprogect/game/reversiAI/UI",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.15917969",
+    "project.structure.side.proportion": "0.2"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\job\deeplay\groupprogect\game\reversiAI\UI" />
@@ -315,7 +248,14 @@
       <option name="project" value="LOCAL" />
       <updated>1695125654372</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="проверим сбилдится ли проект, если да, удалю этот комит и разделю его на несколько частей">
+      <created>1695209579642</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1695209579642</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -335,7 +275,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fix&amp;fit: отрефакторил модули client, databse, gamelogic, localgame. написал тесты для модуля database, минимакс алгоритма и минимакс бота, функции оценки доски" />
     <MESSAGE value="Fix&amp;feat: отрефакторил модули client, databse, gamelogic, localgame. написал тесты для модуля database, минимакс алгоритма и минимакс бота, функции оценки доски. переписано гуи. добавлена возможность игра в гуи(клиент серверная часть приложения)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix&amp;feat: отрефакторил модули client, databse, gamelogic, localgame. написал тесты для модуля database, минимакс алгоритма и минимакс бота, функции оценки доски. переписано гуи. добавлена возможность игра в гуи(клиент серверная часть приложения)" />
+    <MESSAGE value="проверим сбилдится ли проект, если да, удалю этот комит и разделю его на несколько частей" />
+    <option name="LAST_COMMIT_MESSAGE" value="проверим сбилдится ли проект, если да, удалю этот комит и разделю его на несколько частей" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
