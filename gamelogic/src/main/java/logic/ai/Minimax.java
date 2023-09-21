@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Minimax Algorithm
  */
-public class Minimax implements Algorithm {
+public class Minimax{
 
     private Minimax() {
     }

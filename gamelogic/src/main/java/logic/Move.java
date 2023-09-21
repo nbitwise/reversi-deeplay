@@ -45,6 +45,22 @@ public final class Move {
     public int hashCode() {
         return Objects.hash(row, col);
     }
+    /**
+     * Получить строку хода.
+     *
+     * @return Строка хода.
+     */
+    public int getRow() {
+        return row;
+    }
+    /**
+     * Получить столбец хода.
+     *
+     * @return Столбец хода.
+     */
+    public int getCol() {
+        return col;
+    }
 
     @Override
     public String toString() {

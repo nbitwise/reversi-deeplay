@@ -17,8 +17,8 @@ public class Board {
     private final Cell[][] board;
     private static final int BOARD_SIZE = 8;
     private final Logger logger = LogManager.getLogger(Board.class);
-
-
+    private int[][] visitCounts;
+    private int[][] actionCounts;
     /**
      * Создает доску и четыре фишки по центру карты.
      */
@@ -357,8 +357,71 @@ public class Board {
         }
         boardInSrting.append("\n");
     }
-}
+    /**
+     * Устанавливает состояние доски на основе другого объекта Board.
+     *
+     * @param otherBoard Другой объект Board, состояние которого нужно установить на текущей доске.
+     */
+    public void setBoard(Board otherBoard) {
+        if (otherBoard.getSize() != this.getSize()) {
+            throw new IllegalArgumentException("Размеры досок не совпадают");
+        }
 
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                this.set(row, col, otherBoard.get(row, col));
+            }
+        }
+    }
+    /**
+     * Возвращает копию доски с текущим состоянием.
+     *
+     * @return Копия доски с текущим состоянием.
+     */
+    public Board getBCopy() {
+        Board copy = new Board();
+        copy.setBoard(this);
+        return copy;
+    }
+    /**
+     * Получить количество посещений ячейки на доске по указанным координатам.
+     *
+     * @param row Строка на доске.
+     * @param col Столбец на доске.
+     * @return Количество посещений ячейки.
+     */
+    public int getVisitCount(int row, int col) {
+        return visitCounts[row][col];
+    }
+
+    /**
+     * Получить количество действий (действий агента или игроков) в ячейке на доске по указанным координатам.
+     *
+     * @param row Строка на доске.
+     * @param col Столбец на доске.
+     * @return Количество действий в ячейке.
+     */
+    public int getActionCount(int row, int col) {
+        return actionCounts[row][col];
+    }
+    /**
+     * Подсчитывает количество ячеек на доске, которые содержат указанный тип клетки (черные, белые или пустые).
+     *
+     * @param cell Тип клетки, для которой необходимо подсчитать количество.
+     * @return Количество клеток на доске с указанным типом.
+     */
+    public int countCell(Cell cell) {
+        int count = 0;
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if (board[row][col] == cell) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+}
 
 
 
