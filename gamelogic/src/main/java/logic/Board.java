@@ -357,6 +357,10 @@ public class Board {
         }
         boardInSrting.append("\n");
     }
+
+    public Cell[][] getBoard() {
+        return board;
+    }
 }
 
 
