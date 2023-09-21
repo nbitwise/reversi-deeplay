@@ -12,6 +12,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class intro {
+    /**
+     * Класс intro предоставляет метод info() для отображения информации из PDF-файла в диалоговом окне.
+     * Он создает окно JFrame, загружает PDF-документ, отображает его страницы в виде изображений и выводит их в окне.
+     */
     public static void info() {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Information");
@@ -20,7 +24,7 @@ public class intro {
 
             JPanel mainPanel = new JPanel(new BorderLayout());
 
-            String pdfFilePath = "C:\\job\\deeplay\\groupprogect\\game\\reversi-deeplay\\UI\\src\\main\\java\\gui\\Reversi.pdf";
+            String pdfFilePath = "resources/Reversi.pdf";
 
             try {
                 PDDocument document = PDDocument.load(new File(pdfFilePath));
@@ -63,8 +67,6 @@ public class intro {
                         closeButton.setBackground(Color.BLACK);
                     }
                 });
-
-
 
 
                 mainPanel.add(closeButton, BorderLayout.SOUTH);

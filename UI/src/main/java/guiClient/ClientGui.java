@@ -1,6 +1,7 @@
 package guiClient;
 
 import com.google.gson.Gson;
+import gui.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,10 +12,11 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Properties;
 
+import static gui.MainGameWindow.musicPlayer;
 import static guiClient.GetResponsesMethodsHuman.getMessageHuman;
 import static guiClient.SendMethods.sendMessage;
 
-public class clientGui extends JFrame {
+public class ClientGui extends JFrame {
 
     final Socket socket;
     public final BufferedReader bufferedReader;
@@ -24,13 +26,13 @@ public class clientGui extends JFrame {
 
     private static int countGame = 0;
 
-    private static final Logger logger = LogManager.getLogger(clientGui.class);
+    private static final Logger logger = LogManager.getLogger(ClientGui.class);
 
     public RegAndAuth regAndAuth;
     public CreateAndConnect createAndConnect;
     public RoomGui roomGui;
 
-    private clientGui(@NotNull final String host, final int port) throws IOException {
+    private ClientGui(@NotNull final String host, final int port) throws IOException {
         socket = new Socket(host, port);
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -60,10 +62,10 @@ public class clientGui extends JFrame {
         }
 
 
-        clientGui clientGui = new clientGui(host, port);
+        ClientGui clientGui = new ClientGui(host, port);
         SwingUtilities.invokeLater(() -> {
-            MainGameWindow.musicPlayer = new MusicPlayer("resources/retro.wav");
-//                musicPlayer.play();
+            musicPlayer = new MusicPlayer("resources/retro.wav");
+                musicPlayer.play();
             new MainStartWindow(clientGui).setVisible(true);
         });
 

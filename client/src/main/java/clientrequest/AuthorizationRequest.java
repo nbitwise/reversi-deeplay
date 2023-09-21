@@ -11,7 +11,7 @@ public class AuthorizationRequest implements Request {
     public final String command = "AUTHORIZATION";
 
     /**
-     * Имя игрока
+     * имя игрока
      */
     public final String nickname;
 

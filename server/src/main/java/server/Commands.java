@@ -336,7 +336,7 @@ public class Commands {
                     String boardString = Board.displayBoardOnClient(room.board);
                     String boardStringWON = Board.displayBoardOnClientWithoutNumbers(room.board);
                     return new WhereIcanGoResponse(availableMovesString, boardString, boardStringWON,
-                            playerCell == Cell.BLACK ? PLAYER_COLOR_BLACK : PLAYER_COLOR_WHITE);
+                            playerCell == Cell.BLACK ? PLAYER_COLOR_WHITE : PLAYER_COLOR_BLACK);
                 }
                 return new MakeMoveResponse(FAIL_STATUS, YOU_ARE_NOT_IN_ROOM);
             }
