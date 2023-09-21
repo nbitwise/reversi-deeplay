@@ -15,7 +15,7 @@ public class SendMethods {
     private SendMethods() {
     }
 
-    public static void sendMessage(@NotNull final clientGui client) throws IOException {
+    public static void sendMessage(@NotNull final ClientGui client) throws IOException {
         final Scanner scanner = new Scanner(System.in);
         while (client.socket.isConnected()) {
             final String msg = scanner.nextLine();
@@ -23,7 +23,7 @@ public class SendMethods {
         }
     }
 
-    static void sendRequest(@NotNull final Request request, @NotNull final clientGui client) {
+    static void sendRequest(@NotNull final Request request, @NotNull final ClientGui client) {
         final String jsonRequest = client.gson.toJson(request);
         try {
             client.bufferedWriter.write(jsonRequest);
@@ -34,7 +34,7 @@ public class SendMethods {
         }
     }
 
-    public static void createJsonAndSendCommand(@NotNull final clientGui client, @NotNull final String input) throws IOException {
+    public static void createJsonAndSendCommand(@NotNull final ClientGui client, @NotNull final String input) throws IOException {
         final String[] commandParts = input.split("\\s+");
         final String command = commandParts[0];
 
@@ -60,7 +60,7 @@ public class SendMethods {
             default -> commandDefault(command);
         }
     }
-    private static void commandRegistration(@NotNull final clientGui client, @NotNull final String[] commandParts) {
+    private static void commandRegistration(@NotNull final ClientGui client, @NotNull final String[] commandParts) {
         if (commandParts.length > 1) {
             final String nickname = commandParts[1];
             final RegistrationRequest registrationRequest = new RegistrationRequest(nickname);
@@ -69,7 +69,7 @@ public class SendMethods {
             logger.log(Level.INFO, "Usage: register <nickname>");
         }
     }
-    private static void commandAuthorization(@NotNull final clientGui client, @NotNull final String[] commandParts) {
+    private static void commandAuthorization(@NotNull final ClientGui client, @NotNull final String[] commandParts) {
         if (commandParts.length > 1) {
             final String nickname = commandParts[1];
             final AuthorizationRequest authorizationRequest = new AuthorizationRequest(nickname);
@@ -78,7 +78,7 @@ public class SendMethods {
             logger.log(Level.INFO, "Usage: login <nickname>");
         }
     }
-    private static void commandCreateRoom(@NotNull final clientGui client) {
+    private static void commandCreateRoom(@NotNull final ClientGui client) {
         if (client.roomId != 0) {
             logger.log(Level.INFO, "You can not create another room because you are already in room.");
         } else {
@@ -86,7 +86,7 @@ public class SendMethods {
             sendRequest(createRoomRequest, client);
         }
     }
-    private static void commandConnectToRoom(@NotNull final clientGui client, @NotNull final String[] commandParts) {
+    private static void commandConnectToRoom(@NotNull final ClientGui client, @NotNull final String[] commandParts) {
         if (client.roomId != 0) {
             logger.log(Level.INFO, "You can not connect to another room because you are already in room.");
         }
@@ -99,7 +99,7 @@ public class SendMethods {
             logger.log(Level.INFO, "Usage: connect to room <room_id>.");
         }
     }
-    private static void commandLeaveRoom(@NotNull final clientGui client) {
+    private static void commandLeaveRoom(@NotNull final ClientGui client) {
         if (client.roomId == 0) {
             logger.log(Level.INFO, "You can not leave room because you are not in room.");
         } else {
@@ -108,7 +108,7 @@ public class SendMethods {
             client.roomId = 0;
         }
     }
-    private static void commandStartGame(@NotNull final clientGui client, @NotNull final String []commandParts) {
+    private static void commandStartGame(@NotNull final ClientGui client, @NotNull final String []commandParts) {
         if (commandParts[2].equals("gui")) {
             StartGameRequest startGameRequest = new StartGameRequest(client.roomId, true);
             sendRequest(startGameRequest, client);
@@ -117,7 +117,7 @@ public class SendMethods {
             sendRequest(startGameRequest, client);
         }
     }
-    private static void commandMakeMove(@NotNull final clientGui client, @NotNull final String[] commandParts) {
+    private static void commandMakeMove(@NotNull final ClientGui client, @NotNull final String[] commandParts) {
         if (commandParts.length > 2) {
             final int row = Integer.parseInt(commandParts[1]);
             final int col = Integer.parseInt(commandParts[2]);
@@ -127,11 +127,11 @@ public class SendMethods {
             logger.log(Level.INFO, "Wrong coordinates.");
         }
     }
-    private static void commandSurrender(@NotNull final clientGui client) {
+    private static void commandSurrender(@NotNull final ClientGui client) {
         final SurrenderRequest surrenderRequest = new SurrenderRequest();
         sendRequest(surrenderRequest, client);
     }
-    private static void commandExit(@NotNull final clientGui client) throws IOException {
+    private static void commandExit(@NotNull final ClientGui client) throws IOException {
         client.close();
         System.exit(0);
     }

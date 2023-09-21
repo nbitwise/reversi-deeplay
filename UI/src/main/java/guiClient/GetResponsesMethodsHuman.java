@@ -18,11 +18,11 @@ public class GetResponsesMethodsHuman {
     private GetResponsesMethodsHuman() {
     }
 
-    static <T extends Response> T getResponse(@NotNull final Class<T> responseType, @NotNull final String jsonResponse, @NotNull final clientGui clientGui) {
+    static <T extends Response> T getResponse(@NotNull final Class<T> responseType, @NotNull final String jsonResponse, @NotNull final ClientGui clientGui) {
         return clientGui.gson.fromJson(jsonResponse, responseType);
     }
 
-    static void getMessageHuman(@NotNull final clientGui clientGui) {
+    static void getMessageHuman(@NotNull final ClientGui clientGui) {
         new Thread(() -> {
             while (clientGui.socket.isConnected()) {
                 try {
@@ -37,7 +37,7 @@ public class GetResponsesMethodsHuman {
         }).start();
     }
 
-    static void viewOnInComeMessageHuman(@NotNull final clientGui clientGui, @NotNull final String input) throws IOException {
+    static void viewOnInComeMessageHuman(@NotNull final ClientGui clientGui, @NotNull final String input) throws IOException {
         final JsonObject request = JsonParser.parseString(input).getAsJsonObject();
         final String commandName = request.get("command").getAsString().toUpperCase();
 
@@ -68,7 +68,7 @@ public class GetResponsesMethodsHuman {
         }
     }
 
-    private static void viewRegistration(@NotNull final clientGui clientGui, @NotNull final String input) {
+    private static void viewRegistration(@NotNull final ClientGui clientGui, @NotNull final String input) {
         final RegistrationResponse registrationResponse = getResponse(RegistrationResponse.class, input, clientGui);
         System.out.println("Registration response: " + registrationResponse.message);
 
@@ -80,7 +80,7 @@ public class GetResponsesMethodsHuman {
         }
     }
 
-    private static void viewAuthorization(@NotNull final clientGui clientGui, @NotNull final String input) {
+    private static void viewAuthorization(@NotNull final ClientGui clientGui, @NotNull final String input) {
         final AuthorizationResponse authorizationResponse = getResponse(AuthorizationResponse.class, input, clientGui);
         System.out.println("Authorization response: " + authorizationResponse.message);
 
@@ -90,7 +90,7 @@ public class GetResponsesMethodsHuman {
         }
     }
 
-    private static void viewCreateRoom(@NotNull final clientGui clientGui, @NotNull final String input) {
+    private static void viewCreateRoom(@NotNull final ClientGui clientGui, @NotNull final String input) {
         final CreateRoomResponse createRoomResponse = getResponse(CreateRoomResponse.class, input, clientGui);
         if (createRoomResponse.status.equals("fail")) {
             System.out.println("Create room response: " + createRoomResponse.message);
@@ -98,10 +98,10 @@ public class GetResponsesMethodsHuman {
         clientGui.roomId = createRoomResponse.roomId;
         System.out.println("Create room response: " + createRoomResponse.message + ", Room ID: " + createRoomResponse.roomId);
 
-        clientGui.roomGui.roomId.setText(String.valueOf(createRoomResponse.roomId));
+//        clientGui.roomGui.roomId.setText(String.valueOf(createRoomResponse.roomId));
     }
 
-    private static void viewConnectToRoom(@NotNull final clientGui clientGui, @NotNull final String input) {
+    private static void viewConnectToRoom(@NotNull final ClientGui clientGui, @NotNull final String input) {
         final ConnectToRoomResponse connectToRoomResponse = getResponse(ConnectToRoomResponse.class, input, clientGui);
         System.out.println("Connect to room response: " + connectToRoomResponse.message);
 
@@ -111,12 +111,12 @@ public class GetResponsesMethodsHuman {
         }
     }
 
-    private static void viewLeaveRoom(@NotNull final clientGui clientGui, @NotNull final String input) {
+    private static void viewLeaveRoom(@NotNull final ClientGui clientGui, @NotNull final String input) {
         final LeaveRoomResponse leaveRoomResponse = getResponse(LeaveRoomResponse.class, input, clientGui);
         System.out.println("Leave room response: " + leaveRoomResponse.message);
     }
 
-    private static void viewWhereICanGo(@NotNull final clientGui clientGui, @NotNull final String input) {
+    private static void viewWhereICanGo(@NotNull final ClientGui clientGui, @NotNull final String input) {
         final WhereIcanGoResponse whereIcanGoResponse = getResponse(WhereIcanGoResponse.class, input, clientGui);
         System.out.println("Your available moves " + whereIcanGoResponse.availableMoves);
         System.out.println(whereIcanGoResponse.color + " " + whereIcanGoResponse.boardStringWON + " " + whereIcanGoResponse.availableMoves);
@@ -126,31 +126,31 @@ public class GetResponsesMethodsHuman {
     }
 
 
-    private static void viewGameOver(@NotNull final clientGui clientGui, @NotNull final String input) {
+    private static void viewGameOver(@NotNull final ClientGui clientGui, @NotNull final String input) {
         final GameOverResponse gameoverResponse = getResponse(GameOverResponse.class, input, clientGui);
         System.out.println("Game over response " + gameoverResponse.message);
         JOptionPane.showMessageDialog(clientGui.roomGui, gameoverResponse.message);
         clientGui.roomGui.StartGameLabel.setEnabled(true);
     }
 
-    private static void viewMakeMove(@NotNull final clientGui clientGui, @NotNull final String input) {
+    private static void viewMakeMove(@NotNull final ClientGui clientGui, @NotNull final String input) {
         final MakeMoveResponse makeMoveResponse = getResponse(MakeMoveResponse.class, input, clientGui);
         System.out.println("MakeMove response " + makeMoveResponse.message);
     }
 
-    private static void viewStartGame(@NotNull final clientGui clientGui, @NotNull final String input) {
+    private static void viewStartGame(@NotNull final ClientGui clientGui, @NotNull final String input) {
         final StartGameResponse startGameResponse = getResponse(StartGameResponse.class, input, clientGui);
         System.out.println("StartGame response " + startGameResponse.message);
     }
 
-    private static void viewSurrender(@NotNull final clientGui clientGui, @NotNull final String input) {
+    private static void viewSurrender(@NotNull final ClientGui clientGui, @NotNull final String input) {
         final SurrenderResponse surrenderResponse = getResponse(SurrenderResponse.class, input, clientGui);
         JOptionPane.showMessageDialog(clientGui.roomGui, surrenderResponse.message);
         System.out.println(surrenderResponse.message);
     }
 
 
-    private static void viewExit(@NotNull final clientGui clientGui) throws IOException {
+    private static void viewExit(@NotNull final ClientGui clientGui) throws IOException {
         clientGui.close();
         System.exit(0);
     }

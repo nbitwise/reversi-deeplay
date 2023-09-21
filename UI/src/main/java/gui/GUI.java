@@ -15,7 +15,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -27,10 +26,10 @@ public class GUI extends JFrame {
     private Player currentPlayer;
     private Player player1;
     private Player player2;
-    private JLabel playerLabel;
+    private final JLabel playerLabel;
     private JLabel scoreLabel;
-    private JLabel player1InfoLabel;
-    private JLabel player2InfoLabel;
+    private final JLabel player1InfoLabel;
+    private final JLabel player2InfoLabel;
     private int blackScore;
     private int whiteScore;
     private ImageIcon blackIcon;
@@ -40,12 +39,9 @@ public class GUI extends JFrame {
 
     private JTextArea gameInfoTextArea;
     private JScrollPane gameInfoScrollPane;
-    private ArrayList<PlayerPanel> playerList;
-
 
     public GUI() {
         super();
-        playerList = new ArrayList<>();
         Font customFont = new Font("Arial", Font.BOLD, 25);
 
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -87,10 +83,10 @@ public class GUI extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        blackIcon = new ImageIcon("D:\\Java\\reversi-deeplay\\UI\\src\\main\\java\\gui\\Black.png");
-        whiteIcon = new ImageIcon("D:\\Java\\reversi-deeplay\\UI\\src\\main\\java\\gui\\White.png");
+        blackIcon = new ImageIcon("resources/Black.png");
+        whiteIcon = new ImageIcon("resources/White.png");
 
-        ImageIcon icon = new ImageIcon("D:\\Java\\reversi-deeplay\\UI\\src\\main\\java\\gui\\icon.png");
+        ImageIcon icon = new ImageIcon("resources/icon.png");
         setIconImage(icon.getImage());
 
         board = new Board();
@@ -311,10 +307,8 @@ public class GUI extends JFrame {
         refreshButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Здесь добавьте логику для обновления информации о доступных игроках
-                // Например, запрос к серверу и получение списка игроков в response
-                String[] updatedPlayerNames = new String[]{"Player1", "Player2", "Player3"}; // полученные имена игроков из response
-                updatePlayerList(updatedPlayerNames); // Обновляем список игроков в GUI
+                String[] updatedPlayerNames = new String[]{"Player1", "Player2", "Player3"};
+
             }
         });
 
@@ -386,30 +380,6 @@ public class GUI extends JFrame {
         updateBoardGUI();
 
     }
-
-    private void updatePlayerList(String[] playerNames) {
-        playerList.clear(); // Очищаем текущий список игроков
-
-        for (String playerName : playerNames) {
-            PlayerPanel playerPanel = new PlayerPanel(playerName);
-            playerList.add(playerPanel);
-        }
-
-        // Обновляем отображение панели с игроками
-        JPanel playerListPanel = new JPanel(new GridLayout(0, 1));
-        for (PlayerPanel playerPanel : playerList) {
-            playerListPanel.add(playerPanel);
-        }
-
-        JScrollPane playersListScrollPane = new JScrollPane(playerListPanel);
-        playersListScrollPane.setPreferredSize(new Dimension(200, 50));
-        playerListPanel.add(playersListScrollPane, BorderLayout.CENTER);
-
-        revalidate(); // Перерисовываем компоненты
-        repaint();
-    }
-
-
     private void updatePlayerInfo(boolean isHumanVsBotMode) {
         if (isHumanVsBotMode) {
             player1InfoLabel.setText("Human");
@@ -470,7 +440,7 @@ public class GUI extends JFrame {
                 board.placePiece(row, col, currentPlayer.playerCell);
                 updateBoardGUI();
 
-                if (!board.isGameOver()) {
+                if (board.isGameOver()) {
                     currentPlayer = player2;
                     appendGameInfo(currentMoveNumber + " move Human player moved to: " + (row + 1) + ", " + (col + 1));
                     currentMoveNumber++;
@@ -487,7 +457,7 @@ public class GUI extends JFrame {
             @Override
             public void run() {
                 int moveNumber = 1;
-                while (!board.isGameOver()) {
+                while (board.isGameOver()) {
                     if (currentPlayer instanceof Player.HumanPlayer) {
                         synchronized (board) {
                             try {
@@ -533,7 +503,7 @@ public class GUI extends JFrame {
             board.placePiece(move.row, move.col, currentPlayer.playerCell);
             updateBoardGUI();
 
-            if (!board.isGameOver()) {
+            if (board.isGameOver()) {
                 currentPlayer = player1;
                 appendGameInfo(currentMoveNumber + " move Bot player moved to: " + (move.row + 1) + ", " + (move.col + 1));
                 currentMoveNumber++;
@@ -547,7 +517,7 @@ public class GUI extends JFrame {
             @Override
             public void run() {
                 int moveNumber = 1;
-                while (!board.isGameOver()) {
+                while (board.isGameOver()) {
                     if (currentPlayer instanceof Player.BotPlayer) {
                         Move move = currentPlayer.makeMove(board);
                         board.placePiece(move.row, move.col, currentPlayer.playerCell);
