@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Expectimax Algorithm
  */
-public class Expectimax implements Algorithm {
+public class Expectimax{
     private Expectimax() {
     }
 
